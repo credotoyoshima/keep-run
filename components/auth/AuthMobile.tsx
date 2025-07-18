@@ -280,12 +280,13 @@ export function AuthMobile() {
             {/* Password Reset Link - Only show on login mode */}
             {!isSignUp && (
               <div>
-                <a
-                  href="/auth/reset-password"
-                  className="text-sm text-gray-600 hover:text-black transition-colors underline"
+                <button
+                  type="button"
+                  onClick={() => window.location.href = '/auth/reset-password'}
+                  className="text-sm text-gray-600 hover:text-black transition-colors"
                 >
-                  パスワードをお忘れの方
-                </a>
+                  パスワードをお忘れの方は こちら
+                </button>
               </div>
             )}
           </div>

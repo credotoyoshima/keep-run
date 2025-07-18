@@ -36,9 +36,28 @@
   * {
     border-color: hsl(var(--border));
   }
+  
+  html {
+    /* Prevent scroll on the html element */
+    overflow: hidden;
+    height: 100%;
+  }
+  
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+    overflow: hidden;
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    /* For iOS PWA */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Ensure the root div takes full height */
+  #__next {
+    height: 100%;
+    overflow: hidden;
   }
 }
 

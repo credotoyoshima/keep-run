@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   creator: "Keep Run",
   publisher: "Keep Run",
   icons: [
-    { rel: "apple-touch-icon", url: "/icons/icon.svg" },
-    { rel: "icon", url: "/icons/icon.svg" },
+    { rel: "apple-touch-icon", url: "/icon-192.svg" },
+    { rel: "icon", url: "/favicon.svg" },
   ],
 };
 
