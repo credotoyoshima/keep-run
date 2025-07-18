@@ -38,30 +38,32 @@
   }
   
   html {
-    /* Prevent scroll on the html element */
     height: 100%;
-    /* Support for iOS safe areas */
-    height: 100vh;
-    height: -webkit-fill-available;
+    overflow: hidden;
   }
   
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     height: 100%;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    /* For iOS PWA */
-    -webkit-overflow-scrolling: touch;
-    /* Prevent overscroll bounce */
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    /* Prevent pull-to-refresh and overscroll */
     overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
   }
   
   /* Ensure the root div takes full height */
   #__next {
     height: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
+    overflow: hidden;
+  }
+  
+  /* Prevent iOS rubber band effect */
+  .overscroll-contain {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 }
 

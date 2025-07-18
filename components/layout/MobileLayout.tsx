@@ -12,21 +12,27 @@ interface MobileLayoutProps {
 
 export function MobileLayout({ children, title, showBackButton = false }: MobileLayoutProps) {
   return (
-    <div className="h-full min-h-full bg-gray-50 flex flex-col max-w-md mx-auto relative" style={{ height: '100dvh' }}>
+    <div className="fixed inset-0 bg-gray-50 flex flex-col max-w-md mx-auto">
       
-      {/* App Header */}
-      <MobileHeader 
-        title={title} 
-        showBackButton={showBackButton}
-      />
+      {/* App Header - Fixed at top */}
+      <div className="flex-shrink-0">
+        <MobileHeader 
+          title={title} 
+          showBackButton={showBackButton}
+        />
+      </div>
       
       {/* Content - scrollable area between header and bottom nav */}
-      <main className="flex-1 bg-gray-50 overflow-y-auto">
-        {children}
+      <main className="flex-1 bg-gray-50 overflow-y-auto overflow-x-hidden overscroll-contain">
+        <div className="h-full">
+          {children}
+        </div>
       </main>
       
-      {/* Bottom Navigation */}
-      <BottomNavigation />
+      {/* Bottom Navigation - Fixed at bottom */}
+      <div className="flex-shrink-0">
+        <BottomNavigation />
+      </div>
     </div>
   )
 }
