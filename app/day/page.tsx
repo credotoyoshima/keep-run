@@ -1,7 +1,5 @@
-'use client'
-
-import { SimpleDayView } from '@/components/active/SimpleDayView'
+import { SimpleDayViewOptimized } from '@/components/active/SimpleDayViewOptimized'
 
 export default function DayPage() {
-  return <SimpleDayView />
+  return <SimpleDayViewOptimized />
 }

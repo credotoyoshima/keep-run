@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { TimePickerModal } from '@/components/ui/time-picker-modal'
 import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
 import { useDayChangeDetection } from '@/lib/day-change-detector'
-import { LoadingSpinnerCenter } from '@/components/ui/LoadingSpinner'
+import { useTimeBlocks } from '@/lib/hooks/useTimeBlocks'
 import { 
   ChevronDown, 
   ChevronRight, 
@@ -36,8 +36,7 @@ interface TimeBlock {
   completionRate: number
 }
 
-export function SimpleDayView() {
-  const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>([])
+export function SimpleDayViewOptimized() {
   const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(() => {
     // localStorageから開閉状態を復元
     if (typeof window !== 'undefined') {
@@ -53,7 +52,6 @@ export function SimpleDayView() {
     }
     return new Set()
   })
-  const [loading, setLoading] = useState(true)
   const [newBlockTitle, setNewBlockTitle] = useState('')
   const [newBlockTime, setNewBlockTime] = useState('00:00')
   const [showBlockForm, setShowBlockForm] = useState(false)
@@ -81,6 +79,18 @@ export function SimpleDayView() {
   // useDayStartTimeフックを使用
   const { dayStartTime } = useDayStartTime()
   
+  // useTimeBlocksフックを使用
+  const {
+    timeBlocks,
+    isLoading,
+    addTimeBlock: addTimeBlockMutation,
+    deleteTimeBlock: deleteTimeBlockMutation,
+    addTask: addTaskMutation,
+    deleteTask: deleteTaskMutation,
+    toggleTask: toggleTaskMutation,
+    updateTimeBlock: updateTimeBlockMutation,
+  } = useTimeBlocks(currentPage)
+  
   // 日付変更を検出してタスクをリセット
   useDayChangeDetection(dayStartTime, async () => {
     console.log('Day changed, resetting tasks...')
@@ -89,8 +99,7 @@ export function SimpleDayView() {
         method: 'POST'
       })
       if (response.ok) {
-        // タスクリセット後にデータを再取得
-        await fetchTimeBlocks(currentPage)
+        // React Query will refetch automatically
       }
     } catch (error) {
       console.error('Error resetting tasks:', error)
@@ -156,82 +165,36 @@ export function SimpleDayView() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [showBlockForm, newBlockTitle, newBlockTime, editingBlock, editBlockTitle, editBlockTime, showTaskMenu])
 
-  // 時間ブロックを取得
-  const fetchTimeBlocks = async (page: number = currentPage) => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/user-blocks?page=${page}`)
-      
-      if (!response.ok) {
-        console.error('Failed to fetch time blocks')
-        return
-      }
-      
-      const data = await response.json()
-      // 配列であることを確認
-      const blocks = Array.isArray(data) ? data : []
-      setTimeBlocks(blocks)
-      
-      // localStorageに保存された開閉状態がない場合のみ、全てのブロックを展開
-      if (typeof window !== 'undefined' && !localStorage.getItem('expandedTimeBlocks')) {
-        const allBlockIds = blocks.map((block: TimeBlock) => block.id)
-        setExpandedBlocks(new Set(allBlockIds))
-        localStorage.setItem('expandedTimeBlocks', JSON.stringify(allBlockIds))
-      }
-    } catch (error) {
-      console.error('Error fetching time blocks:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-
+  // 初回ロード時に展開状態を設定
   useEffect(() => {
-    fetchTimeBlocks(currentPage)
-  }, [currentPage, dayStartTime])
+    if (timeBlocks && timeBlocks.length > 0 && typeof window !== 'undefined' && !localStorage.getItem('expandedTimeBlocks')) {
+      const allBlockIds = timeBlocks.map((block: TimeBlock) => block.id)
+      setExpandedBlocks(new Set(allBlockIds))
+      localStorage.setItem('expandedTimeBlocks', JSON.stringify(allBlockIds))
+    }
+  }, [timeBlocks])
 
   // 時間ブロックを追加
   const addTimeBlock = async () => {
     if (!newBlockTitle || !newBlockTime) return
 
-    try {
-      const response = await fetch('/api/user-blocks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: newBlockTitle,
-          startTime: newBlockTime,
-          pageNumber: currentPage
-        })
-      })
-
-      if (response.ok) {
-        await fetchTimeBlocks()
-        setNewBlockTitle('')
-        setNewBlockTime('00:00')
-        setShowBlockForm(false)
-      }
-    } catch (error) {
-      console.error('Error adding time block:', error)
-    }
+    addTimeBlockMutation({
+      title: newBlockTitle,
+      startTime: newBlockTime,
+      pageNumber: currentPage
+    })
+    
+    setNewBlockTitle('')
+    setNewBlockTime('00:00')
+    setShowBlockForm(false)
   }
 
   // 時間ブロックを削除
   const deleteTimeBlock = async (blockId: string) => {
     if (!confirm('この時間ブロックを削除してもよろしいですか？')) return
     
-    try {
-      const response = await fetch(`/api/user-blocks?blockId=${blockId}`, {
-        method: 'DELETE'
-      })
-
-      if (response.ok) {
-        await fetchTimeBlocks()
-        setSwipedBlock(null)
-      }
-    } catch (error) {
-      console.error('Error deleting time block:', error)
-    }
+    deleteTimeBlockMutation(blockId)
+    setSwipedBlock(null)
   }
 
   // タスクを追加
@@ -239,83 +202,20 @@ export function SimpleDayView() {
     const taskTitle = newTaskInputs[blockId]
     if (!taskTitle) return
 
-    try {
-      const response = await fetch('/api/day', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'addTask',
-          blockId,
-          data: { title: taskTitle }
-        })
-      })
-
-      if (response.ok) {
-        await fetchTimeBlocks()
-        setNewTaskInputs({ ...newTaskInputs, [blockId]: '' })
-        setShowTaskInput({ ...showTaskInput, [blockId]: false })
-      }
-    } catch (error) {
-      console.error('Error adding task:', error)
-    }
+    addTaskMutation({ blockId, title: taskTitle })
+    setNewTaskInputs({ ...newTaskInputs, [blockId]: '' })
+    setShowTaskInput({ ...showTaskInput, [blockId]: false })
   }
 
   // タスクを削除
   const deleteTask = async (blockId: string, taskId: string) => {
-    try {
-      const response = await fetch('/api/day', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'deleteTask',
-          blockId,
-          data: { taskId }
-        })
-      })
-
-      if (response.ok) {
-        await fetchTimeBlocks()
-        setShowTaskMenu(null)
-      }
-    } catch (error) {
-      console.error('Error deleting task:', error)
-    }
+    deleteTaskMutation({ blockId, taskId })
+    setShowTaskMenu(null)
   }
 
   // タスクの完了状態を切り替え
   const toggleTask = async (blockId: string, taskId: string, currentCompleted: boolean) => {
-    // 即座にUIを更新
-    setTimeBlocks(prev => prev.map(block => {
-      if (block.id === blockId) {
-        return {
-          ...block,
-          tasks: block.tasks.map(task => 
-            task.id === taskId ? { ...task, completed: !currentCompleted } : task
-          )
-        }
-      }
-      return block
-    }))
-
-    try {
-      const response = await fetch('/api/day', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'toggleTask',
-          blockId,
-          data: { taskId, completed: !currentCompleted }
-        })
-      })
-
-      if (!response.ok) {
-        // エラーの場合は元に戻す
-        fetchTimeBlocks()
-      }
-    } catch (error) {
-      console.error('Error toggling task:', error)
-      fetchTimeBlocks()
-    }
+    toggleTaskMutation({ blockId, taskId, completed: !currentCompleted })
   }
 
   // 編集開始
@@ -330,29 +230,15 @@ export function SimpleDayView() {
   const updateTimeBlock = async () => {
     if (!editingBlock) return
 
-    try {
-      const response = await fetch('/api/day', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'updateTimeBlock',
-          blockId: editingBlock.id,
-          data: {
-            title: editBlockTitle,
-            startTime: editBlockTime
-          }
-        })
-      })
-
-      if (response.ok) {
-        await fetchTimeBlocks()
-        setEditingBlock(null)
-        setEditBlockTitle('')
-        setEditBlockTime('')
-      }
-    } catch (error) {
-      console.error('Error updating time block:', error)
-    }
+    updateTimeBlockMutation({
+      blockId: editingBlock.id,
+      title: editBlockTitle,
+      startTime: editBlockTime
+    })
+    
+    setEditingBlock(null)
+    setEditBlockTitle('')
+    setEditBlockTime('')
   }
 
   // タッチイベントハンドラー
@@ -381,11 +267,32 @@ export function SimpleDayView() {
     setTouchEnd(0)
   }
 
-
-  if (loading) {
+  // Initial skeleton loading state
+  if (isLoading && timeBlocks.length === 0) {
     return (
       <MobileLayout title="DAY">
-        <LoadingSpinnerCenter size="lg" />
+        <div className="p-5">
+          {/* Progress Summary Skeleton */}
+          <div className="bg-gray-200 animate-pulse rounded-lg p-4 mb-5">
+            <div className="h-8 w-20 bg-gray-300 rounded mx-auto mb-2"></div>
+            <div className="h-4 w-32 bg-gray-300 rounded ml-auto mb-2"></div>
+            <div className="h-0.5 bg-gray-300 rounded"></div>
+          </div>
+          
+          {/* Page Tabs Skeleton */}
+          <div className="flex bg-gray-100 rounded-lg p-1 mb-5">
+            <div className="flex-1 h-10 bg-gray-200 animate-pulse rounded-md mx-1"></div>
+            <div className="flex-1 h-10 bg-gray-200 animate-pulse rounded-md mx-1"></div>
+            <div className="flex-1 h-10 bg-gray-200 animate-pulse rounded-md mx-1"></div>
+          </div>
+          
+          {/* Time Blocks Skeleton */}
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-gray-200 animate-pulse rounded-lg h-16"></div>
+            ))}
+          </div>
+        </div>
       </MobileLayout>
     )
   }

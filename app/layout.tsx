@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { RouteProgress } from "@/components/layout/RouteProgress";
+import { QueryProvider } from "@/lib/providers/query-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -52,7 +53,9 @@ export default function RootLayout({
         */}
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
-        {children}
+        <QueryProvider>
+          {children}
+        </QueryProvider>
         {/* Service Worker登録を一時的にコメントアウト
         <script
           dangerouslySetInnerHTML={{
