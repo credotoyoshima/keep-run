@@ -19,7 +19,6 @@ interface TimeBlock {
 
 export function useTimeBlocks(page: number) {
   const queryClient = useQueryClient()
-  const [localTimeBlocks, setLocalTimeBlocks] = useState<TimeBlock[]>([])
 
   const { data: timeBlocks = [], isLoading, error } = useQuery({
     queryKey: ['timeBlocks', page],
@@ -32,11 +31,6 @@ export function useTimeBlocks(page: number) {
       return Array.isArray(data) ? data : []
     },
   })
-
-  // Sync local state with query data
-  useEffect(() => {
-    setLocalTimeBlocks(timeBlocks)
-  }, [timeBlocks])
 
   // Add time block mutation
   const addTimeBlockMutation = useMutation({
@@ -84,20 +78,35 @@ export function useTimeBlocks(page: number) {
       return response.json()
     },
     onMutate: async ({ blockId, title }) => {
-      // Optimistically update the UI
-      const newTask = {
-        id: `temp-${Date.now()}`,
-        title,
-        completed: false,
-        orderIndex: localTimeBlocks.find(b => b.id === blockId)?.tasks.length || 0
-      }
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['timeBlocks', page] })
       
-      setLocalTimeBlocks(prev => prev.map(block => {
-        if (block.id === blockId) {
-          return { ...block, tasks: [...block.tasks, newTask] }
+      // Snapshot the previous value
+      const previousTimeBlocks = queryClient.getQueryData(['timeBlocks', page])
+      
+      // Optimistically update to the new value
+      queryClient.setQueryData(['timeBlocks', page], (old: TimeBlock[] = []) => {
+        const newTask = {
+          id: `temp-${Date.now()}`,
+          title,
+          completed: false,
+          orderIndex: old.find(b => b.id === blockId)?.tasks.length || 0
         }
-        return block
-      }))
+        
+        return old.map(block => {
+          if (block.id === blockId) {
+            return { ...block, tasks: [...block.tasks, newTask] }
+          }
+          return block
+        })
+      })
+      
+      // Return a context object with the snapshotted value
+      return { previousTimeBlocks }
+    },
+    onError: (err, newTodo, context) => {
+      // If the mutation fails, use the context returned from onMutate to roll back
+      queryClient.setQueryData(['timeBlocks', page], context?.previousTimeBlocks)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['timeBlocks', page] })
@@ -120,13 +129,22 @@ export function useTimeBlocks(page: number) {
       return response.json()
     },
     onMutate: async ({ blockId, taskId }) => {
-      // Optimistically update the UI
-      setLocalTimeBlocks(prev => prev.map(block => {
-        if (block.id === blockId) {
-          return { ...block, tasks: block.tasks.filter(task => task.id !== taskId) }
-        }
-        return block
-      }))
+      await queryClient.cancelQueries({ queryKey: ['timeBlocks', page] })
+      const previousTimeBlocks = queryClient.getQueryData(['timeBlocks', page])
+      
+      queryClient.setQueryData(['timeBlocks', page], (old: TimeBlock[] = []) => {
+        return old.map(block => {
+          if (block.id === blockId) {
+            return { ...block, tasks: block.tasks.filter(task => task.id !== taskId) }
+          }
+          return block
+        })
+      })
+      
+      return { previousTimeBlocks }
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['timeBlocks', page], context?.previousTimeBlocks)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['timeBlocks', page] })
@@ -149,18 +167,27 @@ export function useTimeBlocks(page: number) {
       return response.json()
     },
     onMutate: async ({ blockId, taskId, completed }) => {
-      // Optimistically update the UI
-      setLocalTimeBlocks(prev => prev.map(block => {
-        if (block.id === blockId) {
-          return {
-            ...block,
-            tasks: block.tasks.map(task => 
-              task.id === taskId ? { ...task, completed } : task
-            )
+      await queryClient.cancelQueries({ queryKey: ['timeBlocks', page] })
+      const previousTimeBlocks = queryClient.getQueryData(['timeBlocks', page])
+      
+      queryClient.setQueryData(['timeBlocks', page], (old: TimeBlock[] = []) => {
+        return old.map(block => {
+          if (block.id === blockId) {
+            return {
+              ...block,
+              tasks: block.tasks.map(task => 
+                task.id === taskId ? { ...task, completed } : task
+              )
+            }
           }
-        }
-        return block
-      }))
+          return block
+        })
+      })
+      
+      return { previousTimeBlocks }
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['timeBlocks', page], context?.previousTimeBlocks)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['timeBlocks', page] })
@@ -183,13 +210,22 @@ export function useTimeBlocks(page: number) {
       return response.json()
     },
     onMutate: async ({ blockId, title, startTime }) => {
-      // Optimistically update the UI
-      setLocalTimeBlocks(prev => prev.map(block => {
-        if (block.id === blockId) {
-          return { ...block, title, startTime }
-        }
-        return block
-      }))
+      await queryClient.cancelQueries({ queryKey: ['timeBlocks', page] })
+      const previousTimeBlocks = queryClient.getQueryData(['timeBlocks', page])
+      
+      queryClient.setQueryData(['timeBlocks', page], (old: TimeBlock[] = []) => {
+        return old.map(block => {
+          if (block.id === blockId) {
+            return { ...block, title, startTime }
+          }
+          return block
+        })
+      })
+      
+      return { previousTimeBlocks }
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['timeBlocks', page], context?.previousTimeBlocks)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['timeBlocks', page] })
@@ -197,7 +233,7 @@ export function useTimeBlocks(page: number) {
   })
 
   return {
-    timeBlocks: localTimeBlocks,
+    timeBlocks,
     isLoading,
     error,
     addTimeBlock: addTimeBlockMutation.mutate,
