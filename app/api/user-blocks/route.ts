@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     const dayStartTime = await getUserDayStartTime(user.id)
 
     // ユーザーに紐づく指定ページの時間ブロックを取得
-    const timeBlocks = await prisma.$queryRaw`
+    const timeBlocks = await prisma.$queryRaw<any[]>`
       SELECT 
         atb.id,
         atb.title,

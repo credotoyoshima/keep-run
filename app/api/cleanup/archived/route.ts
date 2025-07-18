@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 4. 古いルーティン完了記録を削除（90日以上前）
-    const deletedRoutineCompletions = await prisma.routineCompletion.deleteMany({
+    const deletedRoutineCompletions = await prisma.todoRoutineCompletion.deleteMany({
       where: {
         completedDate: {
           lt: ninetyDaysAgo

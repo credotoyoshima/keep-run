@@ -6,7 +6,7 @@ import { getDateForDayStart } from '@/lib/date-utils'
 // 習慣の達成記録を追加/更新
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient()
@@ -16,6 +16,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const params = await context.params
     const habitId = params.id
     const body = await request.json()
     const { date, completed, dayStartTime } = body

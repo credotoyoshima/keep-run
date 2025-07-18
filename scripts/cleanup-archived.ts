@@ -77,7 +77,7 @@ async function cleanupArchivedData() {
     }
 
     // 4. 古いルーティン完了記録を削除
-    const deletedRoutineCompletions = await prisma.routineCompletion.deleteMany({
+    const deletedRoutineCompletions = await prisma.todoRoutineCompletion.deleteMany({
       where: {
         completedDate: {
           lt: ninetyDaysAgo

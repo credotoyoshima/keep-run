@@ -4,8 +4,9 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { AlertCircle } from 'lucide-react'
+import { Suspense } from 'react'
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
   const searchParams = useSearchParams()
   const error = searchParams.get('error') || '認証中にエラーが発生しました'
 
@@ -39,5 +40,17 @@ export default function AuthErrorPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function AuthErrorPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-500">読み込み中...</div>
+      </div>
+    }>
+      <AuthErrorContent />
+    </Suspense>
   )
 }

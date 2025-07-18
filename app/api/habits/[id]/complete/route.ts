@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 // 習慣を完了としてマーク
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient()
@@ -15,6 +15,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const params = await context.params
     const habitId = params.id
 
     // ユーザーが所有する習慣か確認

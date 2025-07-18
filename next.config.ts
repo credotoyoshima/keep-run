@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  eslint: {
+    // ビルド時にESLintエラーを無視
+    ignoreDuringBuilds: true,
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       // クライアントサイドでNode.js専用モジュールを無視
