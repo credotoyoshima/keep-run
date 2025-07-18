@@ -29,7 +29,7 @@ export function MobileHeader({ title, showBackButton = false }: MobileHeaderProp
   }
 
   return (
-    <header className="bg-white border-b border-gray-200 h-14 flex items-center justify-between px-5 shadow-sm">
+    <header className="bg-white border-b border-gray-200 h-14 flex items-center justify-between px-5 shadow-sm flex-shrink-0">
       <div className="w-8 h-8 flex items-center justify-center">
         {showBackButton && (
           <Button 

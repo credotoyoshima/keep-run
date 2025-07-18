@@ -12,7 +12,7 @@ interface MobileLayoutProps {
 
 export function MobileLayout({ children, title, showBackButton = false }: MobileLayoutProps) {
   return (
-    <div className="h-screen bg-gray-50 flex flex-col max-w-md mx-auto relative overflow-hidden">
+    <div className="h-full min-h-full bg-gray-50 flex flex-col max-w-md mx-auto relative" style={{ height: '100dvh' }}>
       
       {/* App Header */}
       <MobileHeader 
