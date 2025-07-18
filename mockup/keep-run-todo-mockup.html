@@ -1,0 +1,1344 @@
+                    <div class="app-header">
+                        <div class="header-action" style="width: 32px;"></div>
+                        <div class="header-title">TODO</div>
+                        <div class="header-action">
+                            <svg><circle cx="10" cy="6" r="1.5"></circle><circle cx="10" cy="12" r="1.5"></circle><circle cx="10" cy="18" r="1.5"></circle></svg>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="todo-container" style="opacity: 0.3;">
+                            <div class="stats-summary">
+                                <div class="stat-card">
+                                    <div class="stat-number">12</div>
+                                    <div class="stat-label">ACTIVE</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">5</div>
+                                    <div class="stat-label">TODAY</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">3</div>
+                                    <div class="stat-label">DONE</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-overlay">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div class="modal-handle"></div>
+                                <h2 class="modal-title">新しいToDo</h2>
+                            </div>
+                            
+                            <input type="text" class="modal-input" placeholder="タイトル" value="デザインレビューの準備">
+                            
+                            <textarea class="modal-textarea" placeholder="詳細（オプション）">新機能のUIデザインについてチームでレビュー</textarea>
+                            
+                            <div class="modal-actions">
+                                <button class="modal-button secondary">キャンセル</button>
+                                <button class="modal-button primary">追加</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 画面4: ToDo編集モーダル -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">4. ToDo編集モーダル</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">
+                        <div class="header-action" style="width: 32px;"></div>
+                        <div class="header-title">TODO</div>
+                        <div class="header-action">
+                            <svg><circle cx="10" cy="6" r="1.5"></circle><circle cx="10" cy="12" r="1.5"></circle><circle cx="10" cy="18" r="1.5"></circle></svg>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="todo-container" style="opacity: 0.3;">
+                            <div class="todo-item">
+                                <div class="todo-checkbox"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">プレゼン資料の準備</div>
+                                    <div class="todo-description">新規プロジェクト提案用</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-overlay">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div class="modal-handle"></div>
+                                <h2 class="modal-title">ToDoを編集</h2>
+                            </div>
+                            
+                            <input type="text" class="modal-input" placeholder="タイトル" value="プレゼン資料の準備">
+                            
+                            <textarea class="modal-textarea" placeholder="詳細（オプション）">新規プロジェクト提案用
+・市場分析データを含める
+・競合他社の事例を3つ以上
+・ROI予測を明確に</textarea>
+                            
+                            <div class="modal-actions">
+                                <button class="modal-button secondary">キャンセル</button>
+                                <button class="modal-button primary">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 画面5: アーカイブ表示 -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">5. アーカイブ表示</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">
+                        <div class="header-action" style="width: 32px;"></div>
+                        <div class="header-title">TODO</div>
+                        <div class="header-action">
+                            <svg><circle cx="10" cy="6" r="1.5"></circle><circle cx="10" cy="12" r="1.5"></circle><circle cx="10" cy="18" r="1.5"></circle></svg>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="todo-container">
+                            <div class="stats-summary">
+                                <div class="stat-card">
+                                    <div class="stat-number">9</div>
+                                    <div class="stat-label">ACTIVE</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">3</div>
+                                    <div class="stat-label">TODAY</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">8</div>
+                                    <div class="stat-label">DONE</div>
+                                </div>
+                            </div>
+                            
+                            <div class="filter-bar">
+                                <div class="filter-chip active">すべて</div>
+                                <div class="filter-chip">今日</div>
+                                <div class="filter-chip">明日</div>
+                                <div class="filter-chip">今週</div>
+                                <div class="filter-chip">重要</div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">新規企画書の作成</div>
+                                    <div class="todo-description">来週の会議用</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">経費精算</div>
+                                    <div class="todo-description">今月分の交通費</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="archive-section">
+                                <div class="archive-header">
+                                    <div class="archive-title">
+                                        <svg><path d="M21 8v13H3V8M1 3h22v5H1z"></path><path d="M10 12h4"></path></svg>
+                                        ARCHIVE
+                                    </div>
+                                    <div class="archive-count">8 items</div>
+                                </div>
+                                
+                                <div class="todo-item archived">
+                                    <div class="todo-checkbox checked">
+                                        <svg><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </div>
+                                    <div class="todo-content">
+                                        <div class="todo-title completed">週次レポートの作成</div>
+                                        <div class="todo-description">マーケティング部門向け</div>
+                                    </div>
+                                    <div class="todo-actions">
+                                        <div class="todo-action">
+                                            <svg><path d="M3 3h18v18H3zM8 12h8m-8-4h8m-8 8h8"></path></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="todo-item archived">
+                                    <div class="todo-checkbox checked">
+                                        <svg><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </div>
+                                    <div class="todo-content">
+                                        <div class="todo-title completed">メール返信</div>
+                                        <div class="todo-description">重要な問い合わせ3件</div>
+                                    </div>
+                                    <div class="todo-actions">
+                                        <div class="todo-action">
+                                            <svg><path d="M3 3h18v18H3zM8 12h8m-8-4h8m-8 8h8"></path></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="todo-item archived">
+                                    <div class="todo-checkbox checked">
+                                        <svg><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </div>
+                                    <div class="todo-content">
+                                        <div class="todo-title completed">請求書の送付</div>
+                                        <div class="todo-description">A社向け - 3月分</div>
+                                    </div>
+                                    <div class="todo-actions">
+                                        <div class="todo-action">
+                                            <svg><path d="M3 3h18v18H3zM8 12h8m-8-4h8m-8 8h8"></path></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-todo-fab">
+                        <svg><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 画面6: フィルター適用 -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">6. フィルター適用（今日）</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">
+                        <div class="header-action" style="width: 32px;"></div>
+                        <div class="header-title">TODO - 今日</div>
+                        <div class="header-action">
+                            <svg><circle cx="10" cy="6" r="1.5"></circle><circle cx="10" cy="12" r="1.5"></circle><circle cx="10" cy="18" r="1.5"></circle></svg>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="todo-container">
+                            <div class="stats-summary">
+                                <div class="stat-card">
+                                    <div class="stat-number">5</div>
+                                    <div class="stat-label">TODAY</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">2</div>
+                                    <div class="stat-label">DONE</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">3</div>
+                                    <div class="stat-label">LEFT</div>
+                                </div>
+                            </div>
+                            
+                            <div class="filter-bar">
+                                <div class="filter-chip">すべて</div>
+                                <div class="filter-chip active">今日</div>
+                                <div class="filter-chip">明日</div>
+                                <div class="filter-chip">今週</div>
+                                <div class="filter-chip">重要</div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox checked">
+                                    <svg><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                </div>
+                                <div class="todo-content">
+                                    <div class="todo-title completed">週次レポートの作成</div>
+                                    <div class="todo-description">マーケティング部門向け</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">クライアントミーティング</div>
+                                    <div class="todo-description">14:00 - オンライン</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox checked">
+                                    <svg><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                </div>
+                                <div class="todo-content">
+                                    <div class="todo-title completed">メール返信</div>
+                                    <div class="todo-description">重要な問い合わせ3件</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">デザインレビューの準備</div>
+                                    <div class="todo-description">新機能のUIデザインについて</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">経費精算</div>
+                                    <div class="todo-description">今月分の交通費</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-todo-fab">
+                        <svg><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 説明セクション -->
+        <div style="max-width: 1000px; margin: 0 auto; padding: 40px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h2 style="font-size: 24px; margin-bottom: 24px; font-weight: 300; letter-spacing: -0.5px;">ToDo機能の特徴</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+                <div>
+                    <h3 style="font-size: 18px; margin-bottom: 12px; font-weight: 500; letter-spacing: -0.3px;">統計とフィルター</h3>
+                    <ul style="line-height: 1.8; color: #666; list-style: none; padding: 0;">
+                        <li style="padding: 4px 0;">• リアルタイムの統計表示</li>
+                        <li style="padding: 4px 0;">• フィルターチップで素早く絞り込み</li>
+                        <li style="padding: 4px 0;">• 今日/明日/今週の表示切替</li>
+                        <li style="padding: 4px 0;">• 重要タスクの優先表示</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="font-size: 18px; margin-bottom: 12px; font-weight: 500; letter-spacing: -0.3px;">シンプルな操作</h3>
+                    <ul style="line-height: 1.8; color: #666; list-style: none; padding: 0;">
+                        <li style="padding: 4px 0;">• ワンタップでタスク完了</li>
+                        <li style="padding: 4px 0;">• スワイプでアーカイブ表示</li>
+                        <li style="padding: 4px 0;">• インライン編集機能</li>
+                        <li style="padding: 4px 0;">• 自動アーカイブ機能</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="font-size: 18px; margin-bottom: 12px; font-weight: 500; letter-spacing: -0.3px;">効率的な管理</h3>
+                    <ul style="line-height: 1.8; color: #666; list-style: none; padding: 0;">
+                        <li style="padding: 4px 0;">• 完了タスクの自動整理</li>
+                        <li style="padding: 4px 0;">• アーカイブからの復元機能</li>
+                        <li style="padding: 4px 0;">• タスクの詳細説明追加</li>
+                        <li style="padding: 4px 0;">• 削除前の確認なし（即座に実行）</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; padding: 24px; background: #f5f5f5; border-radius: 8px;">
+                <h3 style="font-size: 18px; margin-bottom: 12px; font-weight: 500; letter-spacing: -0.3px;">UI/UXのポイント</h3>
+                <p style="line-height: 1.8; color: #666; font-weight: 300;">
+                    ToDo機能は、DAY機能の時間ベースタスク管理を補完する、より柔軟なタスク管理を提供します。
+                    統計カードによる進捗の可視化、フィルターチップによる素早い絞り込み、
+                    ホバーエフェクトによる滑らかな操作感で、効率的なタスク管理を実現します。
+                </p>
+            </div>
+            
+            <div style="margin-top: 24px; padding: 24px; background: #000; color: #fff; border-radius: 8px;">
+                <h3 style="font-size: 18px; margin-bottom: 12px; font-weight: 500; letter-spacing: -0.3px;">デザインの特徴</h3>
+                <p style="line-height: 1.8; opacity: 0.9; font-weight: 300;">
+                    統計表示には極細フォント（font-weight: 200）を使用し、データを美しく表現。
+                    フィルターチップは角丸デザインで、アクティブ時は黒背景で強調。
+                    タスクカードはホバー時に右へスライドし、操作への反応を視覚的にフィードバックします。
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html><!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keep Run - ToDo機能モックアップ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #000;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+            font-weight: 300;
+        }
+        
+        .screens {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(375px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .screen-wrapper {
+            text-align: center;
+        }
+        
+        .screen-title {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: #333;
+            letter-spacing: -0.3px;
+        }
+        
+        .phone {
+            width: 375px;
+            height: 812px;
+            background: #fff;
+            border-radius: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            border: 8px solid #222;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .app-header {
+            height: 56px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+        }
+        
+        .header-action {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .header-action:hover {
+            background: #f5f5f5;
+        }
+        
+        .header-action svg {
+            width: 20px;
+            height: 20px;
+            stroke: #000;
+            stroke-width: 1.5;
+            fill: none;
+        }
+        
+        .content {
+            height: calc(100% - 44px - 56px - 80px);
+            overflow-y: auto;
+            background: #fafafa;
+        }
+        
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+        
+        .nav-item {
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .nav-item.active {
+            color: #000;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin: 0 auto 4px;
+        }
+        
+        .nav-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            fill: none;
+        }
+        
+        /* ToDo機能のスタイル */
+        .todo-container {
+            padding: 20px;
+        }
+        
+        /* 統計サマリー */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: #fff;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: 200;
+            line-height: 1;
+            margin-bottom: 4px;
+            letter-spacing: -1px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* フィルターバー */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        
+        .filter-chip {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            font-size: 14px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .filter-chip:hover {
+            border-color: #ccc;
+        }
+        
+        .filter-chip.active {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+        
+        /* ToDoアイテム */
+        .todo-item {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .todo-item:hover {
+            border-color: #ccc;
+            transform: translateX(4px);
+        }
+        
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 1.5px solid #ccc;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .todo-checkbox:hover {
+            border-color: #666;
+        }
+        
+        .todo-checkbox.checked {
+            background: #000;
+            border-color: #000;
+        }
+        
+        .todo-checkbox.checked svg {
+            width: 14px;
+            height: 14px;
+            stroke: #fff;
+            stroke-width: 2;
+        }
+        
+        .todo-content {
+            flex: 1;
+        }
+        
+        .todo-title {
+            font-size: 16px;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+        
+        .todo-title.completed {
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .todo-description {
+            font-size: 14px;
+            color: #666;
+            font-weight: 300;
+        }
+        
+        .todo-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .todo-action {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .todo-action:hover {
+            background: #f5f5f5;
+        }
+        
+        .todo-action svg {
+            width: 16px;
+            height: 16px;
+            stroke: #666;
+            stroke-width: 1.5;
+        }
+        
+        /* 新規ToDo追加ボタン */
+        .add-todo-fab {
+            position: absolute;
+            bottom: 100px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #000;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .add-todo-fab:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+        
+        .add-todo-fab svg {
+            width: 24px;
+            height: 24px;
+            stroke: #fff;
+            stroke-width: 2;
+        }
+        
+        /* アーカイブセクション */
+        .archive-section {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .archive-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+        
+        .archive-title {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .archive-title svg {
+            width: 16px;
+            height: 16px;
+            stroke: #666;
+        }
+        
+        .archive-count {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .todo-item.archived {
+            opacity: 0.6;
+        }
+        
+        /* モーダル */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: flex-end;
+            z-index: 100;
+        }
+        
+        .modal-content {
+            background: #fff;
+            width: 100%;
+            border-radius: 16px 16px 0 0;
+            padding: 24px;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .modal-handle {
+            width: 36px;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin: 0 auto 16px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 300;
+        }
+        
+        .modal-input:focus {
+            outline: none;
+            border-color: #000;
+        }
+        
+        .modal-textarea {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: 300;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+        
+        .modal-textarea:focus {
+            outline: none;
+            border-color: #000;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .modal-button {
+            flex: 1;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: -0.3px;
+        }
+        
+        .modal-button.primary {
+            background: #000;
+            color: #fff;
+        }
+        
+        .modal-button.primary:hover {
+            background: #333;
+        }
+        
+        .modal-button.secondary {
+            background: #f5f5f5;
+            color: #000;
+        }
+        
+        .modal-button.secondary:hover {
+            background: #e8e8e8;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+        }
+        
+        .empty-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: #ccc;
+            stroke-width: 1;
+            fill: none;
+        }
+        
+        .empty-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+        
+        .empty-text {
+            color: #666;
+            margin-bottom: 24px;
+            font-weight: 300;
+        }
+        
+        /* スワイプヒント */
+        .swipe-hint {
+            text-align: center;
+            padding: 12px;
+            color: #999;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .swipe-hint svg {
+            width: 16px;
+            height: 16px;
+            stroke: #999;
+            animation: swipeUp 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes swipeUp {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Keep Run - ToDo機能モックアップ</h1>
+            <p>シンプルで効率的なタスク管理機能</p>
+        </div>
+        
+        <div class="screens">
+            <!-- 画面1: 初回利用時（空の状態） -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">1. 初回利用時（空の状態）</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">
+                        <div class="header-action" style="width: 32px;"></div>
+                        <div class="header-title">TODO</div>
+                        <div class="header-action">
+                            <svg><circle cx="10" cy="6" r="1.5"></circle><circle cx="10" cy="12" r="1.5"></circle><circle cx="10" cy="18" r="1.5"></circle></svg>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <div class="empty-title">ToDoを追加しましょう</div>
+                            <div class="empty-text">タスクを追加して<br>効率的に管理しましょう</div>
+                        </div>
+                    </div>
+                    <div class="add-todo-fab">
+                        <svg><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 画面2: ToDoリスト表示 -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">2. ToDoリスト表示</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">
+                        <div class="header-action" style="width: 32px;"></div>
+                        <div class="header-title">TODO</div>
+                        <div class="header-action">
+                            <svg><circle cx="10" cy="6" r="1.5"></circle><circle cx="10" cy="12" r="1.5"></circle><circle cx="10" cy="18" r="1.5"></circle></svg>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="todo-container">
+                            <div class="stats-summary">
+                                <div class="stat-card">
+                                    <div class="stat-number">12</div>
+                                    <div class="stat-label">ACTIVE</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">5</div>
+                                    <div class="stat-label">TODAY</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">3</div>
+                                    <div class="stat-label">DONE</div>
+                                </div>
+                            </div>
+                            
+                            <div class="filter-bar">
+                                <div class="filter-chip active">すべて</div>
+                                <div class="filter-chip">今日</div>
+                                <div class="filter-chip">明日</div>
+                                <div class="filter-chip">今週</div>
+                                <div class="filter-chip">重要</div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox checked">
+                                    <svg><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                </div>
+                                <div class="todo-content">
+                                    <div class="todo-title completed">週次レポートの作成</div>
+                                    <div class="todo-description">マーケティング部門向け</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">プレゼン資料の準備</div>
+                                    <div class="todo-description">新規プロジェクト提案用</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">クライアントミーティング</div>
+                                    <div class="todo-description">14:00 - オンライン</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox"></div>
+                                <div class="todo-content">
+                                    <div class="todo-title">書類の整理</div>
+                                    <div class="todo-description">デスク周りの片付け</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item">
+                                <div class="todo-checkbox checked">
+                                    <svg><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                </div>
+                                <div class="todo-content">
+                                    <div class="todo-title completed">メール返信</div>
+                                    <div class="todo-description">重要な問い合わせ3件</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <div class="todo-action">
+                                        <svg><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swipe-hint">
+                                <svg><polyline points="12 19 5 12 12 5"></polyline></svg>
+                                上にスワイプしてアーカイブを表示
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-todo-fab">
+                        <svg><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 画面3: ToDo追加モーダル -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">3. ToDo追加モーダル</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">

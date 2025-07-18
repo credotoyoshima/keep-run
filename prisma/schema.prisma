@@ -1,0 +1,147 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  name            String?
+  avatarUrl       String?
+  dayStartTime    String    @default("05:00")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  activeDays      ActiveDay[]
+  todos           Todo[]
+  evaluations     DailyEvaluation[]
+  habits          ContinuousHabit[]
+  habitHistories  HabitHistory[]
+}
+
+model ActiveDay {
+  id              String    @id @default(uuid())
+  date            DateTime
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  timeBlocks      ActiveTimeBlock[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@unique([userId, date])
+}
+
+model ActiveTimeBlock {
+  id              String    @id @default(uuid())
+  title           String
+  startTime       String
+  orderIndex      Int
+  pageNumber      Int       @default(1)
+  completionRate  Float     @default(0)
+  archived        Boolean   @default(false)
+  dayId           String
+  day             ActiveDay @relation(fields: [dayId], references: [id])
+  tasks           ActiveTask[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model ActiveTask {
+  id              String    @id @default(uuid())
+  title           String
+  completed       Boolean   @default(false)
+  archived        Boolean   @default(false)
+  orderIndex      Int
+  blockId         String
+  block           ActiveTimeBlock @relation(fields: [blockId], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Todo {
+  id              String    @id @default(uuid())
+  title           String
+  description     String?
+  completed       Boolean   @default(false)
+  archived        Boolean   @default(false)
+  important       Boolean   @default(false)
+  dueDate         DateTime?
+  taskType        String    @default("spot") // routine, spot
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  routineCompletions TodoRoutineCompletion[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model TodoRoutineCompletion {
+  id              String    @id @default(uuid())
+  todoId          String
+  todo            Todo      @relation(fields: [todoId], references: [id])
+  completedDate   DateTime  // The date when this routine was completed
+  createdAt       DateTime  @default(now())
+  
+  @@unique([todoId, completedDate])
+}
+
+model ContinuousHabit {
+  id              String    @id @default(uuid())
+  title           String
+  category        String    // exercise, health, learning, other
+  startDate       DateTime
+  targetDays      Int       @default(14)
+  reminderTime    String?   // HH:mm format
+  isActive        Boolean   @default(true)
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  records         HabitRecord[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model HabitRecord {
+  id              String    @id @default(uuid())
+  date            DateTime
+  completed       Boolean
+  habitId         String
+  habit           ContinuousHabit @relation(fields: [habitId], references: [id])
+  createdAt       DateTime  @default(now())
+}
+
+model HabitHistory {
+  id              String    @id @default(uuid())
+  title           String
+  category        String
+  startDate       DateTime
+  endDate         DateTime
+  totalDays       Int
+  completedDays   Int
+  status          String    // completed, failed, abandoned
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  createdAt       DateTime  @default(now())
+}
+
+model DailyEvaluation {
+  id              String    @id @default(uuid())
+  date            DateTime
+  rating          Int       // 1-5
+  comment         String?
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@unique([userId, date])
+}

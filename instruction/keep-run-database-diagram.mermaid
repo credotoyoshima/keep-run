@@ -1,0 +1,138 @@
+erDiagram
+    User ||--o{ DayTemplate : "creates"
+    User ||--o{ ActiveDay : "has"
+    User ||--o{ Todo : "owns"
+    User ||--o{ DailyEvaluation : "records"
+    User ||--o{ ContinuousHabit : "maintains"
+    User ||--o{ HabitHistory : "has"
+    
+    DayTemplate ||--o{ TemplateTimeBlock : "contains"
+    TemplateTimeBlock ||--o{ TemplateTask : "includes"
+    
+    ActiveDay ||--o{ ActiveTimeBlock : "contains"
+    ActiveTimeBlock ||--o{ ActiveTask : "includes"
+    
+    ContinuousHabit ||--o{ HabitRecord : "tracks"
+    
+    User {
+        string id PK "UUID"
+        string email UK "ユニーク"
+        string name "NULL可"
+        string avatarUrl "NULL可"
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    DayTemplate {
+        string id PK "UUID"
+        string name "テンプレート名"
+        string userId FK "User.id"
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    TemplateTimeBlock {
+        string id PK "UUID"
+        string title "ブロック名"
+        string startTime "柔軟な時間表記"
+        int orderIndex "表示順"
+        string templateId FK "DayTemplate.id"
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    TemplateTask {
+        string id PK "UUID"
+        string title "タスク名"
+        int orderIndex "表示順"
+        string blockId FK "TemplateTimeBlock.id"
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    ActiveDay {
+        string id PK "UUID"
+        datetime date "日付"
+        string userId FK "User.id"
+        string templateId FK "DayTemplate.id NULL可"
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    ActiveTimeBlock {
+        string id PK "UUID"
+        string title "ブロック名"
+        string startTime "時間"
+        int orderIndex "表示順"
+        float completionRate "完了率"
+        string dayId FK "ActiveDay.id"
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    ActiveTask {
+        string id PK "UUID"
+        string title "タスク名"
+        boolean completed "完了フラグ"
+        int orderIndex "表示順"
+        string blockId FK "ActiveTimeBlock.id"
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    Todo {
+        string id PK "UUID"
+        string title "タイトル"
+        string description "詳細 NULL可"
+        boolean completed "完了フラグ"
+        boolean archived "アーカイブフラグ"
+        datetime dueDate "期限 NULL可"
+        string priority "優先度 NULL可"
+        string userId FK "User.id"
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    ContinuousHabit {
+        string id PK "UUID"
+        string title "習慣名"
+        string category "カテゴリー"
+        datetime startDate "開始日"
+        int targetDays "目標日数(14)"
+        string reminderTime "リマインド時刻 NULL可"
+        boolean isActive "アクティブフラグ"
+        string userId FK "User.id"
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    HabitRecord {
+        string id PK "UUID"
+        datetime date "記録日"
+        boolean completed "完了フラグ"
+        string habitId FK "ContinuousHabit.id"
+        datetime createdAt
+    }
+    
+    HabitHistory {
+        string id PK "UUID"
+        string title "習慣名"
+        string category "カテゴリー"
+        datetime startDate "開始日"
+        datetime endDate "終了日"
+        int totalDays "総日数"
+        int completedDays "完了日数"
+        string status "状態"
+        string userId FK "User.id"
+        datetime createdAt
+    }
+    
+    DailyEvaluation {
+        string id PK "UUID"
+        datetime date "評価日"
+        int rating "評価(1-5)"
+        string comment "コメント NULL可"
+        string userId FK "User.id"
+        datetime createdAt
+        datetime updatedAt
+    }

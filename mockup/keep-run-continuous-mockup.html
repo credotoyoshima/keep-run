@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keep Run - 継続機能モックアップ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #000;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+            font-weight: 300;
+        }
+        
+        .screens {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(375px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .screen-wrapper {
+            text-align: center;
+        }
+        
+        .screen-title {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: #333;
+            letter-spacing: -0.3px;
+        }
+        
+        .phone {
+            width: 375px;
+            height: 812px;
+            background: #fff;
+            border-radius: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            border: 8px solid #222;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .app-header {
+            height: 56px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+        }
+        
+        .content {
+            height: calc(100% - 44px - 56px - 80px);
+            overflow-y: auto;
+            background: #fafafa;
+        }
+        
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+        
+        .nav-item {
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .nav-item.active {
+            color: #000;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin: 0 auto 4px;
+        }
+        
+        .nav-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            fill: none;
+        }
+        
+        /* 継続機能のスタイル */
+        .habit-container {
+            padding: 24px;
+        }
+        
+        .progress-circle {
+            width: 240px;
+            height: 240px;
+            margin: 40px auto;
+            position: relative;
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-bg {
+            stroke: #f0f0f0;
+            stroke-width: 2;
+        }
+        
+        .progress-ring-fill {
+            stroke: #000;
+            stroke-width: 2;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+        
+        .progress-ring-fill.warning {
+            stroke: #ff4444;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .day-count {
+            font-size: 72px;
+            font-weight: 200;
+            line-height: 1;
+            margin-bottom: 8px;
+            letter-spacing: -4px;
+        }
+        
+        .day-count.warning {
+            color: #ff4444;
+        }
+        
+        .day-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .habit-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .habit-category {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .habit-category svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .complete-button {
+            width: 100%;
+            height: 64px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: -0.3px;
+        }
+        
+        .complete-button:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+        
+        .complete-button.completed {
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .complete-button.completed svg {
+            width: 20px;
+            height: 20px;
+            stroke: #fff;
+            stroke-width: 2;
+        }
+        
+        .complete-button.warning {
+            background: #ff4444;
+        }
+        
+        .complete-button.warning:hover {
+            background: #ff6666;
+        }
+        
+        .reminder-time {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .reminder-time svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* 新規習慣設定画面 */
+        .form-container {
+            padding: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+        }
+        
+        .form-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #fff;
+            font-weight: 300;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #000;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .category-item {
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .category-item:hover {
+            border-color: #ccc;
+        }
+        
+        .category-item.selected {
+            border-color: #000;
+            background: #f8f8f8;
+        }
+        
+        .category-icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .category-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: #666;
+            stroke-width: 1.5;
+            fill: none;
+        }
+        
+        .category-item.selected .category-icon svg {
+            stroke: #000;
+        }
+        
+        .category-name {
+            font-size: 14px;
+            font-weight: 400;
+        }
+        
+        .start-button {
+            width: 100%;
+            height: 56px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: all 0.2s;
+            letter-spacing: -0.3px;
+        }
+        
+        .start-button:hover {
+            background: #333;
+            transform: translateY(-1px);
+        }
+        
+        /* 完了メッセージ */
+        .success-message {
+            background: #000;
+            color: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 24px;
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .success-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+        }
+        
+        .success-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: #fff;
+            stroke-width: 1.5;
+            fill: none;
+        }
+        
+        .success-text {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+        
+        .success-subtext {
+            font-size: 14px;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+        
+        /* 履歴リスト */
+        .history-section {
+            margin-top: 40px;
+            padding: 0 24px 24px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+        }
+        
+        .history-item {
+            background: #fff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e0e0e0;
+            transition: border-color 0.2s;
+        }
+        
+        .history-item:hover {
+            border-color: #ccc;
+        }
+        
+        .history-title {
+            font-weight: 400;
+            font-size: 16px;
+        }
+        
+        .history-date {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .history-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-success {
+            background: #000;
+            color: #fff;
+        }
+        
+        .badge-failed {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+        }
+        
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+        }
+        
+        .empty-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: #ccc;
+            stroke-width: 1;
+            fill: none;
+        }
+        
+        .empty-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+        
+        .empty-text {
+            color: #666;
+            margin-bottom: 24px;
+            font-weight: 300;
+        }
+        
+        /* 警告バナー */
+        .warning-banner {
+            background: #000;
+            padding: 20px;
+            margin: 24px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .warning-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+        }
+        
+        .warning-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: #ff4444;
+            stroke-width: 2;
+            fill: none;
+        }
+        
+        .warning-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #ff4444;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+        
+        .warning-text {
+            font-size: 14px;
+            color: #fff;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+        
+        .countdown-text {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-top: 24px;
+        }
+        
+        .countdown-time {
+            font-weight: 500;
+            color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Keep Run - 継続機能モックアップ</h1>
+            <p>「継続する技術」を実装したシンプルな習慣形成機能</p>
+        </div>
+        
+        <div class="screens">
+            <!-- 画面1: 初回利用時（習慣未設定） -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">1. 初回利用時（習慣未設定）</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">継続</div>
+                    <div class="content">
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <svg><circle cx="40" cy="40" r="35"></circle><path d="M40 25v30m15-15H25"></path></svg>
+                            </div>
+                            <div class="empty-title">習慣を始めましょう</div>
+                            <div class="empty-text">5分で完了できる小さな習慣から<br>始めてみませんか？</div>
+                            <button class="complete-button">習慣を設定する</button>
+                        </div>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 画面2: 習慣設定画面 -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">2. 習慣設定画面</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">新しい習慣を設定</div>
+                    <div class="content">
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label class="form-label">習慣名（5分で完了できること）</label>
+                                <input type="text" class="form-input" placeholder="例：腕立て伏せ10回" value="毎朝5分の瞑想">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">カテゴリー</label>
+                                <div class="category-grid">
+                                    <div class="category-item">
+                                        <div class="category-icon">
+                                            <svg><path d="M5 12l5 5L20 7"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                                        </div>
+                                        <span class="category-name">運動</span>
+                                    </div>
+                                    <div class="category-item selected">
+                                        <div class="category-icon">
+                                            <svg><path d="M12 2v20M2 12h20"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                                        </div>
+                                        <span class="category-name">健康</span>
+                                    </div>
+                                    <div class="category-item">
+                                        <div class="category-icon">
+                                            <svg><path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path></svg>
+                                        </div>
+                                        <span class="category-name">学習</span>
+                                    </div>
+                                    <div class="category-item">
+                                        <div class="category-icon">
+                                            <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                                        </div>
+                                        <span class="category-name">その他</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">リマインダー時刻</label>
+                                <input type="time" class="form-input" value="06:00">
+                            </div>
+                            
+                            <button class="start-button">14日間の挑戦を開始する</button>
+                        </div>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 画面3: アクティブな習慣（実行前） -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">3. アクティブな習慣（実行前）</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">継続</div>
+                    <div class="content">
+                        <div class="habit-container">
+                            <div class="progress-circle">
+                                <svg width="240" height="240">
+                                    <circle cx="120" cy="120" r="110" fill="none" class="progress-ring-bg"/>
+                                    <circle class="progress-ring progress-ring-fill" cx="120" cy="120" r="110" fill="none" 
+                                            stroke-dasharray="691" stroke-dashoffset="345" />
+                                </svg>
+                                <div class="progress-text">
+                                    <div class="day-count">7</div>
+                                    <div class="day-label">DAY</div>
+                                </div>
+                            </div>
+                            
+                            <h2 class="habit-title">毎朝5分の瞑想</h2>
+                            <p class="habit-category">
+                                <svg><path d="M12 2v20M2 12h20"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                                健康
+                            </p>
+                            
+                            <button class="complete-button completed">
+                                <svg><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                今日は完了しました
+                            </button>
+                            
+                            <p class="reminder-time">
+                                <svg><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                リマインダー: 毎日 6:00
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 画面5: 習慣履歴 -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">5. 習慣履歴表示</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">継続</div>
+                    <div class="content">
+                        <div class="habit-container">
+                            <div class="progress-circle">
+                                <svg width="240" height="240">
+                                    <circle cx="120" cy="120" r="110" fill="none" class="progress-ring-bg"/>
+                                    <circle class="progress-ring progress-ring-fill" cx="120" cy="120" r="110" fill="none" 
+                                            stroke-dasharray="691" stroke-dashoffset="395" />
+                                </svg>
+                                <div class="progress-text">
+                                    <div class="day-count">7</div>
+                                    <div class="day-label">DAY</div>
+                                </div>
+                            </div>
+                            
+                            <h2 class="habit-title">毎朝5分の瞑想</h2>
+                            <p class="habit-category">
+                                <svg><path d="M12 2v20M2 12h20"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                                健康
+                            </p>
+                            
+                            <button class="complete-button">今日の習慣を完了する</button>
+                        </div>
+                        
+                        <div class="history-section">
+                            <h3 class="section-title">過去の習慣</h3>
+                            <div class="history-item">
+                                <div>
+                                    <div class="history-title">腕立て伏せ10回</div>
+                                    <div class="history-date">2025年4月1日 - 4月14日</div>
+                                </div>
+                                <div class="history-badge badge-success">14日達成</div>
+                            </div>
+                            <div class="history-item">
+                                <div>
+                                    <div class="history-title">英単語10個暗記</div>
+                                    <div class="history-date">2025年3月15日 - 3月28日</div>
+                                </div>
+                                <div class="history-badge badge-success">14日達成</div>
+                            </div>
+                            <div class="history-item">
+                                <div>
+                                    <div class="history-title">ランニング5分</div>
+                                    <div class="history-date">2025年3月1日 - 3月3日</div>
+                                </div>
+                                <div class="history-badge badge-failed">3日で終了</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 画面6: 3日坊主警告 -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">6. 3日坊主警告画面</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">継続</div>
+                    <div class="content">
+                        <div class="warning-banner">
+                            <div class="warning-icon">
+                                <svg><path d="M12 9v4m0 4h.01"></path><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path></svg>
+                            </div>
+                            <div class="warning-title">3日坊主の危機！</div>
+                            <div class="warning-text">このままでは振り出しに戻ります。<br>今すぐ5分だけ実行しましょう！</div>
+                        </div>
+                        
+                        <div class="habit-container">
+                            <div class="progress-circle">
+                                <svg width="240" height="240">
+                                    <circle cx="120" cy="120" r="110" fill="none" stroke="#ffdddd" stroke-width="2"/>
+                                    <circle class="progress-ring progress-ring-fill warning" cx="120" cy="120" r="110" fill="none" 
+                                            stroke-dasharray="691" stroke-dashoffset="592" />
+                                </svg>
+                                <div class="progress-text">
+                                    <div class="day-count warning">3</div>
+                                    <div class="day-label">DAY - 未完了</div>
+                                </div>
+                            </div>
+                            
+                            <h2 class="habit-title">毎朝5分の瞑想</h2>
+                            <p class="habit-category">
+                                <svg><path d="M12 2v20M2 12h20"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                                健康
+                            </p>
+                            
+                            <button class="complete-button warning">今すぐ実行する！</button>
+                            
+                            <p class="countdown-text">
+                                振り出しに戻る前のラストチャンス<br>
+                                あと<span class="countdown-time">12時間以内</span>に完了してください
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 説明セクション -->
+        <div style="max-width: 1000px; margin: 0 auto; padding: 40px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h2 style="font-size: 24px; margin-bottom: 24px; font-weight: 300; letter-spacing: -0.5px;">継続機能の特徴</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+                <div>
+                    <h3 style="font-size: 18px; margin-bottom: 12px; font-weight: 500; letter-spacing: -0.3px;">シンプルな設計</h3>
+                    <ul style="line-height: 1.8; color: #666; list-style: none; padding: 0;">
+                        <li style="padding: 4px 0;">• 1つの習慣に集中</li>
+                        <li style="padding: 4px 0;">• 5分で完了できる内容</li>
+                        <li style="padding: 4px 0;">• 14日間の短期集中型</li>
+                        <li style="padding: 4px 0;">• ワンタップで記録完了</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="font-size: 18px; margin-bottom: 12px; font-weight: 500; letter-spacing: -0.3px;">モチベーション維持</h3>
+                    <ul style="line-height: 1.8; color: #666; list-style: none; padding: 0;">
+                        <li style="padding: 4px 0;">• 段階的な励ましメッセージ</li>
+                        <li style="padding: 4px 0;">• 視覚的な進捗表示</li>
+                        <li style="padding: 4px 0;">• 達成バッジの付与</li>
+                        <li style="padding: 4px 0;">• 連続日数の強調表示</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="font-size: 18px; margin-bottom: 12px; font-weight: 500; letter-spacing: -0.3px;">3日坊主対策</h3>
+                    <ul style="line-height: 1.8; color: #666; list-style: none; padding: 0;">
+                        <li style="padding: 4px 0;">• 3日目の特別な警告表示</li>
+                        <li style="padding: 4px 0;">• 厳しめのメッセージで喝入れ</li>
+                        <li style="padding: 4px 0;">• プッシュ通知での強いリマインド</li>
+                        <li style="padding: 4px 0;">• 失敗履歴も記録して学習</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; padding: 24px; background: #f5f5f5; border-radius: 8px;">
+                <h3 style="font-size: 18px; margin-bottom: 12px; font-weight: 500; letter-spacing: -0.3px;">UI/UXのポイント</h3>
+                <p style="line-height: 1.8; color: #666; font-weight: 300;">
+                    Keep Runアプリ全体のデザインコンセプトである「Notion風」のミニマルでモノクロームなデザインを継承。
+                    大きな円形プログレスバーで視覚的に進捗を表現し、ユーザーの達成感を刺激します。
+                    シンプルな操作性により、毎日の記録を習慣化しやすくしています。
+                </p>
+            </div>
+            
+            <div style="margin-top: 24px; padding: 24px; background: #000; color: #fff; border-radius: 8px;">
+                <h3 style="font-size: 18px; margin-bottom: 12px; font-weight: 500; letter-spacing: -0.3px;">デザインの特徴</h3>
+                <p style="line-height: 1.8; opacity: 0.9; font-weight: 300;">
+                    極太の数字（72px, font-weight: 200）で日数を強調し、進捗を直感的に把握。
+                    警告状態では赤色（#ff4444）を使用し、危機感を視覚的に訴求。
+                    カテゴリーアイコンはシンプルなSVGで統一し、洗練された印象を演出しています。
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>none" class="progress-ring-bg"/>
+                                    <circle class="progress-ring progress-ring-fill" cx="120" cy="120" r="110" fill="none" 
+                                            stroke-dasharray="691" stroke-dashoffset="395" />
+                                </svg>
+                                <div class="progress-text">
+                                    <div class="day-count">7</div>
+                                    <div class="day-label">DAY</div>
+                                </div>
+                            </div>
+                            
+                            <h2 class="habit-title">毎朝5分の瞑想</h2>
+                            <p class="habit-category">
+                                <svg><path d="M12 2v20M2 12h20"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                                健康
+                            </p>
+                            
+                            <button class="complete-button">今日の習慣を完了する</button>
+                            
+                            <p class="reminder-time">
+                                <svg><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                リマインダー: 毎日 6:00
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <span>DAY</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polyline points="9 11 12 14 20 6"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                            </div>
+                            <span>ToDo</span>
+                        </div>
+                        <div class="nav-item active">
+                            <div class="nav-icon">
+                                <svg><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                            </div>
+                            <span>継続</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><polygon points="12 2 15 8.5 22 9.3 17 14.2 18.5 21.2 12 17.8 5.5 21.2 7 14.2 2 9.3 9 8.5 12 2"></polygon></svg>
+                            </div>
+                            <span>評価</span>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-icon">
+                                <svg><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path></svg>
+                            </div>
+                            <span>設定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 画面4: 完了後の表示 -->
+            <div class="screen-wrapper">
+                <h3 class="screen-title">4. 習慣完了後</h3>
+                <div class="phone">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="app-header">継続</div>
+                    <div class="content">
+                        <div class="success-message">
+                            <div class="success-icon">
+                                <svg><circle cx="24" cy="24" r="22"></circle><path d="M24 12v12m-8-8h16"></path></svg>
+                            </div>
+                            <div class="success-text">1週間達成！</div>
+                            <div class="success-subtext">半分まで来ました。その調子です！</div>
+                        </div>
+                        
+                        <div class="habit-container">
+                            <div class="progress-circle">
+                                <svg width="240" height="240">
+                                    <circle cx="120" cy="120" r="110" fill="
