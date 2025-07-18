@@ -36,7 +36,7 @@ export function BottomNavigation() {
   const pathname = usePathname()
 
   return (
-    <nav className="bg-white border-t border-gray-200 h-20 flex items-center justify-around pb-5 pt-2">
+    <nav className="bg-white border-t border-gray-200 flex items-center justify-around pt-2 pb-2 safe-bottom">
       {navigation.map((item) => {
         const isActive = pathname === item.href || (item.href === '/day' && pathname === '/')
         const Icon = item.icon
