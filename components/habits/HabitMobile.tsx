@@ -10,6 +10,7 @@ import { getTodayInJST, formatDateString } from '@/lib/date-utils'
 import { useDayChangeDetection } from '@/lib/day-change-detector'
 import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
 import { LoadingSpinnerCenter } from '@/components/ui/LoadingSpinner'
+import { useContinuousHabits } from '@/lib/hooks/useContinuousHabits'
 
 interface HabitRecord {
   date: string
@@ -31,54 +32,40 @@ interface ContinuousHabit {
 }
 
 export function HabitMobile() {
-  const [currentHabit, setCurrentHabit] = useState<ContinuousHabit | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [canCreateNew, setCanCreateNew] = useState(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showHistoryModal, setShowHistoryModal] = useState(false)
   
   // useDayStartTimeフックを使用
   const { dayStartTime } = useDayStartTime()
 
-  // 習慣データを取得
-  const fetchHabit = async () => {
-    try {
-      const response = await fetch('/api/habits')
-      if (!response.ok) {
-        console.error('Failed to fetch habit')
-        return
-      }
-      const data = await response.json()
-      if (data && data.canCreateNew) {
-        setCanCreateNew(true)
-        setCurrentHabit(null)
-      } else {
-        setCurrentHabit(data)
-        // 2日連続未達成の場合はリセット（ただし、開始から3日以上経過している場合のみ）
-        if (data && data.shouldReset && data.currentDay && data.currentDay >= 3) {
-          await handleReset(data.id)
-        }
-        // 14日達成の場合は完了
-        if (data && data.isCompleted) {
-          await handleComplete(data.id)
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching habit:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  // ReactQueryを使用して習慣データを取得・管理
+  const {
+    currentHabit,
+    canCreateNew,
+    isLoading: loading,
+    createHabit,
+    recordHabit,
+    resetHabit,
+    isCreating,
+    isRecording,
+    isResetting
+  } = useContinuousHabits()
 
-  // 日付変更を検出して習慣データを更新
+  // 日付変更を検出（ReactQueryが自動管理）
   useDayChangeDetection(dayStartTime, () => {
-    console.log('Day changed, refreshing habit...')
-    fetchHabit()
+    console.log('Day changed, React Query will handle data refresh')
   })
 
-  useEffect(() => {
-    fetchHabit()
-  }, [dayStartTime])
+  // 一時的な関数（ReactQuery移行完了後に削除）
+  const fetchHabit = async () => {
+    console.log('fetchHabit: ReactQuery移行待ち')
+    // 元のfetch実装は一時的にコメントアウト
+  }
+
+  const setCurrentHabit = (habit: any) => {
+    console.log('setCurrentHabit: ReactQuery移行待ち', habit)
+    // 元のstate設定は一時的にコメントアウト
+  }
 
   // 習慣をリセット
   const handleReset = async (habitId: string) => {

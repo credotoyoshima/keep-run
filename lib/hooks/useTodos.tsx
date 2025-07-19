@@ -3,12 +3,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 interface Todo {
   id: string
   title: string
-  description?: string
+  description?: string | null
   completed: boolean
-  priority: 'high' | 'medium' | 'low'
-  dueDate?: string
-  createdAt: Date
-  updatedAt: Date
+  taskType: 'routine' | 'spot'
+  important: boolean
+  dueDate?: string | null
+  createdAt: string
+  updatedAt: string
 }
 
 export function useTodos() {
@@ -27,7 +28,13 @@ export function useTodos() {
 
   // Add todo mutation
   const addTodoMutation = useMutation({
-    mutationFn: async (newTodo: { title: string; description?: string; priority: 'high' | 'medium' | 'low'; dueDate?: string }) => {
+    mutationFn: async (newTodo: { 
+      title: string; 
+      description?: string; 
+      taskType: 'routine' | 'spot'; 
+      important: boolean; 
+      dueDate?: string 
+    }) => {
       const response = await fetch('/api/todos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

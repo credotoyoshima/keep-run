@@ -48,8 +48,35 @@ export function useTimeBlocks(page: number) {
       if (!response.ok) throw new Error('Failed to add time block')
       return response.json()
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['timeBlocks', page] })
+    onMutate: async ({ title, startTime }) => {
+      await queryClient.cancelQueries({ queryKey: ['timeBlocks', page] })
+      const previousTimeBlocks = queryClient.getQueryData(['timeBlocks', page])
+      
+      // 楽観的更新で新しいブロックを追加
+      queryClient.setQueryData(['timeBlocks', page], (old: TimeBlock[] = []) => {
+        const newBlock = {
+          id: `temp-${Date.now()}`,
+          title,
+          startTime,
+          orderIndex: old.length,
+          completionRate: 0,
+          tasks: []
+        }
+        return [...old, newBlock]
+      })
+      
+      return { previousTimeBlocks }
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['timeBlocks', page], context?.previousTimeBlocks)
+    },
+    onSuccess: (data) => {
+      // サーバーからの正確なデータで楽観的更新を修正
+      queryClient.setQueryData(['timeBlocks', page], (old: TimeBlock[] = []) => {
+        return old.map(block => 
+          block.id.startsWith('temp-') ? data : block
+        )
+      })
     }
   })
 

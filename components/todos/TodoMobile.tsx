@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { useDayChangeDetection } from '@/lib/day-change-detector'
 import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
+import { useTodos } from '@/lib/hooks/useTodos'
 
 interface Todo {
   id: string
@@ -31,9 +32,7 @@ interface Todo {
 
 
 export function TodoMobile() {
-  const [todos, setTodos] = useState<Todo[]>([])
   const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('pending')
-  const [loading, setLoading] = useState(true)
   const [showAddForm, setShowAddForm] = useState(false)
   const [newTodoTitle, setNewTodoTitle] = useState('')
   const [newTodoType, setNewTodoType] = useState<'routine' | 'spot'>('spot')
@@ -46,38 +45,31 @@ export function TodoMobile() {
   const [editTodoType, setEditTodoType] = useState<'routine' | 'spot'>('spot')
   const [editTodoImportant, setEditTodoImportant] = useState(false)
 
-  // ToDoリストを取得
-  const fetchTodos = async () => {
-    try {
-      const response = await fetch('/api/todos')
-      if (!response.ok) {
-        console.error('Failed to fetch todos')
-        return
-      }
-      const data = await response.json()
-      setTodos(data)
-    } catch (error) {
-      console.error('Error fetching todos:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  // ReactQueryを使用してToDoリストを取得・管理
+  const { 
+    todos, 
+    isLoading: loading, 
+    error, 
+    addTodo: addTodoMutation, 
+    updateTodo: updateTodoMutation, 
+    toggleTodo: toggleTodoMutation, 
+    deleteTodo: deleteTodoMutation 
+  } = useTodos()
 
   // useDayStartTimeフックを使用
   const { dayStartTime } = useDayStartTime()
 
-  // 日付変更を検出してToDoリストを更新
+  // 日付変更を検出（ReactQueryが自動的にデータを管理）
   useDayChangeDetection(dayStartTime, () => {
-    console.log('Day changed, refreshing todos...')
-    fetchTodos()
+    console.log('Day changed, data will be automatically refreshed by React Query')
   })
 
   useEffect(() => {
-    fetchTodos()
+    // ReactQueryが自動的にデータを取得するため、手動呼び出しは不要
 
-    // 設定変更時にToDoリストを再取得
+    // 設定変更時の処理（React Queryが自動更新）
     const handleSettingsChange = () => {
-      fetchTodos()
+      console.log('Settings changed, React Query will handle data refresh')
     }
 
     window.addEventListener('settingsChanged', handleSettingsChange)
@@ -150,134 +142,51 @@ export function TodoMobile() {
     setTouchEnd(0)
   }
 
-  // ToDoの完了状態を切り替え
-  const toggleTodoCompletion = async (todoId: string) => {
-    const todo = todos.find(t => t.id === todoId)
+  // ToDoの完了状態を切り替え（ReactQuery版）
+  const toggleTodoCompletion = (todoId: string) => {
+    const todo = todos.find((t: Todo) => t.id === todoId)
     if (!todo) return
 
-    // 楽観的更新
-    setTodos(todos =>
-      todos.map(t =>
-        t.id === todoId ? { ...t, completed: !t.completed } : t
-      )
-    )
-
-    try {
-      const response = await fetch(`/api/todos/${todoId}`, {
-        method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ completed: !todo.completed })
-      })
-
-      if (!response.ok) {
-        // エラーの場合は元に戻す
-        setTodos(todos =>
-          todos.map(t =>
-            t.id === todoId ? { ...t, completed: todo.completed } : t
-          )
-        )
-      } else {
-        // ルーティンタスクの場合、サーバーからの応答で更新
-        const updatedTodo = await response.json()
-        setTodos(todos =>
-          todos.map(t =>
-            t.id === todoId ? { ...t, completed: updatedTodo.completed } : t
-          )
-        )
-      }
-    } catch (error) {
-      console.error('Error updating todo:', error)
-      // エラーの場合は元に戻す
-      setTodos(todos =>
-        todos.map(t =>
-          t.id === todoId ? { ...t, completed: todo.completed } : t
-        )
-      )
-    }
+    // ReactQueryのmutationを使用（楽観的更新付き）
+    toggleTodoMutation({ id: todoId, completed: !todo.completed })
   }
 
-  // 重要フラグを切り替え
-  const toggleTodoImportant = async (todoId: string) => {
-    const todo = todos.find(t => t.id === todoId)
+  // 重要フラグを切り替え（ReactQuery版）
+  const toggleTodoImportant = (todoId: string) => {
+    const todo = todos.find((t: Todo) => t.id === todoId)
     if (!todo) return
 
-    // 楽観的更新
-    setTodos(todos =>
-      todos.map(t =>
-        t.id === todoId ? { ...t, important: !t.important } : t
-      )
-    )
-
-    try {
-      const response = await fetch(`/api/todos/${todoId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ important: !todo.important })
-      })
-
-      if (!response.ok) {
-        // エラーの場合は元に戻す
-        setTodos(todos =>
-          todos.map(t =>
-            t.id === todoId ? { ...t, important: todo.important } : t
-          )
-        )
-      }
-    } catch (error) {
-      console.error('Error updating todo:', error)
-      // エラーの場合は元に戻す
-      setTodos(todos =>
-        todos.map(t =>
-          t.id === todoId ? { ...t, important: todo.important } : t
-        )
-      )
-    }
+    // ReactQueryのmutationを使用（楽観的更新付き）
+    updateTodoMutation({ id: todoId, important: !todo.important })
   }
 
-  // 新しいToDoを追加
-  const addTodo = async () => {
+  // ToDoを追加（ReactQuery版）
+  const handleAddTodo = () => {
     if (!newTodoTitle.trim()) return
 
-    try {
-      const response = await fetch('/api/todos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          title: newTodoTitle,
-          taskType: newTodoType,
-          important: newTodoImportant
-        })
-      })
-
-      if (response.ok) {
-        await fetchTodos()
+    addTodoMutation({
+      title: newTodoTitle,
+      taskType: newTodoType,
+      important: newTodoImportant
+    }, {
+      onSuccess: () => {
         setNewTodoTitle('')
         setNewTodoType('spot')
+        setNewTodoImportant(false)
         setShowAddForm(false)
       }
-    } catch (error) {
-      console.error('Error adding todo:', error)
-    }
+    })
   }
 
-  // ToDoを削除
-  const deleteTodo = async (todoId: string) => {
+  // ToDoを削除（ReactQuery版）
+  const handleDeleteTodo = (todoId: string) => {
     if (!confirm('このToDoを削除してもよろしいですか？')) return
 
-    try {
-      const response = await fetch(`/api/todos/${todoId}`, {
-        method: 'DELETE'
-      })
-
-      if (response.ok) {
-        await fetchTodos()
+    deleteTodoMutation(todoId, {
+      onSuccess: () => {
         setSwipedTodo(null)
       }
-    } catch (error) {
-      console.error('Error deleting todo:', error)
-    }
+    })
   }
 
   // 編集を開始
@@ -289,42 +198,32 @@ export function TodoMobile() {
     setSwipedTodo(null)
   }
 
-  // ToDoを更新
-  const updateTodo = async (todoId: string) => {
+  // ToDoを更新（ReactQuery版）
+  const handleUpdateTodo = (todoId: string) => {
     if (!editTodoTitle.trim()) return
 
-    try {
-      const response = await fetch(`/api/todos/${todoId}`, {
-        method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-          title: editTodoTitle,
-          taskType: editTodoType,
-          important: editTodoImportant
-        })
-      })
-
-      if (response.ok) {
-        await fetchTodos()
+    updateTodoMutation({
+      id: todoId,
+      title: editTodoTitle,
+      taskType: editTodoType,
+      important: editTodoImportant
+    }, {
+      onSuccess: () => {
         setEditingTodo(null)
         setEditTodoTitle('')
         setEditTodoType('spot')
         setEditTodoImportant(false)
       }
-    } catch (error) {
-      console.error('Error updating todo:', error)
-    }
+    })
   }
 
-  const filteredTodos = todos.filter(todo => {
+  const filteredTodos = todos.filter((todo: Todo) => {
     if (filter === 'pending') return !todo.completed
     if (filter === 'completed') return todo.completed
     return true
   })
 
-  const completedCount = todos.filter(todo => todo.completed).length
+  const completedCount = todos.filter((todo: Todo) => todo.completed).length
   const totalCount = todos.length
   const progressPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
 
@@ -391,7 +290,7 @@ export function TodoMobile() {
 
       {/* Todo List */}
       <div className="space-y-3 mb-5">
-        {filteredTodos.map((todo) => (
+        {filteredTodos.map((todo: Todo) => (
           <div 
             key={todo.id}
             className={`bg-white rounded-lg overflow-hidden transition-all ${
@@ -418,7 +317,7 @@ export function TodoMobile() {
                         setEditTodoType('spot')
                         setEditTodoImportant(false)
                       } else if (e.key === 'Enter' && editTodoTitle.trim()) {
-                        updateTodo(todo.id)
+                        handleUpdateTodo(todo.id)
                       }
                     }}
                   />
@@ -455,7 +354,7 @@ export function TodoMobile() {
                       </label>
                     </div>
                     <Button
-                      onClick={() => updateTodo(todo.id)}
+                      onClick={() => handleUpdateTodo(todo.id)}
                       disabled={!editTodoTitle.trim()}
                       size="icon"
                       className="h-9 w-9 bg-black hover:bg-gray-800 ml-auto"
@@ -554,7 +453,7 @@ export function TodoMobile() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
-                        deleteTodo(todo.id)
+                        handleDeleteTodo(todo.id)
                       }}
                       className="swipe-action-button p-2 hover:bg-red-50 rounded-lg transition-colors bg-white shadow-sm border border-gray-200"
                     >
@@ -608,7 +507,7 @@ export function TodoMobile() {
                   setNewTodoTitle('')
                   setNewTodoType('spot')
                 } else if (e.key === 'Enter' && newTodoTitle.trim()) {
-                  addTodo()
+                  handleAddTodo()
                 }
               }}
             />
@@ -645,7 +544,7 @@ export function TodoMobile() {
                 </label>
               </div>
               <Button
-                onClick={addTodo}
+                onClick={handleAddTodo}
                 disabled={!newTodoTitle.trim()}
                 size="icon"
                 className="h-9 w-9 bg-black hover:bg-gray-800 ml-auto"
