@@ -23,14 +23,14 @@ export function ViewTransitionLink({
   onTouchStart 
 }: ViewTransitionLinkProps) {
   const router = useRouter()
-  const [isPending, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
     
     // View Transitions APIが利用可能な場合
     if ('startViewTransition' in document) {
-      (document as any).startViewTransition(() => {
+      (document as Document & { startViewTransition: (callback: () => void) => void }).startViewTransition(() => {
         startTransition(() => {
           router.push(href)
         })

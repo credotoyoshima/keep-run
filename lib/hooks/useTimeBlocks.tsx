@@ -1,5 +1,4 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState, useEffect } from 'react'
 
 interface Task {
   id: string
@@ -29,7 +28,7 @@ export function useTimeBlocks(page: number) {
         if (response.status === 401 || response.status === 403) {
           return []
         }
-        const error = new Error('Failed to fetch time blocks') as any
+        const error = new Error('Failed to fetch time blocks') as Error & { status: number }
         error.status = response.status
         throw error
       }

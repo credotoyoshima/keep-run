@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { Tables } from '@/lib/supabase/types'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -13,7 +14,7 @@ import { User, LogOut } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 export function Header() {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<Tables<'User'> | null>(null)
   const router = useRouter()
   const supabase = createClient()
 

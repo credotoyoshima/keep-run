@@ -74,7 +74,6 @@ export function SimpleDayViewOptimized() {
     }
     return 1
   })
-  const maxPages = 3
   
   // useDayStartTimeフックを使用
   const { dayStartTime } = useDayStartTime()

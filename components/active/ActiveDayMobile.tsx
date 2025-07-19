@@ -41,7 +41,6 @@ interface TimeBlocksData {
 
 export function ActiveDayMobile() {
   const [activeDay, setActiveDay] = useState<TimeBlocksData | null>(null)
-  const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>([])
   const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [newBlockTitle, setNewBlockTitle] = useState('')

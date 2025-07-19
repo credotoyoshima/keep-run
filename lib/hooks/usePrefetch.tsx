@@ -97,7 +97,7 @@ export function usePrefetch() {
         prefetchHabits(),
         prefetchEvaluations(new Date().getFullYear(), new Date().getMonth() + 1),
       ])
-    } catch (error) {
+    } catch {
       // エラーは静かに処理
       console.log('Prefetch completed with some errors')
     }

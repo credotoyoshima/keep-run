@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
 
 // 90日以上前のアーカイブデータを物理削除するバッチ処理
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -141,5 +141,5 @@ export async function GET(request: NextRequest) {
   }
 
   // POSTメソッドと同じ処理を実行
-  return POST(request)
+  return POST()
 }

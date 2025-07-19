@@ -34,7 +34,7 @@ export function DayStartTimeModal({ isOpen, onClose, currentTime, onSave }: DayS
         onClose()
         setMessage('')
       }, 1500)
-    } catch (error) {
+    } catch {
       setMessage('保存に失敗しました')
     } finally {
       setLoading(false)

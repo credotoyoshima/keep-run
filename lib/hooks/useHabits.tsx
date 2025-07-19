@@ -14,15 +14,6 @@ interface Habit {
   updatedAt: Date
 }
 
-interface HabitValue {
-  id: string
-  habitId: string
-  date: Date
-  value: number
-  createdAt: Date
-  updatedAt: Date
-}
-
 export function useHabits() {
   const queryClient = useQueryClient()
 

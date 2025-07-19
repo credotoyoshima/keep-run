@@ -81,7 +81,7 @@ export async function PATCH(
       }
 
       // ルーティンタスクの場合、completedフィールドは更新しない
-      const updateData: any = {}
+      const updateData: Record<string, unknown> = {}
       if (body.title !== undefined) updateData.title = body.title
       if (body.description !== undefined) updateData.description = body.description
       if (body.taskType !== undefined) updateData.taskType = body.taskType
@@ -112,7 +112,7 @@ export async function PATCH(
     }
 
     // スポットタスクの場合は通常通り処理
-    const updateData: any = {}
+    const updateData: Record<string, unknown> = {}
     if (body.title !== undefined) updateData.title = body.title
     if (body.description !== undefined) updateData.description = body.description
     if (body.completed !== undefined) updateData.completed = body.completed

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import { MobileLayout } from '@/components/layout/MobileLayout'
 import { ProfileEditModal } from './ProfileEditModal'
 import { DayStartTimeModal } from './DayStartTimeModal'

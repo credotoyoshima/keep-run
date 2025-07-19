@@ -74,7 +74,7 @@ export function BottomNavigation() {
   //   }
   // }, [pathname, isAuthenticated, prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations])
 
-  const handleMouseEnter = (href: string) => {
+  const handleMouseEnter = () => {
     // プリフェッチ機能を一時的に無効化
     // 認証されていない場合はプリフェッチしない
     // if (!isAuthenticated) return
@@ -104,8 +104,8 @@ export function BottomNavigation() {
             key={item.name}
             href={item.href}
             prefetch={true}
-            onMouseEnter={() => handleMouseEnter(item.href)}
-            onTouchStart={() => handleMouseEnter(item.href)}
+            onMouseEnter={() => handleMouseEnter()}
+            onTouchStart={() => handleMouseEnter()}
             className={`flex flex-col items-center justify-center text-xs transition-colors ${
               isActive 
                 ? 'text-black' 

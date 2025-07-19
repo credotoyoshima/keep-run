@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { Plus, FileText } from 'lucide-react'
 import { Database } from '@/lib/supabase/types'
@@ -35,8 +34,6 @@ interface CreateActiveDayDialogProps {
 
 export function CreateActiveDayDialog({ open, onOpenChange, onCreated }: CreateActiveDayDialogProps) {
   const [templates, setTemplates] = useState<DayTemplateWithBlocks[]>([])
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('')
-  const [loading, setLoading] = useState(false)
   const [fetchingTemplates, setFetchingTemplates] = useState(true)
   const supabase = createClient()
 
@@ -69,7 +66,6 @@ export function CreateActiveDayDialog({ open, onOpenChange, onCreated }: CreateA
   }
 
   const createFromTemplate = async (template: DayTemplateWithBlocks) => {
-    setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
@@ -88,7 +84,6 @@ export function CreateActiveDayDialog({ open, onOpenChange, onCreated }: CreateA
       .single()
 
     if (activeDayError || !activeDay) {
-      setLoading(false)
       return
     }
 
@@ -124,13 +119,11 @@ export function CreateActiveDayDialog({ open, onOpenChange, onCreated }: CreateA
       }
     }
 
-    setLoading(false)
     onCreated()
     onOpenChange(false)
   }
 
   const createEmptyDay = async () => {
-    setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
@@ -146,7 +139,6 @@ export function CreateActiveDayDialog({ open, onOpenChange, onCreated }: CreateA
         updatedAt: new Date().toISOString(),
       })
 
-    setLoading(false)
     onCreated()
     onOpenChange(false)
   }
@@ -200,7 +192,7 @@ export function CreateActiveDayDialog({ open, onOpenChange, onCreated }: CreateA
                         </CardHeader>
                         <CardContent>
                           <div className="text-sm text-muted-foreground">
-                            {template.timeBlocks.slice(0, 3).map((block, index) => (
+                            {template.timeBlocks.slice(0, 3).map((block) => (
                               <div key={block.id}>
                                 {block.startTime} - {block.title}
                               </div>

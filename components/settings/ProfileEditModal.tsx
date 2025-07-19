@@ -65,7 +65,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
       } else {
         setMessage('更新に失敗しました')
       }
-    } catch (error) {
+    } catch {
       setMessage('エラーが発生しました')
     } finally {
       setLoading(false)

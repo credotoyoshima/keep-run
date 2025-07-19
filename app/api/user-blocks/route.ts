@@ -3,13 +3,31 @@ import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
 import { getUserDayStartTimeByEmail, getOrCreateUserByEmail } from '@/lib/server-utils'
 
+type TimeBlockWithTasks = {
+  id: string
+  title: string
+  startTime: string
+  orderIndex: number
+  pageNumber: number
+  completionRate: number
+  archived: boolean
+  tasks: {
+    id: string
+    title: string
+    completed: boolean
+    orderIndex: number
+    archived: boolean
+  }[]
+}
+
 // ユーザーの時間ブロックを取得（日付に依存しない）
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-    if (authError || !user) {
+    if (authError || !user || !user.email) {
+      console.error('Authentication error:', authError || 'No user or email')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -21,7 +39,7 @@ export async function GET(request: NextRequest) {
     const dayStartTime = await getUserDayStartTimeByEmail(user.email!)
 
     // ユーザーに紐づく指定ページの時間ブロックを取得
-    const timeBlocks = await prisma.$queryRaw<any[]>`
+    const timeBlocks = await prisma.$queryRaw<TimeBlockWithTasks[]>`
       SELECT 
         atb.id,
         atb.title,
@@ -43,13 +61,13 @@ export async function GET(request: NextRequest) {
       INNER JOIN "ActiveDay" ad ON atb."dayId" = ad.id
       LEFT JOIN "ActiveTask" at ON at."blockId" = atb.id
       INNER JOIN "User" u ON ad."userId" = u.id
-      WHERE u.email = ${user.email} AND atb."pageNumber" = ${pageNumber}
+      WHERE u.email = ${user.email!} AND atb."pageNumber" = ${pageNumber}
       GROUP BY atb.id, atb.title, atb."startTime", atb."orderIndex", atb."pageNumber", atb."completionRate", atb."createdAt", atb."updatedAt"
       ORDER BY atb."startTime"
     `
 
     // PostgreSQLのjson_aggはnullを含む可能性があるため、配列として整形
-    const formattedBlocks = (timeBlocks || []).map((block: any) => ({
+    const formattedBlocks = (timeBlocks || []).map((block) => ({
       ...block,
       tasks: block.tasks || []
     }))
@@ -87,7 +105,8 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-    if (authError || !user) {
+    if (authError || !user || !user.email) {
+      console.error('Authentication error:', authError || 'No user or email')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -149,7 +168,8 @@ export async function DELETE(request: NextRequest) {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-    if (authError || !user) {
+    if (authError || !user || !user.email) {
+      console.error('Authentication error:', authError || 'No user or email')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 

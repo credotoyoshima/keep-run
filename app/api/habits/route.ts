@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
-import { getDateForDayStart, getTodayInJST, formatDateString } from '@/lib/date-utils'
+import { getTodayInJST, formatDateString } from '@/lib/date-utils'
 import { getUserDayStartTimeByEmail } from '@/lib/server-utils'
 
 // アクティブな習慣を取得
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -162,16 +162,6 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // 最新の習慣履歴を確認（リセットされた習慣は除外）
-    const lastCompletedHistory = await prisma.habitHistory.findFirst({
-      where: {
-        userId: user.id,
-        status: 'completed' // 完了した習慣のみチェック
-      },
-      orderBy: {
-        endDate: 'desc'
-      }
-    })
 
     // リセットされていない最新の習慣を確認
     const lastNonAbandonedHabit = await prisma.continuousHabit.findFirst({

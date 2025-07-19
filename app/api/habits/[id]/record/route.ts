@@ -19,7 +19,7 @@ export async function POST(
     const params = await context.params
     const habitId = params.id
     const body = await request.json()
-    const { date, completed, dayStartTime } = body
+    const { completed, dayStartTime } = body
 
     // ユーザーが所有する習慣か確認
     const habit = await prisma.continuousHabit.findFirst({

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { MobileLayout } from '@/components/layout/MobileLayout'
 import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
 import { CheckCircle, Plus, Circle } from 'lucide-react'
 import { CreateHabitModal } from './CreateHabitModal'
 import { HabitHistoryModal } from './HabitHistoryModal'
