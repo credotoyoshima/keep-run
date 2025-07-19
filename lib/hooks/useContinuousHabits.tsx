@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDayStartTime } from './useDayStartTime'
+import { getTodayInJST, formatDateString } from '@/lib/date-utils'
 
 interface HabitRecord {
   date: string
@@ -76,7 +77,34 @@ export function useContinuousHabits() {
       // 楽観的更新
       queryClient.setQueryData(['continuousHabits'], (old: any) => {
         if (old?.id === habitId) {
-          return { ...old, todayCompleted: completed }
+          // dayStartTimeを考慮した今日の日付を取得
+          const today = getTodayInJST(dayStartTime)
+          const todayStr = formatDateString(today)
+          
+          // records配列を更新
+          const updatedRecords = [...(old.records || [])]
+          const todayRecordIndex = updatedRecords.findIndex(r => r.date === todayStr)
+          
+          if (todayRecordIndex >= 0) {
+            // 既存の記録を更新
+            updatedRecords[todayRecordIndex] = { ...updatedRecords[todayRecordIndex], completed }
+          } else {
+            // 新しい記録を追加
+            updatedRecords.push({ date: todayStr, completed })
+          }
+          
+          // completedDaysを再計算（習慣開始日以降のもののみ）
+          const startDate = new Date(old.startDate)
+          const completedDays = updatedRecords.filter(r => 
+            r.completed && new Date(r.date) >= startDate
+          ).length
+          
+          return { 
+            ...old, 
+            todayCompleted: completed,
+            records: updatedRecords,
+            completedDays
+          }
         }
         return old
       })

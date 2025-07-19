@@ -657,3 +657,1708 @@ Import trace for requested module:
  ✓ Compiled in 732ms (1768 modules)
  ✓ Compiled in 690ms (1768 modules)
  ✓ Compiled in 730ms (1768 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/credo/projects/keep-run/.next/cache/webpack/server-development/17.pack.gz_' -> '/home/credo/projects/keep-run/.next/cache/webpack/server-development/17.pack.gz'
+ ○ Compiling / ...
+ ✓ Compiled / in 1069ms (937 modules)
+ GET / 200 in 1393ms
+ GET /day 200 in 48ms
+ ○ Compiling /api/user-blocks ...
+ ✓ Compiled /api/user-blocks in 605ms (956 modules)
+prisma:error 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+Error fetching user blocks: 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+ GET /api/user-blocks?page=2 500 in 5939ms
+prisma:error 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+Error fetching user blocks: 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+ GET /api/user-blocks?page=1 500 in 9372ms
+prisma:error 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+Error fetching user blocks: 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+ GET /api/user-blocks?page=2 500 in 8947ms
+prisma:error 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+Error fetching user blocks: 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+ GET /api/user-blocks?page=1 500 in 8976ms
+ ✓ Compiled /api/todos in 341ms (959 modules)
+ ✓ Compiled in 1ms (959 modules)
+ ✓ Compiled in 0ms (959 modules)
+ ✓ Compiled in 1ms (959 modules)
+ GET /day 200 in 1053ms
+prisma:error 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+Error fetching user dayStartTime by email: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+    at async getUserDayStartTimeByEmail (lib/server-utils.ts:31:17)
+    at async GET (app/api/todos/route.ts:18:25)
+  29 |   try {
+  30 |     // ユーザーが存在しない場合は作成
+> 31 |     const user = await prisma.user.upsert({
+     |                 ^
+  32 |       where: { email },
+  33 |       update: {},
+  34 |       create: { {
+  code: 'P1001',
+  meta: [Object],
+  clientVersion: '6.11.1'
+}
+ GET /api/todos 200 in 6861ms
+ GET /api/user-blocks?page=3 200 in 6891ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /api/habits in 889ms (1786 modules)
+ ✓ Compiled (1788 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1275ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /_next/static/webpack/5289017b7725586a.webpack.hot-update.json 404 in 751ms
+ GET /day 200 in 200ms
+ GET /api/habits 200 in 690ms
+ GET /day 200 in 228ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 37ms
+ GET /api/user-blocks?page=3 200 in 395ms
+ GET /api/user-blocks?page=1 200 in 435ms
+ GET /api/todos 200 in 331ms
+ GET /api/habits 200 in 337ms
+ ✓ Compiled /api/evaluations in 252ms (964 modules)
+ GET /day 200 in 40ms
+ GET /api/evaluations?year=2025&month=7 200 in 547ms
+ ✓ Compiled /favicon.ico in 333ms (966 modules)
+ GET /favicon.ico 200 in 337ms
+ GET /favicon.ico 200 in 365ms
+ GET /api/user-blocks?page=2 200 in 416ms
+ GET /todo 200 in 53ms
+ GET /api/todos 200 in 390ms
+ GET /routines 200 in 35ms
+ GET /_next/static/chunks/app/routines/page.js 404 in 66ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 2.7s (1768 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(ssr)/./components/habits/HabitMobile.tsx:13:118)
+    at (ssr)/./components/habits/HabitMobile.tsx (.next/server/app/routines/page.js:271:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(ssr)/./components/habits/RoutinesPageClient.tsx:7:70)
+    at (ssr)/./components/habits/RoutinesPageClient.tsx (.next/server/app/routines/page.js:282:1)
+    at Object.__webpack_require__ [as require] (.next/server/webpack-runtime.js:33:43) {
+  digest: '257639001'
+}
+ GET /routines 200 in 2224ms
+ ✓ Compiled /_not-found in 378ms (1758 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 487ms
+ GET /_next/static/chunks/app/routines/page.js 404 in 511ms
+ ✓ Compiled /api/user-blocks in 197ms (951 modules)
+prisma:error Error in PostgreSQL connection: Error { kind: Io, cause: Some(Os { code: 104, kind: ConnectionReset, message: "Connection reset by peer" }) }
+prisma:error 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+Error fetching user blocks: 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+ GET /api/user-blocks?page=1 500 in 5465ms
+prisma:error 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+Error fetching user blocks: 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+ GET /api/user-blocks?page=1 500 in 5141ms
+ ○ Compiling /api/todos ...
+ ✓ Compiled /api/todos in 1322ms (1794 modules)
+ GET /routines 404 in 16ms
+ GET /routines 404 in 15ms
+ GET /api/todos 200 in 1194ms
+ GET /routines 404 in 33ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 20ms
+ GET /routines 404 in 15ms
+ GET /routines 404 in 12ms
+prisma:error 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+Error fetching user dayStartTime by email: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.user.upsert()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+    at async getUserDayStartTimeByEmail (lib/server-utils.ts:31:17)
+    at async GET (app/api/todos/route.ts:18:25)
+  29 |   try {
+  30 |     // ユーザーが存在しない場合は作成
+> 31 |     const user = await prisma.user.upsert({
+     |                 ^
+  32 |       where: { email },
+  33 |       update: {},
+  34 |       create: { {
+  code: 'P1001',
+  meta: [Object],
+  clientVersion: '6.11.1'
+}
+ GET /routines 404 in 15ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+prisma:error 
+Invalid `prisma.todo.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+Error fetching todos: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.todo.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-ap-northeast-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-0-ap-northeast-1.pooler.supabase.com:5432`.
+    at async GET (app/api/todos/route.ts:25:18)
+  23 |
+  24 |     // アーカイブされていないToDoを取得
+> 25 |     const todos = await prisma.todo.findMany({
+     |                  ^
+  26 |       where: {
+  27 |         userId: user.id,
+  28 |         archived: false {
+  code: 'P1001',
+  meta: [Object],
+  clientVersion: '6.11.1'
+}
+ GET /routines 404 in 13ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 16ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 16ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 13ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 22ms
+ GET /routines 404 in 19ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 14ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 13ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 16ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 14ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 15ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 9ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 13ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 15ms
+ GET /routines 404 in 10ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/credo/projects/keep-run/.next/cache/webpack/client-development/7.pack.gz_' -> '/home/credo/projects/keep-run/.next/cache/webpack/client-development/7.pack.gz'
+ GET /routines 404 in 12ms
+ GET /routines 404 in 19ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/credo/projects/keep-run/.next/cache/webpack/server-development/1.pack.gz_' -> '/home/credo/projects/keep-run/.next/cache/webpack/server-development/1.pack.gz'
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 15ms
+ GET /routines 404 in 13ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 18ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 9ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 19ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 13ms
+ GET /routines 404 in 9ms
+ GET /routines 404 in 18ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 13ms
+ GET /routines 404 in 9ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 16ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 9ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 13ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 15ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 9ms
+ GET /routines 404 in 14ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 13ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 14ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 15ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 17ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 13ms
+ GET /routines 404 in 15ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 15ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 9ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 16ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 16ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 9ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 11ms
+ GET /routines 404 in 12ms
+ GET /routines 404 in 16ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 10ms
+ GET /routines 404 in 9ms
+ GET /routines 404 in 10ms
+ ✓ Compiled in 586ms (1758 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/credo/projects/keep-run/.next/cache/webpack/server-development/0.pack.gz_' -> '/home/credo/projects/keep-run/.next/cache/webpack/server-development/0.pack.gz'
+ ⨯ [Error: ENOENT: no such file or directory, open '/home/credo/projects/keep-run/.next/server/app-paths-manifest.json'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/credo/projects/keep-run/.next/server/app-paths-manifest.json'
+}
+ GET /routines 500 in 4496ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 1468ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 740ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 758ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 725ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 861ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 1357ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 2246ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 1277ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 816ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 789ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 700ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 637ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 647ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 701ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 581ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 566ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 515ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 580ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 503ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 769ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 677ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 601ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 641ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 577ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 611ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 623ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 563ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 605ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 594ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 465ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 683ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 544ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 526ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 663ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 592ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 488ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 495ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 516ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 483ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 479ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 469ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 453ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 474ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 469ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 511ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 496ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 962ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 456ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 427ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 439ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 443ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 486ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 452ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 447ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 477ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 471ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 476ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 461ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 487ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 474ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 488ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 517ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 546ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 587ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 595ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 565ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 479ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 450ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 499ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 487ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 501ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 485ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 643ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 635ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 490ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 496ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 511ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 506ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 492ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 503ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 516ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 502ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 546ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 668ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 451ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 452ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 440ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 462ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 477ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 455ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 453ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 459ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 494ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 532ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 498ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 482ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 495ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 469ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 732ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 629ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 525ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 589ms
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>) {
+  digest: '3371361150'
+}
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (.next/server/webpack-runtime.js:1:128)
+    at JSON.parse (<anonymous>)
+ GET /routines 500 in 948ms
+ ✓ Compiled in 1489ms (1768 modules)
+ ✓ Compiled in 1440ms (1768 modules)
+ ✓ Compiled in 1393ms (1768 modules)
+ ✓ Compiled in 3.6s (1754 modules)
+ ✓ Compiled in 420ms (1754 modules)
+ ✓ Compiled in 422ms (1754 modules)
+ ✓ Compiled in 659ms (1768 modules)
+ ✓ Compiled in 517ms (1768 modules)
+ ✓ Compiled in 589ms (1770 modules)
+ ✓ Compiled in 845ms (1770 modules)
+ ✓ Compiled in 802ms (1770 modules)
+ ✓ Compiled in 451ms (1770 modules)
+ ✓ Compiled in 1230ms (1770 modules)
+ ✓ Compiled in 556ms (1770 modules)
+ ✓ Compiled in 464ms (1770 modules)
+ ✓ Compiled in 484ms (1770 modules)
+ ✓ Compiled in 1128ms (1770 modules)
+ ✓ Compiled in 982ms (1756 modules)
+ ✓ Compiled in 360ms (1756 modules)
+ ✓ Compiled in 421ms (1756 modules)
