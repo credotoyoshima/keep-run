@@ -1,5 +1,3 @@
-'use client'
-
 import { HabitMobile } from '@/components/habits/HabitMobile'
 
 export default function RoutinesPage() {
