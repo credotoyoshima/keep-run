@@ -1,10 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { usePrefetch } from '@/lib/hooks/usePrefetch'
-import { createClient } from '@/lib/supabase/client'
+// import { useEffect, useState } from 'react'
+// import { usePrefetch } from '@/lib/hooks/usePrefetch'
+// import { createClient } from '@/lib/supabase/client'
 
 export function InitialDataLoaderAuth() {
+  // プリフェッチ機能を一時的に無効化
+  return null
+  
+  /* TODO: 認証エラーを解決後に有効化
   const { prefetchAllPages } = usePrefetch()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isReady, setIsReady] = useState(false)
@@ -49,4 +53,5 @@ export function InitialDataLoaderAuth() {
   }, [isReady, isAuthenticated, prefetchAllPages])
 
   return null
+  */
 }
