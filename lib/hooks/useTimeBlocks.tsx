@@ -227,10 +227,8 @@ export function useTimeBlocks(page: number) {
     },
     onError: (err, variables, context) => {
       queryClient.setQueryData(['timeBlocks', page], context?.previousTimeBlocks)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['timeBlocks', page] })
     }
+    // onSettledを削除: タスク削除後の復活を防ぐ
   })
 
   // Update time block mutation
@@ -265,10 +263,8 @@ export function useTimeBlocks(page: number) {
     },
     onError: (err, variables, context) => {
       queryClient.setQueryData(['timeBlocks', page], context?.previousTimeBlocks)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['timeBlocks', page] })
     }
+    // onSettledを削除: 楽観的更新のみに依存
   })
 
   return {

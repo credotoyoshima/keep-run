@@ -625,3 +625,6 @@ Import trace for requested module:
 ./components/habits/HabitMobile.tsx
 ./components/habits/RoutinesPageClient.tsx
  ✓ Compiled in 568ms (1434 modules)
+ ✓ Compiled in 962ms (1420 modules)
+ ✓ Compiled in 334ms (1420 modules)
+ ✓ Compiled in 1180ms (1434 modules)

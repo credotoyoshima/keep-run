@@ -220,9 +220,16 @@ export function SimpleDayViewOptimized() {
   }
 
   // タスクを削除
-  const deleteTask = async (blockId: string, taskId: string) => {
-    deleteTaskMutation({ blockId, taskId })
-    setShowTaskMenu(null)
+  const deleteTask = (blockId: string, taskId: string) => {
+    deleteTaskMutation({ blockId, taskId }, {
+      onSuccess: () => {
+        setShowTaskMenu(null)
+      },
+      onError: (error) => {
+        console.error('Error deleting task:', error)
+        alert('タスクの削除に失敗しました')
+      }
+    })
   }
 
   // タスクの完了状態を切り替え
