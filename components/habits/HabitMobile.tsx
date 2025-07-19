@@ -323,7 +323,6 @@ export function HabitMobile() {
         onClose={() => setShowCreateModal(false)}
         onSuccess={() => {
           setShowCreateModal(false)
-          fetchHabit()
         }}
       />
       
