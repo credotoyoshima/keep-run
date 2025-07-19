@@ -46,24 +46,24 @@ export function useDayStartTimeGlobal() {
     refetchOnWindowFocus: false,
   })
 
-  // バックグラウンド同期
-  const syncWithDatabase = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const response = await fetch('/api/user/settings')
-        if (response.ok) {
-          const data = await response.json()
-          if (data.dayStartTime) {
-            queryClient.setQueryData(['userSettings', 'dayStartTime'], data.dayStartTime)
-            localStorage.setItem('dayStartTime', data.dayStartTime)
-          }
-        }
-      }
-    } catch (error) {
-      console.warn('Background sync failed:', error)
-    }
-  }
+  // バックグラウンド同期（未使用）
+  // const syncWithDatabase = async () => {
+  //   try {
+  //     const { data: { user } } = await supabase.auth.getUser()
+  //     if (user) {
+  //       const response = await fetch('/api/user/settings')
+  //       if (response.ok) {
+  //         const data = await response.json()
+  //         if (data.dayStartTime) {
+  //           queryClient.setQueryData(['userSettings', 'dayStartTime'], data.dayStartTime)
+  //           localStorage.setItem('dayStartTime', data.dayStartTime)
+  //         }
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.warn('Background sync failed:', error)
+  //   }
+  // }
 
   const updateDayStartTime = async (newTime: string) => {
     // 楽観的更新

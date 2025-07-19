@@ -1,9 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useTransition } from 'react'
-import { MouseEvent, ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 interface ViewTransitionLinkProps {
   href: string
@@ -22,13 +20,6 @@ export function ViewTransitionLink({
   onMouseEnter,
   onTouchStart 
 }: ViewTransitionLinkProps) {
-  const router = useRouter()
-  const [, startTransition] = useTransition()
-
-  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    // 速度最優先: View Transitionを無効化して高速化
-    // 通常のNext.js Linkの動作に任せる
-  }
 
   return (
     <Link

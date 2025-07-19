@@ -43,8 +43,39 @@ export function useTodos() {
       if (!response.ok) throw new Error('Failed to add todo')
       return response.json()
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['todos'] })
+    onMutate: async (newTodo) => {
+      await queryClient.cancelQueries({ queryKey: ['todos'] })
+      const previousTodos = queryClient.getQueryData(['todos'])
+      
+      // 楽観的更新で新しいTodoを即座に追加
+      const optimisticTodo = {
+        id: `temp-${Date.now()}`,
+        title: newTodo.title,
+        description: newTodo.description || null,
+        completed: false,
+        taskType: newTodo.taskType,
+        important: newTodo.important,
+        dueDate: newTodo.dueDate || null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+      
+      queryClient.setQueryData(['todos'], (old: Todo[] = []) => {
+        return [optimisticTodo, ...old]
+      })
+      
+      return { previousTodos }
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['todos'], context?.previousTodos)
+    },
+    onSuccess: (data) => {
+      // サーバーからの正確なデータで楽観的更新を修正
+      queryClient.setQueryData(['todos'], (old: Todo[] = []) => {
+        return old.map(todo => 
+          todo.id.startsWith('temp-') ? data : todo
+        )
+      })
     }
   })
 

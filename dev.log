@@ -422,3 +422,206 @@ Import trace for requested module:
 ./components/active/DayPageClient.tsx
  ✓ Compiled in 412ms (1429 modules)
  ✓ Compiled in 378ms (1429 modules)
+ ✓ Compiled in 592ms (587 modules)
+ ✓ Compiled in 904ms (1429 modules)
+ ✓ Compiled in 211ms (587 modules)
+ ○ Compiling /api/user-blocks ...
+ ✓ Compiled /api/user-blocks in 736ms (861 modules)
+Authentication error: [Error [AuthSessionMissingError]: Auth session missing!] {
+  __isAuthError: true,
+  status: 400,
+  code: undefined
+}
+ GET /api/user-blocks?page=1 401 in 918ms
+ ✓ Compiled in 518ms (1448 modules)
+ ✓ Compiled in 788ms (1446 modules)
+ ✓ Compiled in 399ms (1446 modules)
+ ✓ Compiled in 396ms (1446 modules)
+ ✓ Compiled in 501ms (1446 modules)
+ ✓ Compiled in 347ms (1427 modules)
+ ✓ Compiled in 353ms (1427 modules)
+ ✓ Compiled in 1819ms (1427 modules)
+ ⨯ ./components/todos/TodoMobile.tsx
+Module parse failed: Identifier 'addTodo' has already been declared (196:10)
+|     };
+|     // 新しいToDoを追加
+>     const addTodo = async ()=>{
+|         if (!newTodoTitle.trim()) return;
+|         try {
+
+Import trace for requested module:
+./components/todos/TodoMobile.tsx
+./components/todos/TodoPageClient.tsx
+ ✓ Compiled in 894ms (1429 modules)
+ ✓ Compiled in 460ms (1429 modules)
+ ✓ Compiled in 501ms (1429 modules)
+ ✓ Compiled in 399ms (1429 modules)
+ ✓ Compiled in 915ms (1429 modules)
+ ✓ Compiled in 543ms (1429 modules)
+ ✓ Compiled in 464ms (1429 modules)
+ ✓ Compiled in 484ms (1429 modules)
+ ✓ Compiled in 1276ms (1429 modules)
+ ⨯ ./components/habits/HabitMobile.tsx
+Error:   [31mx[0m await isn't allowed in non-async function
+    ,-[[36;1;4m/home/credo/projects/keep-run/components/habits/HabitMobile.tsx[0m:55:1]
+ [2m52[0m |   } = useContinuousHabits()
+ [2m53[0m | 
+ [2m54[0m |   // 習慣データ取得は不要（ReactQueryが自動管理）
+ [2m55[0m |       const data = await response.json()
+    : [35;1m                   ^^^^^[0m
+ [2m56[0m |       if (data && data.canCreateNew) {
+ [2m57[0m |         setCanCreateNew(true)
+ [2m58[0m |         setCurrentHabit(null)
+    `----
+  [31mx[0m await isn't allowed in non-async function
+    ,-[[36;1;4m/home/credo/projects/keep-run/components/habits/HabitMobile.tsx[0m:63:1]
+ [2m60[0m |         setCurrentHabit(data)
+ [2m61[0m |         // 2日連続未達成の場合はリセット（ただし、開始から3日以上経過している場合のみ）
+ [2m62[0m |         if (data && data.shouldReset && data.currentDay && data.currentDay >= 3) {
+ [2m63[0m |           await handleReset(data.id)
+    : [35;1m          ^^^^^[0m
+ [2m64[0m |         }
+ [2m65[0m |         // 14日達成の場合は完了
+ [2m66[0m |         if (data && data.isCompleted) {
+    `----
+  [31mx[0m await isn't allowed in non-async function
+    ,-[[36;1;4m/home/credo/projects/keep-run/components/habits/HabitMobile.tsx[0m:67:1]
+ [2m64[0m |         }
+ [2m65[0m |         // 14日達成の場合は完了
+ [2m66[0m |         if (data && data.isCompleted) {
+ [2m67[0m |           await handleComplete(data.id)
+    : [35;1m          ^^^^^[0m
+ [2m68[0m |         }
+ [2m69[0m |       }
+ [2m70[0m |     } catch (error) {
+    `----
+  [31mx[0m Expected a semicolon
+    ,-[[36;1;4m/home/credo/projects/keep-run/components/habits/HabitMobile.tsx[0m:70:1]
+ [2m67[0m |           await handleComplete(data.id)
+ [2m68[0m |         }
+ [2m69[0m |       }
+ [2m70[0m |     } catch (error) {
+    : [35;1m      ^^^^^[0m
+ [2m71[0m |       console.error('Error fetching habit:', error)
+ [2m72[0m |     } finally {
+ [2m73[0m |       setLoading(false)
+    `----
+  [31mx[0m Expression expected
+    ,-[[36;1;4m/home/credo/projects/keep-run/components/habits/HabitMobile.tsx[0m:75:1]
+ [2m72[0m |     } finally {
+ [2m73[0m |       setLoading(false)
+ [2m74[0m |     }
+ [2m75[0m |   }
+    : [35;1m  ^[0m
+ [2m76[0m | 
+ [2m77[0m |   // 日付変更を検出して習慣データを更新
+ [2m78[0m |   useDayChangeDetection(dayStartTime, () => {
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/habits/HabitMobile.tsx
+./components/habits/RoutinesPageClient.tsx
+ ✓ Compiled in 583ms (1431 modules)
+ ✓ Compiled in 977ms (1431 modules)
+ ✓ Compiled in 446ms (1431 modules)
+ ✓ Compiled in 773ms (1433 modules)
+ ✓ Compiled in 445ms (1419 modules)
+ ✓ Compiled in 1354ms (1433 modules)
+prisma:error Error in PostgreSQL connection: Error { kind: Io, cause: Some(Os { code: 104, kind: ConnectionReset, message: "Connection reset by peer" }) }
+ ✓ Compiled in 865ms (589 modules)
+ ⨯ ./components/evaluations/EvaluationMobile.tsx
+Error:   [31mx[0m Expression expected
+    ,-[[36;1;4m/home/credo/projects/keep-run/components/evaluations/EvaluationMobile.tsx[0m:43:1]
+ [2m40[0m |   // 評価データ取得は不要（ReactQueryが自動管理）
+ [2m41[0m | 
+ [2m42[0m |     fetchEvaluations()
+ [2m43[0m |   }, [])
+    : [35;1m   ^[0m
+ [2m44[0m | 
+ [2m45[0m |   // 月の名前を取得
+ [2m46[0m |   const getMonthName = (date: Date) => {
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/evaluations/EvaluationMobile.tsx
+./components/evaluations/AnalyticsPageClient.tsx
+ ⨯ ./components/evaluations/EvaluationMobile.tsx
+Module parse failed: Identifier 'saveEvaluation' has already been declared (167:10)
+|     };
+|     // 評価を保存
+>     const saveEvaluation = async ()=>{
+|         if (!selectedDate || newRating === 0 || saving) return;
+|         setSaving(true);
+
+Import trace for requested module:
+./components/evaluations/EvaluationMobile.tsx
+./components/evaluations/AnalyticsPageClient.tsx
+ ✓ Compiled in 492ms (590 modules)
+ ✓ Compiled in 247ms (590 modules)
+ ✓ Compiled in 1004ms (1420 modules)
+ ✓ Compiled in 641ms (1434 modules)
+ ✓ Compiled in 936ms (1420 modules)
+ ✓ Compiled in 2.1s (1434 modules)
+ ✓ Compiled in 556ms (1420 modules)
+ ✓ Compiled in 526ms (1434 modules)
+ ✓ Compiled in 420ms (1420 modules)
+ ✓ Compiled in 472ms (1420 modules)
+ ⨯ ./components/habits/HabitMobile.tsx
+Error:   [31mx[0m Expected a semicolon
+     ,-[[36;1;4m/home/credo/projects/keep-run/components/habits/HabitMobile.tsx[0m:129:1]
+ [2m126[0m |         alert('習慣の記録に失敗しました')
+ [2m127[0m |       }
+ [2m128[0m |     })
+ [2m129[0m |       })
+     : [35;1m       ^[0m
+ [2m130[0m | 
+ [2m131[0m |       if (!response.ok) {
+ [2m132[0m |         // エラーの場合は再読み込み
+     `----
+  [31mx[0m await isn't allowed in non-async function
+     ,-[[36;1;4m/home/credo/projects/keep-run/components/habits/HabitMobile.tsx[0m:133:1]
+ [2m130[0m | 
+ [2m131[0m |       if (!response.ok) {
+ [2m132[0m |         // エラーの場合は再読み込み
+ [2m133[0m |         await fetchHabit()
+     : [35;1m        ^^^^^[0m
+ [2m134[0m |       }
+ [2m135[0m |     } catch (error) {
+ [2m136[0m |       console.error('Error toggling habit:', error)
+     `----
+  [31mx[0m Expected a semicolon
+     ,-[[36;1;4m/home/credo/projects/keep-run/components/habits/HabitMobile.tsx[0m:135:1]
+ [2m132[0m |         // エラーの場合は再読み込み
+ [2m133[0m |         await fetchHabit()
+ [2m134[0m |       }
+ [2m135[0m |     } catch (error) {
+     : [35;1m      ^^^^^[0m
+ [2m136[0m |       console.error('Error toggling habit:', error)
+ [2m137[0m |       await fetchHabit()
+ [2m138[0m |     }
+     `----
+  [31mx[0m Expression expected
+     ,-[[36;1;4m/home/credo/projects/keep-run/components/habits/HabitMobile.tsx[0m:139:1]
+ [2m136[0m |       console.error('Error toggling habit:', error)
+ [2m137[0m |       await fetchHabit()
+ [2m138[0m |     }
+ [2m139[0m |   }
+     : [35;1m  ^[0m
+ [2m140[0m | 
+ [2m141[0m |   // 円形プログレスバーの値を計算
+ [2m142[0m |   const progressPercentage = currentHabit 
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/habits/HabitMobile.tsx
+./components/habits/RoutinesPageClient.tsx
+ ✓ Compiled in 568ms (1434 modules)

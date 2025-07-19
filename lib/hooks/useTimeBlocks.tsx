@@ -89,8 +89,19 @@ export function useTimeBlocks(page: number) {
       if (!response.ok) throw new Error('Failed to delete time block')
       return response.json()
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['timeBlocks', page] })
+    onMutate: async (blockId) => {
+      await queryClient.cancelQueries({ queryKey: ['timeBlocks', page] })
+      const previousTimeBlocks = queryClient.getQueryData(['timeBlocks', page])
+      
+      // 楽観的更新で時間ブロックを即座に削除
+      queryClient.setQueryData(['timeBlocks', page], (old: TimeBlock[] = []) => {
+        return old.filter(block => block.id !== blockId)
+      })
+      
+      return { previousTimeBlocks }
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['timeBlocks', page], context?.previousTimeBlocks)
     }
   })
 
@@ -139,10 +150,8 @@ export function useTimeBlocks(page: number) {
     onError: (err, newTodo, context) => {
       // If the mutation fails, use the context returned from onMutate to roll back
       queryClient.setQueryData(['timeBlocks', page], context?.previousTimeBlocks)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['timeBlocks', page] })
     }
+    // onSettledを削除: 楽観的更新のみに依存
   })
 
   // Delete task mutation
@@ -177,10 +186,8 @@ export function useTimeBlocks(page: number) {
     },
     onError: (err, variables, context) => {
       queryClient.setQueryData(['timeBlocks', page], context?.previousTimeBlocks)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['timeBlocks', page] })
     }
+    // onSettledを削除: 楽観的更新のみに依存してタスク復活を防ぐ
   })
 
   // Toggle task mutation

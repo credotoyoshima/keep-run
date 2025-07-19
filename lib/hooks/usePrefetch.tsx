@@ -83,24 +83,45 @@ export function usePrefetch() {
   }, [queryClient])
 
   const prefetchAllPages = useCallback(async () => {
-    try {
-      // DAYページのデータをプリフェッチ（1-3ページ）
-      await Promise.allSettled([
-        prefetchTimeBlocks(1),
-        prefetchTimeBlocks(2),
-        prefetchTimeBlocks(3),
-      ])
-      
-      // その他のページのデータをプリフェッチ
-      await Promise.allSettled([
-        prefetchTodos(),
-        prefetchHabits(),
-        prefetchEvaluations(new Date().getFullYear(), new Date().getMonth() + 1),
-      ])
-    } catch {
-      // エラーは静かに処理
-      console.log('Prefetch completed with some errors')
+    console.log('Starting staged prefetch...')
+    
+    // Helper function for delayed execution with error handling
+    const safePrefetch = async (prefetchFn: () => Promise<void>, name: string, delay: number = 0) => {
+      if (delay > 0) {
+        await new Promise(resolve => setTimeout(resolve, delay))
+      }
+      try {
+        await prefetchFn()
+        console.log(`✓ Prefetched ${name}`)
+      } catch (error) {
+        console.log(`✗ Failed to prefetch ${name}:`, error)
+        // Continue execution even if one prefetch fails
+      }
     }
+
+    // Stage 1: Most important data (DAY page 1)
+    await safePrefetch(() => prefetchTimeBlocks(1), 'TimeBlocks Page 1')
+    
+    // Stage 2: Secondary important data (500ms delay)
+    await safePrefetch(() => prefetchTodos(), 'Todos', 500)
+    
+    // Stage 3: Additional data (300ms delay)  
+    await safePrefetch(() => prefetchHabits(), 'Habits', 300)
+    
+    // Stage 4: Supplementary data (300ms delay)
+    await safePrefetch(
+      () => prefetchEvaluations(new Date().getFullYear(), new Date().getMonth() + 1), 
+      'Evaluations', 
+      300
+    )
+    
+    // Stage 5: Extended DAY pages (400ms delay)
+    await safePrefetch(() => prefetchTimeBlocks(2), 'TimeBlocks Page 2', 400)
+    
+    // Stage 6: Final DAY page (300ms delay)
+    await safePrefetch(() => prefetchTimeBlocks(3), 'TimeBlocks Page 3', 300)
+    
+    console.log('Staged prefetch completed')
   }, [prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations])
 
   return {

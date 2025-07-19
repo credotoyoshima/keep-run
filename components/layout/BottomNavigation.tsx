@@ -8,10 +8,6 @@ import {
   TrendingUp, 
   Star
 } from 'lucide-react'
-import { usePrefetch } from '@/lib/hooks/usePrefetch'
-import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { useQueryClient } from '@tanstack/react-query'
 
 const navigation = [
   {
@@ -38,30 +34,6 @@ const navigation = [
 
 export function BottomNavigation() {
   const pathname = usePathname()
-  const queryClient = useQueryClient()
-  const { prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations } = usePrefetch()
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-  // プリフェッチ機能を一時的に無効化（500エラー解決のため）
-
-  const handleMouseEnter = () => {
-    // プリフェッチ機能を一時的に無効化
-    // 認証されていない場合はプリフェッチしない
-    // if (!isAuthenticated) return
-    
-    // ホバー時にデータをプリフェッチ
-    // if (href === '/day') {
-    //   prefetchTimeBlocks(1)
-    //   prefetchTimeBlocks(2)
-    //   prefetchTimeBlocks(3)
-    // } else if (href === '/todo') {
-    //   prefetchTodos()
-    // } else if (href === '/routines') {
-    //   prefetchHabits()
-    // } else if (href === '/analytics') {
-    //   prefetchEvaluations()
-    // }
-  }
 
   return (
     <nav className="bg-white border-t border-gray-200 flex items-center justify-around pt-2 pb-2 safe-bottom flex-shrink-0">
@@ -74,8 +46,6 @@ export function BottomNavigation() {
             key={item.name}
             href={item.href}
             prefetch={true}
-            onMouseEnter={() => handleMouseEnter()}
-            onTouchStart={() => handleMouseEnter()}
             className={`flex flex-col items-center justify-center text-xs transition-colors ${
               isActive 
                 ? 'text-black' 

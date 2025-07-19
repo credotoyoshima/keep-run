@@ -7,16 +7,10 @@ export function InitialDataLoaderAuth() {
   const { prefetchAllPages } = usePrefetch()
 
   useEffect(() => {
-    // 本番環境では負荷軽減のため一時的にプリフェッチを無効化
-    if (process.env.NODE_ENV === 'production') {
-      console.log('Prefetch disabled in production environment')
-      return
-    }
-
-    // 開発環境でのみプリフェッチを実行
+    // 段階的プリフェッチにより本番環境でも安全に実行
     const timer = setTimeout(() => {
       prefetchAllPages()
-    }, 1000)
+    }, 2000) // 本番環境では少し長めの遅延で安全性を確保
 
     return () => clearTimeout(timer)
   }, [prefetchAllPages])

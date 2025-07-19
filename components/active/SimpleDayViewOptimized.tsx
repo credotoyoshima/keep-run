@@ -174,26 +174,39 @@ export function SimpleDayViewOptimized() {
   }, [timeBlocks])
 
   // 時間ブロックを追加
-  const addTimeBlock = async () => {
+  const addTimeBlock = () => {
     if (!newBlockTitle || !newBlockTime) return
 
     addTimeBlockMutation({
       title: newBlockTitle,
       startTime: newBlockTime,
       pageNumber: currentPage
+    }, {
+      onSuccess: () => {
+        setNewBlockTitle('')
+        setNewBlockTime('00:00')
+        setShowBlockForm(false)
+      },
+      onError: (error) => {
+        console.error('Error adding time block:', error)
+        alert('時間ブロックの追加に失敗しました')
+      }
     })
-    
-    setNewBlockTitle('')
-    setNewBlockTime('00:00')
-    setShowBlockForm(false)
   }
 
   // 時間ブロックを削除
-  const deleteTimeBlock = async (blockId: string) => {
+  const deleteTimeBlock = (blockId: string) => {
     if (!confirm('この時間ブロックを削除してもよろしいですか？')) return
     
-    deleteTimeBlockMutation(blockId)
-    setSwipedBlock(null)
+    deleteTimeBlockMutation(blockId, {
+      onSuccess: () => {
+        setSwipedBlock(null)
+      },
+      onError: (error) => {
+        console.error('Error deleting time block:', error)
+        alert('時間ブロックの削除に失敗しました')
+      }
+    })
   }
 
   // タスクを追加

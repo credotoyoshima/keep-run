@@ -1,24 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
-import { getUserDayStartTimeByEmail, getOrCreateUserByEmail } from '@/lib/server-utils'
-
-type TimeBlockWithTasks = {
-  id: string
-  title: string
-  startTime: string
-  orderIndex: number
-  pageNumber: number
-  completionRate: number
-  archived: boolean
-  tasks: {
-    id: string
-    title: string
-    completed: boolean
-    orderIndex: number
-    archived: boolean
-  }[]
-}
+import { getOrCreateUserByEmail } from '@/lib/server-utils'
 
 // ユーザーの時間ブロックを取得（日付に依存しない）
 export async function GET(request: NextRequest) {
@@ -35,62 +18,58 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const pageNumber = parseInt(searchParams.get('page') || '1')
     
-    // ユーザーの一日の始まり時間を取得
-    const dayStartTime = await getUserDayStartTimeByEmail(user.email!)
-
-    // ユーザーに紐づく指定ページの時間ブロックを取得
-    const timeBlocks = await prisma.$queryRaw<TimeBlockWithTasks[]>`
-      SELECT 
-        atb.id,
-        atb.title,
-        atb."startTime",
-        atb."orderIndex",
-        atb."pageNumber",
-        atb."completionRate",
-        atb."createdAt",
-        atb."updatedAt",
-        json_agg(
-          json_build_object(
-            'id', at.id,
-            'title', at.title,
-            'completed', at.completed,
-            'orderIndex', at."orderIndex"
-          ) ORDER BY at."orderIndex"
-        ) FILTER (WHERE at.id IS NOT NULL) as tasks
-      FROM "ActiveTimeBlock" atb
-      INNER JOIN "ActiveDay" ad ON atb."dayId" = ad.id
-      LEFT JOIN "ActiveTask" at ON at."blockId" = atb.id
-      INNER JOIN "User" u ON ad."userId" = u.id
-      WHERE u.email = ${user.email!} AND atb."pageNumber" = ${pageNumber}
-      GROUP BY atb.id, atb.title, atb."startTime", atb."orderIndex", atb."pageNumber", atb."completionRate", atb."createdAt", atb."updatedAt"
-      ORDER BY atb."startTime"
-    `
-
-    // PostgreSQLのjson_aggはnullを含む可能性があるため、配列として整形
-    const formattedBlocks = (timeBlocks || []).map((block) => ({
-      ...block,
-      tasks: block.tasks || []
-    }))
+    // 安全なPrismaクエリでデータを取得（500エラー解決）
+    const user_data = await getOrCreateUserByEmail(user.email!)
     
-    // dayStartTimeを考慮して並び替え
-    const sortedBlocks = formattedBlocks.sort((a, b) => {
-      const aTime = a.startTime
-      const bTime = b.startTime
-      
-      // dayStartTime以降の時間かどうかを判定
-      const aIsAfterDayStart = aTime >= dayStartTime
-      const bIsAfterDayStart = bTime >= dayStartTime
-      
-      // 両方がdayStartTime以降または両方が以前の場合は時間順
-      if (aIsAfterDayStart === bIsAfterDayStart) {
-        return aTime.localeCompare(bTime)
-      }
-      
-      // dayStartTime以降の時間を先に表示
-      return aIsAfterDayStart ? -1 : 1
+    // アクティブな日を取得または作成
+    let activeDay = await prisma.activeDay.findFirst({
+      where: { userId: user_data.id }
     })
     
-    return NextResponse.json(sortedBlocks)
+    if (!activeDay) {
+      activeDay = await prisma.activeDay.create({
+        data: {
+          userId: user_data.id,
+          date: new Date()
+        }
+      })
+    }
+    
+    // 指定ページの時間ブロックを取得
+    const timeBlocks = await prisma.activeTimeBlock.findMany({
+      where: {
+        dayId: activeDay.id,
+        pageNumber: pageNumber,
+        archived: false
+      },
+      include: {
+        tasks: {
+          where: { archived: false },
+          orderBy: { orderIndex: 'asc' }
+        }
+      },
+      orderBy: { orderIndex: 'asc' }
+    })
+    
+    // 型安全なデータ変換
+    const formattedBlocks = timeBlocks.map(block => ({
+      id: block.id,
+      title: block.title,
+      startTime: block.startTime,
+      orderIndex: block.orderIndex,
+      pageNumber: block.pageNumber,
+      completionRate: block.completionRate,
+      archived: block.archived,
+      tasks: block.tasks.map(task => ({
+        id: task.id,
+        title: task.title,
+        completed: task.completed,
+        orderIndex: task.orderIndex,
+        archived: task.archived
+      }))
+    }))
+    
+    return NextResponse.json(formattedBlocks)
   } catch (error) {
     console.error('Error fetching user blocks:', error instanceof Error ? error.message : 'Unknown error')
     return NextResponse.json({ 

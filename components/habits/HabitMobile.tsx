@@ -106,8 +106,8 @@ export function HabitMobile() {
   }
 
 
-  // 習慣完了をトグル
-  const toggleHabitCompletion = async () => {
+  // 習慣完了をトグル（ReactQuery版）
+  const toggleHabitCompletion = () => {
     if (!currentHabit) return
 
     const today = getTodayDate()
@@ -116,48 +116,16 @@ export function HabitMobile() {
     // 今日すでに完了している場合は未完了に戻す、そうでない場合は完了にする
     const newCompleted = todayRecord?.completed ? false : true
     
-    // 楽観的更新
-    if (todayRecord) {
-      const newRecords = currentHabit.records.map(r => 
-        r.date === today ? { ...r, completed: newCompleted } : r
-      )
-      setCurrentHabit({
-        ...currentHabit,
-        records: newRecords,
-        todayCompleted: newCompleted,
-        completedDays: newCompleted 
-          ? currentHabit.completedDays + 1 
-          : currentHabit.completedDays - 1
-      })
-    } else {
-      const newRecord = { date: today, completed: true }
-      setCurrentHabit({
-        ...currentHabit,
-        records: [...currentHabit.records, newRecord],
-        todayCompleted: true,
-        completedDays: currentHabit.completedDays + 1
-      })
-    }
-
-    try {
-      const response = await fetch(`/api/habits/${currentHabit.id}/record`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          date: today, 
-          completed: newCompleted,
-          dayStartTime 
-        })
-      })
-
-      if (!response.ok) {
-        // エラーの場合は再読み込み
-        await fetchHabit()
+    // ReactQueryのmutationを使用（楽観的更新付き）
+    recordHabit({
+      habitId: currentHabit.id,
+      completed: newCompleted
+    }, {
+      onError: (error) => {
+        console.error('Error recording habit:', error)
+        alert('習慣の記録に失敗しました')
       }
-    } catch (error) {
-      console.error('Error toggling habit:', error)
-      await fetchHabit()
-    }
+    })
   }
 
   // 円形プログレスバーの値を計算
