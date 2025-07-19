@@ -297,11 +297,11 @@ export function SimpleDayViewOptimized() {
     )
   }
 
-  const completedTasks = timeBlocks?.reduce((total, block) => 
-    total + (block.tasks?.filter(task => task.completed).length || 0), 0
+  const completedTasks = timeBlocks?.reduce((total: number, block: TimeBlock) => 
+    total + (block.tasks?.filter((task: Task) => task.completed).length || 0), 0
   ) || 0
   
-  const totalTasks = timeBlocks?.reduce((total, block) => 
+  const totalTasks = timeBlocks?.reduce((total: number, block: TimeBlock) => 
     total + (block.tasks?.length || 0), 0
   ) || 0
   
