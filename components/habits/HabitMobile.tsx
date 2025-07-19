@@ -60,16 +60,6 @@ export function HabitMobile() {
     queryClient.invalidateQueries({ queryKey: ['continuousHabits'] })
   })
 
-  // 一時的な関数（ReactQuery移行完了後に削除）
-  const fetchHabit = async () => {
-    console.log('fetchHabit: ReactQuery移行待ち')
-    // 元のfetch実装は一時的にコメントアウト
-  }
-
-  const setCurrentHabit = (habit: any) => {
-    console.log('setCurrentHabit: ReactQuery移行待ち', habit)
-    // 元のstate設定は一時的にコメントアウト
-  }
 
   // 習慣をリセット
   const handleReset = async (habitId: string) => {
@@ -80,7 +70,6 @@ export function HabitMobile() {
       
       if (response.ok) {
         alert('2日連続で未達成のため、振り出しに戻りました。')
-        await fetchHabit()
       }
     } catch (error) {
       console.error('Error resetting habit:', error)
@@ -96,7 +85,6 @@ export function HabitMobile() {
       
       if (response.ok) {
         alert('おめでとうございます！14日間達成しました！新しい習慣を登録できます。')
-        await fetchHabit()
       }
     } catch (error) {
       console.error('Error completing habit:', error)
@@ -213,7 +201,6 @@ export function HabitMobile() {
           onClose={() => setShowCreateModal(false)}
           onSuccess={() => {
             setShowCreateModal(false)
-            fetchHabit()
           }}
         />
         
