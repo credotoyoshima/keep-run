@@ -26,27 +26,13 @@ export function ViewTransitionLink({
   const [, startTransition] = useTransition()
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    
-    // View Transitions APIが利用可能な場合
-    if ('startViewTransition' in document) {
-      (document as Document & { startViewTransition: (callback: () => void) => void }).startViewTransition(() => {
-        startTransition(() => {
-          router.push(href)
-        })
-      })
-    } else {
-      // フォールバック
-      startTransition(() => {
-        router.push(href)
-      })
-    }
+    // 速度最優先: View Transitionを無効化して高速化
+    // 通常のNext.js Linkの動作に任せる
   }
 
   return (
     <Link
       href={href}
-      onClick={handleClick}
       className={className}
       prefetch={prefetch}
       onMouseEnter={onMouseEnter}

@@ -1,0 +1,424 @@
+
+> keep-run@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.3.5
+   - Local:        http://localhost:3000
+   - Network:      http://10.255.255.254:3000
+   - Environments: .env.local, .env.development, .env
+
+ ✓ Starting...
+ ✓ Ready in 2.1s
+ ✓ Compiled /middleware in 236ms (179 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 2.9s (1000 modules)
+ GET / 200 in 3519ms
+ ✓ Compiled in 652ms (453 modules)
+ GET / 200 in 108ms
+ ○ Compiling /day ...
+ ✓ Compiled /day in 1352ms (1118 modules)
+ GET /day 200 in 1477ms
+ GET /day 200 in 31ms
+ ○ Compiling /api/user/settings ...
+ ✓ Compiled /api/user/settings in 850ms (1239 modules)
+ GET /api/user/settings 200 in 1585ms
+ GET /api/user-blocks?page=2 200 in 1723ms
+ GET /api/user/settings 200 in 205ms
+ GET /api/user/settings 200 in 252ms
+ GET /api/user-blocks?page=2 200 in 466ms
+ GET /api/user/settings 200 in 202ms
+ ✓ Compiled /_not-found in 249ms (1243 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 390ms
+ GET /api/user-blocks?page=1 200 in 367ms
+ GET /api/user-blocks?page=3 200 in 312ms
+ ○ Compiling /todo ...
+ ✓ Compiled /todo in 723ms (1260 modules)
+ GET /todo 200 in 824ms
+ ○ Compiling /api/todos ...
+ ✓ Compiled /api/todos in 510ms (1263 modules)
+ GET /api/user/settings 200 in 574ms
+ GET /api/user/settings 200 in 756ms
+ GET /api/todos 200 in 1325ms
+ GET /api/todos 200 in 1422ms
+ ✓ Compiled /routines in 361ms (1286 modules)
+ GET /routines 200 in 430ms
+ ✓ Compiled /api/habits in 493ms (1288 modules)
+ GET /api/user/settings 200 in 613ms
+ GET /api/user/settings 200 in 795ms
+ GET /api/habits 200 in 1174ms
+ GET /api/habits 200 in 1299ms
+ ✓ Compiled /analytics in 416ms (1307 modules)
+ GET /analytics 200 in 483ms
+ ✓ Compiled /api/evaluations in 279ms (1309 modules)
+ GET /api/evaluations 200 in 589ms
+ GET /api/evaluations 200 in 658ms
+ ○ Compiling /settings ...
+ ✓ Compiled /settings in 765ms (1463 modules)
+ GET /settings 200 in 925ms
+ GET /api/user/settings 200 in 252ms
+ ○ Compiling /api/user/profile ...
+ ✓ Compiled /api/user/profile in 746ms (1465 modules)
+ GET /api/user/profile 200 in 756ms
+ GET /api/user/profile 200 in 1014ms
+ GET /api/user/settings 200 in 949ms
+ GET /todo 200 in 105ms
+ GET /api/todos 200 in 540ms
+ GET /api/todos 200 in 640ms
+ GET /api/user/settings 200 in 205ms
+ GET /api/user/settings 200 in 237ms
+ GET /day 200 in 32ms
+ GET /api/user/settings 200 in 206ms
+ GET /api/user/settings 200 in 239ms
+ GET /routines 200 in 27ms
+ GET /api/user/settings 200 in 338ms
+ GET /api/user/settings 200 in 658ms
+ GET /api/habits 200 in 852ms
+ GET /api/habits 200 in 867ms
+ ✓ Compiled in 480ms (586 modules)
+ GET /day 200 in 93ms
+ GET /routines 200 in 94ms
+ ✓ Compiled in 296ms (586 modules)
+ GET /day 200 in 58ms
+ GET /routines 200 in 65ms
+ ✓ Compiled in 325ms (586 modules)
+ GET /day 200 in 57ms
+ GET /routines 200 in 62ms
+ ✓ Compiled in 371ms (586 modules)
+ GET /day 200 in 56ms
+ GET /routines 200 in 59ms
+ ✓ Compiled in 237ms (586 modules)
+ GET /routines 200 in 52ms
+ GET /day 200 in 55ms
+ ✓ Compiled in 212ms (586 modules)
+ GET /routines 200 in 50ms
+ GET /day 200 in 52ms
+ ✓ Compiled in 549ms (1427 modules)
+ GET /routines 200 in 163ms
+ GET /day 200 in 166ms
+ ✓ Compiled in 233ms (586 modules)
+ GET /day 200 in 96ms
+ GET /routines 200 in 97ms
+ ✓ Compiled in 315ms (586 modules)
+ GET /day 200 in 66ms
+ GET /routines 200 in 67ms
+ ✓ Compiled in 226ms (586 modules)
+ GET /routines 200 in 49ms
+ GET /day 200 in 49ms
+ ✓ Compiled in 199ms (586 modules)
+ GET /routines 200 in 48ms
+ GET /day 200 in 50ms
+ ✓ Compiled in 279ms (586 modules)
+ GET /day 200 in 58ms
+ GET /routines 200 in 62ms
+ ✓ Compiled in 346ms (586 modules)
+ GET /routines 200 in 55ms
+ GET /day 200 in 56ms
+ ✓ Compiled in 235ms (586 modules)
+ GET /routines 200 in 53ms
+ GET /day 200 in 54ms
+ ✓ Compiled in 263ms (586 modules)
+ GET /day 200 in 57ms
+ GET /routines 200 in 59ms
+ ✓ Compiled in 407ms (586 modules)
+ GET /routines 200 in 60ms
+ GET /day 200 in 61ms
+ ✓ Compiled in 252ms (586 modules)
+ GET /routines 200 in 47ms
+ GET /day 200 in 49ms
+ ○ Compiling /api/habits/[id]/record ...
+ ✓ Compiled /api/habits/[id]/record in 636ms (1432 modules)
+ POST /api/habits/d922c1dd-2a31-4ec1-bae8-6aa316d1eef7/record 200 in 2255ms
+ POST /api/habits/d922c1dd-2a31-4ec1-bae8-6aa316d1eef7/record 200 in 987ms
+ GET /day 200 in 64ms
+ ✓ Compiled /api/user/settings in 317ms (862 modules)
+ GET /day 200 in 71ms
+ GET /day 200 in 71ms
+ GET /api/user/settings 200 in 525ms
+ GET /api/user/settings 200 in 759ms
+ ✓ Compiled /favicon.ico in 354ms (864 modules)
+ GET /favicon.ico 200 in 384ms
+ GET /favicon.ico 200 in 388ms
+ GET /todo 200 in 36ms
+ ○ Compiling /api/todos ...
+ ✓ Compiled /api/todos in 543ms (867 modules)
+ ✓ Compiled in 1ms (867 modules)
+ ✓ Compiled in 0ms (867 modules)
+ ✓ Compiled in 0ms (867 modules)
+ GET /day 200 in 847ms
+ GET /todo 200 in 848ms
+ GET /api/user/settings 200 in 1563ms
+ GET /api/user/settings 200 in 1738ms
+ GET /api/todos 200 in 1999ms
+ GET /api/todos 200 in 2074ms
+ GET /routines 200 in 23ms
+ ✓ Compiled /api/habits in 448ms (869 modules)
+ ✓ Compiled in 0ms (869 modules)
+ ✓ Compiled in 0ms (869 modules)
+ ✓ Compiled in 0ms (869 modules)
+ GET /api/user/settings 200 in 1092ms
+ GET /routines 200 in 926ms
+ GET /day 200 in 926ms
+ GET /favicon.ico 200 in 22ms
+ GET /favicon.ico 200 in 28ms
+ GET /api/user/settings 200 in 1542ms
+ GET /api/habits 200 in 1809ms
+ GET /api/habits 200 in 1943ms
+ ✓ Compiled /analytics in 406ms (881 modules)
+ GET /analytics 200 in 455ms
+ ✓ Compiled /api/evaluations in 247ms (883 modules)
+ GET /api/evaluations 200 in 558ms
+ GET /api/evaluations 200 in 650ms
+ GET /todo 200 in 39ms
+ GET /api/user/settings 200 in 413ms
+ GET /api/todos 200 in 590ms
+ GET /api/user/settings 200 in 572ms
+ GET /api/todos 200 in 825ms
+ GET /day 200 in 24ms
+ GET /api/user/settings 200 in 216ms
+ GET /api/user/settings 200 in 257ms
+ GET /todo 200 in 18ms
+ GET /api/user/settings 200 in 405ms
+ GET /api/user/settings 200 in 472ms
+ GET /api/todos 200 in 718ms
+ GET /api/todos 200 in 811ms
+ GET /routines 200 in 26ms
+ GET /api/user/settings 200 in 341ms
+ GET /api/habits 200 in 568ms
+ GET /api/user/settings 200 in 521ms
+ GET /api/habits 200 in 828ms
+ ✓ Compiled in 505ms (586 modules)
+ GET /day 200 in 77ms
+ GET /routines 200 in 78ms
+ ✓ Compiled in 255ms (586 modules)
+ GET /day 200 in 53ms
+ GET /routines 200 in 53ms
+ ✓ Compiled in 433ms (586 modules)
+ GET /routines 200 in 95ms
+ GET /day 200 in 97ms
+ ✓ Compiled in 2s (1427 modules)
+ GET /day 200 in 139ms
+ GET /routines 200 in 141ms
+ ✓ Compiled /api/user/settings in 377ms (859 modules)
+ GET /api/user/settings 200 in 984ms
+ GET /api/user/settings 200 in 1285ms
+ ✓ Compiled in 356ms (586 modules)
+ GET /routines 200 in 95ms
+ GET /day 200 in 96ms
+ ✓ Compiled in 210ms (586 modules)
+ GET /routines 200 in 75ms
+ GET /day 200 in 78ms
+ ✓ Compiled in 208ms (586 modules)
+ GET /routines 200 in 53ms
+ GET /day 200 in 55ms
+ ✓ Compiled in 270ms (586 modules)
+ GET /day 200 in 58ms
+ GET /routines 200 in 58ms
+ ✓ Compiled in 194ms (586 modules)
+ GET /routines 200 in 51ms
+ GET /day 200 in 52ms
+ ✓ Compiled in 207ms (586 modules)
+ GET /day 200 in 50ms
+ GET /routines 200 in 50ms
+ ✓ Compiled in 505ms (1445 modules)
+ GET /day 200 in 96ms
+ GET /routines 200 in 97ms
+ ✓ Compiled in 224ms (586 modules)
+ GET /routines 200 in 59ms
+ GET /day 200 in 63ms
+ ✓ Compiled in 460ms (586 modules)
+ GET /day 200 in 72ms
+ GET /routines 200 in 75ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 854ms (1417 modules)
+ GET /_next/static/css/app/layout.css?v=1752899149923 404 in 913ms
+ GET /_next/static/css/app/layout.css?v=1752899149902 404 in 1016ms
+ ✓ Compiled in 242ms (589 modules)
+ GET /routines 200 in 92ms
+ GET /day 200 in 83ms
+ GET /_next/static/css/app/layout.css?v=1752899172869 404 in 30ms
+ GET /_next/static/css/app/layout.css?v=1752899172834 404 in 32ms
+ ✓ Compiled in 242ms (589 modules)
+ GET /day 200 in 50ms
+ GET /routines 200 in 51ms
+ GET /_next/static/css/app/layout.css?v=1752899176876 404 in 35ms
+ GET /_next/static/css/app/layout.css?v=1752899176892 404 in 33ms
+ ✓ Compiled in 693ms (1431 modules)
+ GET /routines 200 in 116ms
+ GET /day 200 in 123ms
+ GET /_next/static/css/app/layout.css?v=1752899200641 404 in 59ms
+ GET /_next/static/css/app/layout.css?v=1752899200602 404 in 29ms
+ ✓ Compiled in 593ms (1431 modules)
+ GET /routines 200 in 88ms
+ GET /day 200 in 92ms
+ GET /_next/static/css/app/layout.css?v=1752899205430 404 in 73ms
+ GET /_next/static/css/app/layout.css?v=1752899205458 404 in 31ms
+ ✓ Compiled in 852ms (1431 modules)
+ GET /day 200 in 126ms
+ GET /routines 200 in 130ms
+ GET /_next/static/css/app/layout.css?v=1752899228217 404 in 59ms
+ GET /_next/static/css/app/layout.css?v=1752899228261 404 in 41ms
+ ✓ Compiled in 586ms (1431 modules)
+ GET /day 200 in 122ms
+ GET /routines 200 in 126ms
+ GET /_next/static/css/app/layout.css?v=1752899252875 404 in 92ms
+ GET /_next/static/css/app/layout.css?v=1752899252916 404 in 62ms
+ ✓ Compiled in 664ms (1431 modules)
+ GET /day 200 in 114ms
+ GET /routines 200 in 120ms
+ GET /_next/static/css/app/layout.css?v=1752899283244 404 in 74ms
+ GET /_next/static/css/app/layout.css?v=1752899283275 404 in 61ms
+ ✓ Compiled in 710ms (1431 modules)
+ GET /day 200 in 128ms
+ GET /routines 200 in 129ms
+ GET /_next/static/css/app/layout.css?v=1752899287652 404 in 107ms
+ GET /_next/static/css/app/layout.css?v=1752899287684 404 in 53ms
+ ✓ Compiled in 528ms (1417 modules)
+ ✓ Compiled /api/user/settings in 449ms (860 modules)
+ GET /api/user/settings 200 in 940ms
+ ✓ Compiled in 365ms (1435 modules)
+ GET /api/user/settings 200 in 288ms
+ ✓ Compiled in 464ms (1435 modules)
+ ✓ Compiled in 203ms (860 modules)
+ GET /day 200 in 96ms
+ GET /routines 200 in 98ms
+ GET /_next/static/css/app/layout.css?v=1752899346872 404 in 62ms
+ GET /_next/static/css/app/layout.css?v=1752899346838 404 in 30ms
+ ✓ Compiled / in 378ms (848 modules)
+ HEAD / 200 in 570ms
+ ✓ Compiled in 465ms (586 modules)
+ GET /day 200 in 74ms
+ GET /routines 200 in 75ms
+ ✓ Compiled /_not-found in 371ms (1423 modules)
+ GET /_next/static/css/app/layout.css?v=1752899423149 404 in 453ms
+ GET /_next/static/css/app/layout.css?v=1752899423128 404 in 495ms
+ ✓ Compiled in 270ms (589 modules)
+ GET /routines 200 in 80ms
+ GET /day 200 in 83ms
+ GET /_next/static/css/app/layout.css?v=1752899432232 404 in 35ms
+ GET /_next/static/css/app/layout.css?v=1752899432264 404 in 32ms
+ GET /routines 200 in 201ms
+ GET /_next/static/css/app/layout.css?v=1752899535479 404 in 93ms
+ GET /_next/static/chunks/main-app.js?v=1752899535479 404 in 101ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 101ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 35ms
+ ✓ Compiled in 168ms (179 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (100kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/credo/projects/keep-run/.next/cache/webpack/edge-server-development/0.pack.gz_' -> '/home/credo/projects/keep-run/.next/cache/webpack/edge-server-development/0.pack.gz'
+ ✓ Compiled in 1323ms (1427 modules)
+ ✓ Compiled in 792ms (1429 modules)
+ ✓ Compiled in 735ms (1429 modules)
+ ✓ Compiled in 401ms (1429 modules)
+ ✓ Compiled in 677ms (1427 modules)
+ ✓ Compiled in 192ms (586 modules)
+ ✓ Compiled in 478ms (1427 modules)
+ ✓ Compiled in 570ms (1429 modules)
+ ✓ Compiled in 338ms (1429 modules)
+ ✓ Compiled in 347ms (1429 modules)
+ ✓ Compiled in 465ms (1429 modules)
+ ✓ Compiled in 342ms (1429 modules)
+ ⨯ ./components/layout/BottomNavigation.tsx
+Error:   [31mx[0m Expected '}', got '<eof>'
+     ,-[[36;1;4m/home/credo/projects/keep-run/components/layout/BottomNavigation.tsx[0m:137:1]
+ [2m134[0m |       })}
+ [2m135[0m |     </nav>
+ [2m136[0m |   )
+ [2m137[0m | }
+     : [35;1m^[0m
+     `----
+  [31mx[0m Unexpected eof
+     ,-[[36;1;4m/home/credo/projects/keep-run/components/layout/BottomNavigation.tsx[0m:137:1]
+ [2m134[0m |       })}
+ [2m135[0m |     </nav>
+ [2m136[0m |   )
+ [2m137[0m | }
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/layout/BottomNavigation.tsx
+./components/layout/MobileLayout.tsx
+./components/active/SimpleDayViewOptimized.tsx
+./components/active/DayPageClient.tsx
+ ✓ Compiled in 522ms (1429 modules)
+ ✓ Compiled in 476ms (1429 modules)
+ ✓ Compiled in 851ms (1415 modules)
+ ✓ Compiled in 1286ms (1431 modules)
+ ✓ Compiled in 706ms (1431 modules)
+ ✓ Compiled in 447ms (1431 modules)
+ ✓ Compiled in 417ms (1431 modules)
+ ✓ Compiled in 448ms (1431 modules)
+ ✓ Compiled in 865ms (1431 modules)
+ ✓ Compiled in 458ms (1431 modules)
+ ✓ Compiled in 240ms (588 modules)
+ ✓ Compiled in 189ms (588 modules)
+ ✓ Compiled in 625ms (1429 modules)
+ ✓ Compiled in 825ms (1429 modules)
+ ✓ Compiled in 657ms (1415 modules)
+ ⨯ ./components/layout/ViewTransitionLink.tsx
+Error:   [31mx[0m Expected a semicolon
+    ,-[[36;1;4m/home/credo/projects/keep-run/components/layout/ViewTransitionLink.tsx[0m:33:1]
+ [2m30[0m |     // e.preventDefault()
+ [2m31[0m |     // router.push(href)
+ [2m32[0m |         router.push(href)
+ [2m33[0m |       })
+    : [35;1m       ^[0m
+ [2m34[0m |     }
+ [2m35[0m |   }
+    `----
+  [31mx[0m Expression expected
+    ,-[[36;1;4m/home/credo/projects/keep-run/components/layout/ViewTransitionLink.tsx[0m:35:1]
+ [2m32[0m |         router.push(href)
+ [2m33[0m |       })
+ [2m34[0m |     }
+ [2m35[0m |   }
+    : [35;1m  ^[0m
+ [2m36[0m | 
+ [2m37[0m |   return (
+ [2m38[0m |     <Link
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/layout/ViewTransitionLink.tsx
+./components/layout/BottomNavigation.tsx
+./components/layout/MobileLayout.tsx
+./components/active/SimpleDayViewOptimized.tsx
+./components/active/DayPageClient.tsx
+ ⨯ ./components/layout/ViewTransitionLink.tsx
+Error:   [31mx[0m Expected a semicolon
+    ,-[[36;1;4m/home/credo/projects/keep-run/components/layout/ViewTransitionLink.tsx[0m:33:1]
+ [2m30[0m |     // View Transitionを無効化して高速化
+ [2m31[0m |     return
+ [2m32[0m |         router.push(href)
+ [2m33[0m |       })
+    : [35;1m       ^[0m
+ [2m34[0m |     }
+ [2m35[0m |   }
+    `----
+  [31mx[0m Expression expected
+    ,-[[36;1;4m/home/credo/projects/keep-run/components/layout/ViewTransitionLink.tsx[0m:35:1]
+ [2m32[0m |         router.push(href)
+ [2m33[0m |       })
+ [2m34[0m |     }
+ [2m35[0m |   }
+    : [35;1m  ^[0m
+ [2m36[0m | 
+ [2m37[0m |   return (
+ [2m38[0m |     <Link
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/layout/ViewTransitionLink.tsx
+./components/layout/BottomNavigation.tsx
+./components/layout/MobileLayout.tsx
+./components/active/SimpleDayViewOptimized.tsx
+./components/active/DayPageClient.tsx
+ ✓ Compiled in 412ms (1429 modules)
+ ✓ Compiled in 378ms (1429 modules)

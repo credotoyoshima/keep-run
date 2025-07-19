@@ -8,7 +8,7 @@ import { CreateHabitModal } from './CreateHabitModal'
 import { HabitHistoryModal } from './HabitHistoryModal'
 import { getTodayInJST, formatDateString } from '@/lib/date-utils'
 import { useDayChangeDetection } from '@/lib/day-change-detector'
-import { useDayStartTimeGlobal } from '@/lib/hooks/useDayStartTimeGlobal'
+import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
 import { LoadingSpinnerCenter } from '@/components/ui/LoadingSpinner'
 
 interface HabitRecord {
@@ -37,8 +37,8 @@ export function HabitMobile() {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showHistoryModal, setShowHistoryModal] = useState(false)
   
-  // useDayStartTimeGlobalフックを使用
-  const { dayStartTime } = useDayStartTimeGlobal()
+  // useDayStartTimeフックを使用
+  const { dayStartTime } = useDayStartTime()
 
   // 習慣データを取得
   const fetchHabit = async () => {

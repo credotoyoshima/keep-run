@@ -15,8 +15,6 @@ export function useDayStartTimeGlobal() {
       if (typeof window !== 'undefined') {
         const localValue = localStorage.getItem('dayStartTime')
         if (localValue) {
-          // 非同期でDBと同期（バックグラウンド更新）
-          syncWithDatabase()
           return localValue
         }
       }

@@ -10,42 +10,43 @@ export function useDayStartTime() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const supabase = createClient()
 
-  // 設定を取得する関数
+  // 設定を取得する関数（簡略化版）
   const fetchSettings = useCallback(async () => {
     try {
-      // 1. まずlocalStorageから即座に読み込み（UX優先）
+      // 1. localStorageから即座に読み込み（高速化）
       if (typeof window !== 'undefined') {
         const localValue = localStorage.getItem('dayStartTime')
         if (localValue) {
           setDayStartTime(localValue)
           setIsLoading(false)
+          return // localStorageの値で終了（DBアクセスをスキップ）
         }
       }
 
-      // 2. 認証状態を確認
+      // 2. localStorageに値がない場合のみ認証チェック
       const { data: { user } } = await supabase.auth.getUser()
       
       if (user) {
         setIsAuthenticated(true)
-        // DBから取得
-        const response = await fetch('/api/user/settings')
-        if (response.ok) {
-          const data = await response.json()
-          if (data.dayStartTime) {
-            setDayStartTime(data.dayStartTime)
-            // DBの値でlocalStorageを更新（真実の単一ソース）
-            localStorage.setItem('dayStartTime', data.dayStartTime)
+        try {
+          const response = await fetch('/api/user/settings')
+          if (response.ok) {
+            const data = await response.json()
+            if (data.dayStartTime) {
+              setDayStartTime(data.dayStartTime)
+              localStorage.setItem('dayStartTime', data.dayStartTime)
+            }
           }
-        } else if (response.status === 404) {
-          // ユーザーが見つからない場合はlocalStorageの値を使用
-          console.warn('User settings not found, using local value')
+        } catch (apiError) {
+          console.warn('API call failed, using default:', apiError)
+          // APIエラー時はデフォルト値を使用
         }
       } else {
         setIsAuthenticated(false)
       }
     } catch (error) {
       console.error('Error fetching day start time:', error)
-      setError('設定の取得に失敗しました')
+      // エラー時はデフォルト値を使用
     } finally {
       setIsLoading(false)
     }

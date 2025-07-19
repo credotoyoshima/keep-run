@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { MobileLayout } from '@/components/layout/MobileLayout'
 import { Input } from '@/components/ui/input'
 import { TimePickerModal } from '@/components/ui/time-picker-modal'
-import { useDayStartTimeGlobal } from '@/lib/hooks/useDayStartTimeGlobal'
+import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
 import { useDayChangeDetection } from '@/lib/day-change-detector'
 import { useTimeBlocks } from '@/lib/hooks/useTimeBlocks'
 import { 
@@ -76,7 +76,7 @@ export function SimpleDayViewOptimized() {
   })
   
   // useDayStartTimeフックを使用（最適化版）
-  const { dayStartTime } = useDayStartTimeGlobal()
+  const { dayStartTime } = useDayStartTime()
   
   // useTimeBlocksフックを使用
   const {
