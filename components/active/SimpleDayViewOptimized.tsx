@@ -359,7 +359,7 @@ export function SimpleDayViewOptimized() {
         </div>
 
         {/* Page Tabs */}
-        <div className="flex bg-gray-100 rounded-lg p-1 mb-5">
+        <div className={`flex bg-gray-100 rounded-lg p-1 ${sortedTimeBlocks.length === 0 ? 'mb-2' : 'mb-5'}`}>
           <button
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
               currentPage === 1 
@@ -392,271 +392,273 @@ export function SimpleDayViewOptimized() {
           </button>
         </div>
 
-        {/* Time Blocks */}
-        <div className="space-y-3 mb-5" style={{ minHeight: '200px' }}>
-          {sortedTimeBlocks && sortedTimeBlocks.length > 0 ? sortedTimeBlocks.map((block: TimeBlock) => {
-            const isExpanded = expandedBlocks.has(block.id)
-            const blockCompletedTasks = block.tasks?.filter((task: Task) => task.completed).length || 0
-            const isCompleted = block.tasks.length > 0 && blockCompletedTasks === block.tasks.length
+        {/* Time Blocks or 0件時のAddボタン */}
+        {sortedTimeBlocks.length > 0 ? (
+          <div className="space-y-3 mb-5" style={{ minHeight: '200px' }}>
+            {sortedTimeBlocks.map((block: TimeBlock) => {
+              const isExpanded = expandedBlocks.has(block.id)
+              const blockCompletedTasks = block.tasks?.filter((task: Task) => task.completed).length || 0
+              const isCompleted = block.tasks.length > 0 && blockCompletedTasks === block.tasks.length
 
-            return editingBlock?.id === block.id ? (
-              // 編集フォーム
-              <div 
-                key={block.id} 
-                className="bg-white border border-gray-200 rounded-lg p-4 mb-3 edit-form"
-                onClick={(e) => {
-                  // クリックターゲットが編集フォーム内の要素でない場合はキャンセル
-                  if (e.target === e.currentTarget) {
-                    setEditingBlock(null)
-                    setEditBlockTitle('')
-                    setEditBlockTime('')
-                  }
-                }}
-              >
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => setShowEditTimePicker(true)}
-                    className="flex items-center gap-2 h-9 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors hover:border-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm font-mono mr-2"
-                  >
-                    <Clock className="h-4 w-4 text-gray-500" />
-                    {editBlockTime}
-                  </button>
-                  <Input
-                    value={editBlockTitle}
-                    onChange={(e) => setEditBlockTitle(e.target.value)}
-                    placeholder="時間ブロックのタイトル"
-                    className="flex-1 mr-2"
-                    autoFocus
-                    onKeyDown={(e) => {
-                      if (e.key === 'Escape') {
-                        setEditingBlock(null)
-                        setEditBlockTitle('')
-                        setEditBlockTime('')
-                      } else if (e.key === 'Enter' && editBlockTitle && editBlockTime) {
-                        updateTimeBlock()
-                      }
-                    }}
-                  />
-                  <Button
-                    onClick={updateTimeBlock}
-                    disabled={!editBlockTitle || !editBlockTime}
-                    size="icon"
-                    className="h-9 w-9 bg-black hover:bg-gray-800"
-                  >
-                    <Check className="h-4 w-4 text-white" />
-                  </Button>
+              return editingBlock?.id === block.id ? (
+                // 編集フォーム
+                <div 
+                  key={block.id} 
+                  className="bg-white border border-gray-200 rounded-lg p-4 mb-3 edit-form"
+                  onClick={(e) => {
+                    // クリックターゲットが編集フォーム内の要素でない場合はキャンセル
+                    if (e.target === e.currentTarget) {
+                      setEditingBlock(null)
+                      setEditBlockTitle('')
+                      setEditBlockTime('')
+                    }
+                  }}
+                >
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => setShowEditTimePicker(true)}
+                      className="flex items-center gap-2 h-9 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors hover:border-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm font-mono mr-2"
+                    >
+                      <Clock className="h-4 w-4 text-gray-500" />
+                      {editBlockTime}
+                    </button>
+                    <Input
+                      value={editBlockTitle}
+                      onChange={(e) => setEditBlockTitle(e.target.value)}
+                      placeholder="時間ブロックのタイトル"
+                      className="flex-1 mr-2"
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          setEditingBlock(null)
+                          setEditBlockTitle('')
+                          setEditBlockTime('')
+                        } else if (e.key === 'Enter' && editBlockTitle && editBlockTime) {
+                          updateTimeBlock()
+                        }
+                      }}
+                    />
+                    <Button
+                      onClick={updateTimeBlock}
+                      disabled={!editBlockTitle || !editBlockTime}
+                      size="icon"
+                      className="h-9 w-9 bg-black hover:bg-gray-800"
+                    >
+                      <Check className="h-4 w-4 text-white" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              // 通常表示
-              <div
-                key={block.id}
-                className={`bg-white border rounded-lg overflow-hidden transition-all duration-200 ${
-                  isCompleted ? 'opacity-60' : ''
-                } border-gray-200`}
-              >
-                <div className="relative overflow-hidden">
-                  <div
-                    className={`p-3 flex items-center justify-between bg-white transition-transform duration-200 ease-out relative z-10 ${
-                      swipedBlock === block.id ? '-translate-x-24' : 'translate-x-0'
-                    }`}
-                    onTouchStart={handleBlockTouchStart}
-                    onTouchMove={handleBlockTouchMove}
-                    onTouchEnd={() => handleBlockTouchEnd(block.id)}
-                    onTouchCancel={() => {
-                      setTouchStart(0)
-                      setTouchEnd(0)
-                    }}
-                  >
+              ) : (
+                // 通常表示
+                <div
+                  key={block.id}
+                  className={`bg-white border rounded-lg overflow-hidden transition-all duration-200 ${
+                    isCompleted ? 'opacity-60' : ''
+                  } border-gray-200`}
+                >
+                  <div className="relative overflow-hidden">
                     <div
-                      className="flex-1 flex items-center cursor-pointer"
-                      onClick={() => {
-                        const newExpanded = new Set(expandedBlocks)
-                        if (isExpanded) {
-                          newExpanded.delete(block.id)
-                        } else {
-                          newExpanded.add(block.id)
-                        }
-                        setExpandedBlocks(newExpanded)
-                        
-                        // localStorageに保存
-                        if (typeof window !== 'undefined') {
-                          localStorage.setItem('expandedTimeBlocks', JSON.stringify(Array.from(newExpanded)))
-                        }
+                      className={`p-3 flex items-center justify-between bg-white transition-transform duration-200 ease-out relative z-10 ${
+                        swipedBlock === block.id ? '-translate-x-24' : 'translate-x-0'
+                      }`}
+                      onTouchStart={handleBlockTouchStart}
+                      onTouchMove={handleBlockTouchMove}
+                      onTouchEnd={() => handleBlockTouchEnd(block.id)}
+                      onTouchCancel={() => {
+                        setTouchStart(0)
+                        setTouchEnd(0)
                       }}
                     >
-                      <div className="text-sm font-semibold text-black min-w-[50px] font-mono">
-                        {block.startTime}
-                      </div>
-                      <div className="flex-1 text-base font-normal mx-2">
-                        {block.title}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`text-sm font-mono ${
-                            isCompleted ? 'text-green-600' : 'text-gray-700'
-                          }`}
-                        >
-                          {blockCompletedTasks}/{block.tasks.length}
-                        </span>
-                        <div className="w-5 h-5 flex items-center justify-center">
-                          {isExpanded ? (
-                            <ChevronDown className="h-3 w-3 text-gray-700" />
-                          ) : (
-                            <ChevronRight className="h-3 w-3 text-gray-700" />
-                          )}
+                      <div
+                        className="flex-1 flex items-center cursor-pointer"
+                        onClick={() => {
+                          const newExpanded = new Set(expandedBlocks)
+                          if (isExpanded) {
+                            newExpanded.delete(block.id)
+                          } else {
+                            newExpanded.add(block.id)
+                          }
+                          setExpandedBlocks(newExpanded)
+                          
+                          // localStorageに保存
+                          if (typeof window !== 'undefined') {
+                            localStorage.setItem('expandedTimeBlocks', JSON.stringify(Array.from(newExpanded)))
+                          }
+                        }}
+                      >
+                        <div className="text-sm font-semibold text-black min-w-[50px] font-mono">
+                          {block.startTime}
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className={`absolute right-0 top-0 h-full flex items-center gap-2 px-3 transition-all duration-200 swipe-action-buttons ${
-                      swipedBlock === block.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                    }`}
-                  >
-                    <button
-                      onMouseDown={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                      }}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        startEditingBlock(block)
-                      }}
-                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors bg-white shadow-sm border border-gray-200"
-                    >
-                      <Edit2 className="h-4 w-4 text-gray-600" />
-                    </button>
-                    <button
-                      onMouseDown={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                      }}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        deleteTimeBlock(block.id)
-                      }}
-                      className="p-2 hover:bg-red-50 rounded-lg transition-colors bg-white shadow-sm border border-gray-200"
-                    >
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </button>
-                  </div>
-                </div>
-
-                {isExpanded && (
-                  <div className="px-4 pb-4 border-t border-gray-100">
-                    <div className="space-y-2">
-                      {block.tasks.map((task: Task) => (
-                        <div key={task.id} className="flex items-center gap-3 py-2">
-                          <button
-                            className={`w-[18px] h-[18px] border-2 rounded-sm flex items-center justify-center transition-all ${
-                              task.completed
-                                ? 'bg-black border-black'
-                                : 'border-gray-400 hover:border-gray-600'
-                            }`}
-                            onClick={() => toggleTask(block.id, task.id, task.completed)}
-                          >
-                            {task.completed && (
-                              <Check className="h-3 w-3 text-white stroke-2" />
-                            )}
-                          </button>
+                        <div className="flex-1 text-base font-normal mx-2">
+                          {block.title}
+                        </div>
+                        <div className="flex items-center gap-2">
                           <span
-                            className={`flex-1 text-[15px] font-light ${
-                              task.completed ? 'line-through text-gray-600' : 'text-black'
+                            className={`text-sm font-mono ${
+                              isCompleted ? 'text-green-600' : 'text-gray-700'
                             }`}
                           >
-                            {task.title}
+                            {blockCompletedTasks}/{block.tasks.length}
                           </span>
-                          <div className="relative flex items-center task-menu-container">
-                            {showTaskMenu === task.id && (
-                              <div className="absolute right-6 flex items-center animate-slide-in">
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    deleteTask(block.id, task.id)
-                                  }}
-                                  className="p-1.5 hover:bg-red-50 rounded-md transition-colors bg-white shadow-sm task-delete-button"
-                                >
-                                  <Trash2 className="h-4 w-4 text-red-500" />
-                                </button>
-                              </div>
+                          <div className="w-5 h-5 flex items-center justify-center">
+                            {isExpanded ? (
+                              <ChevronDown className="h-3 w-3 text-gray-700" />
+                            ) : (
+                              <ChevronRight className="h-3 w-3 text-gray-700" />
                             )}
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                console.log('Menu clicked for task:', task.id, 'Current menu:', showTaskMenu)
-                                setShowTaskMenu(showTaskMenu === task.id ? null : task.id)
-                              }}
-                              className="p-1 hover:bg-gray-100 rounded-md transition-colors"
-                              aria-label="Task menu"
-                            >
-                              <MoreVertical className="h-3 w-3 text-gray-500" />
-                            </button>
                           </div>
                         </div>
-                      ))}
-
-                    {showTaskInput[block.id] ? (
-                      <div className="flex items-center gap-2 py-2">
-                        <Input
-                          value={newTaskInputs[block.id] || ''}
-                          onChange={(e) => setNewTaskInputs(prev => ({ ...prev, [block.id]: e.target.value }))}
-                          onKeyDown={(e) => e.key === 'Enter' && addTask(block.id)}
-                          placeholder="タスク名を入力"
-                          className="flex-1 h-8 text-sm"
-                          autoFocus
-                        />
-                        <Button
-                          size="sm"
-                          className="h-8 px-4 bg-black hover:bg-gray-800 text-white"
-                          onClick={() => addTask(block.id)}
-                          disabled={!newTaskInputs[block.id]}
-                        >
-                          追加
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="w-8 h-8"
-                          onClick={() => {
-                            setShowTaskInput(prev => ({ ...prev, [block.id]: false }))
-                            setNewTaskInputs(prev => ({ ...prev, [block.id]: '' }))
-                          }}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
                       </div>
-                    ) : (
+                    </div>
+                    <div
+                      className={`absolute right-0 top-0 h-full flex items-center gap-2 px-3 transition-all duration-200 swipe-action-buttons ${
+                        swipedBlock === block.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                      }`}
+                    >
                       <button
-                        className="flex items-center gap-2 py-2 text-gray-700 hover:text-black transition-colors font-light"
-                        onClick={() => setShowTaskInput(prev => ({ ...prev, [block.id]: true }))}
+                        onMouseDown={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          startEditingBlock(block)
+                        }}
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors bg-white shadow-sm border border-gray-200"
                       >
-                        <Plus className="h-4 w-4" />
-                        <span className="text-[15px]">新しいタスクを追加</span>
+                        <Edit2 className="h-4 w-4 text-gray-600" />
                       </button>
-                    )}
+                      <button
+                        onMouseDown={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          deleteTimeBlock(block.id)
+                        }}
+                        className="p-2 hover:bg-red-50 rounded-lg transition-colors bg-white shadow-sm border border-gray-200"
+                      >
+                        <Trash2 className="h-4 w-4 text-red-500" />
+                      </button>
                     </div>
                   </div>
-                )}
-              </div>
-            )
-          }) : null}
-        </div>
 
-        {/* ブロックがない場合の追加ボタン */}
-        {!showBlockForm && sortedTimeBlocks && sortedTimeBlocks.length === 0 && (
-          <button
-            className="w-full border border-dashed border-gray-400 rounded-lg p-4 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light mb-1"
-            onClick={() => setShowBlockForm(true)}
-          >
-            <Plus className="h-4 w-4" />
-            <span className="text-[15px]">新しい時間ブロックの追加</span>
-          </button>
+                  {isExpanded && (
+                    <div className="px-4 pb-4 border-t border-gray-100">
+                      <div className="space-y-2">
+                        {block.tasks.map((task: Task) => (
+                          <div key={task.id} className="flex items-center gap-3 py-2">
+                            <button
+                              className={`w-[18px] h-[18px] border-2 rounded-sm flex items-center justify-center transition-all ${
+                                task.completed
+                                  ? 'bg-black border-black'
+                                  : 'border-gray-400 hover:border-gray-600'
+                              }`}
+                              onClick={() => toggleTask(block.id, task.id, task.completed)}
+                            >
+                              {task.completed && (
+                                <Check className="h-3 w-3 text-white stroke-2" />
+                              )}
+                            </button>
+                            <span
+                              className={`flex-1 text-[15px] font-light ${
+                                task.completed ? 'line-through text-gray-600' : 'text-black'
+                              }`}
+                            >
+                              {task.title}
+                            </span>
+                            <div className="relative flex items-center task-menu-container">
+                              {showTaskMenu === task.id && (
+                                <div className="absolute right-6 flex items-center animate-slide-in">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      deleteTask(block.id, task.id)
+                                    }}
+                                    className="p-1.5 hover:bg-red-50 rounded-md transition-colors bg-white shadow-sm task-delete-button"
+                                  >
+                                    <Trash2 className="h-4 w-4 text-red-500" />
+                                  </button>
+                                </div>
+                              )}
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  console.log('Menu clicked for task:', task.id, 'Current menu:', showTaskMenu)
+                                  setShowTaskMenu(showTaskMenu === task.id ? null : task.id)
+                                }}
+                                className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                                aria-label="Task menu"
+                              >
+                                <MoreVertical className="h-3 w-3 text-gray-500" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+
+                      {showTaskInput[block.id] ? (
+                        <div className="flex items-center gap-2 py-2">
+                          <Input
+                            value={newTaskInputs[block.id] || ''}
+                            onChange={(e) => setNewTaskInputs(prev => ({ ...prev, [block.id]: e.target.value }))}
+                            onKeyDown={(e) => e.key === 'Enter' && addTask(block.id)}
+                            placeholder="タスク名を入力"
+                            className="flex-1 h-8 text-sm"
+                            autoFocus
+                          />
+                          <Button
+                            size="sm"
+                            className="h-8 px-4 bg-black hover:bg-gray-800 text-white"
+                            onClick={() => addTask(block.id)}
+                            disabled={!newTaskInputs[block.id]}
+                          >
+                            追加
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="w-8 h-8"
+                            onClick={() => {
+                              setShowTaskInput(prev => ({ ...prev, [block.id]: false }))
+                              setNewTaskInputs(prev => ({ ...prev, [block.id]: '' }))
+                            }}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <button
+                          className="flex items-center gap-2 py-2 text-gray-700 hover:text-black transition-colors font-light"
+                          onClick={() => setShowTaskInput(prev => ({ ...prev, [block.id]: true }))}
+                        >
+                          <Plus className="h-4 w-4" />
+                          <span className="text-[15px]">新しいタスクを追加</span>
+                        </button>
+                      )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          !showBlockForm && (
+            <div className="mt-2 mb-5">
+              <button
+                className="w-full border border-dashed border-gray-400 rounded-lg p-4 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light"
+                onClick={() => setShowBlockForm(true)}
+              >
+                <Plus className="h-4 w-4" />
+                <span className="text-[15px]">新しい時間ブロックの追加</span>
+              </button>
+            </div>
+          )
         )}
-
-        {/* Add Time Block */}
+        {/* Add Time Block Form & ボタン(ブロックあり時) */}
         {showBlockForm ? (
           <div 
             className="bg-white border border-gray-200 rounded-lg p-4 mb-1 add-form"

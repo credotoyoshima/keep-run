@@ -164,16 +164,22 @@ export function TodoMobile() {
   const handleAddTodo = () => {
     if (!newTodoTitle.trim()) return
 
+    // 即座にフォームを閉じる（楽観的更新）
+    setNewTodoTitle('')
+    setNewTodoType('spot')
+    setNewTodoImportant(false)
+    setShowAddForm(false)
+
     addTodoMutation({
       title: newTodoTitle,
       taskType: newTodoType,
       important: newTodoImportant
     }, {
-      onSuccess: () => {
-        setNewTodoTitle('')
-        setNewTodoType('spot')
-        setNewTodoImportant(false)
-        setShowAddForm(false)
+      onError: (error) => {
+        console.error('Error adding todo:', error)
+        alert('ToDoの追加に失敗しました')
+        // 失敗時はフォームを再表示
+        setShowAddForm(true)
       }
     })
   }
@@ -556,7 +562,7 @@ export function TodoMobile() {
         </div>
       ) : (
         <button 
-          className="w-full border border-dashed border-gray-400 rounded-lg p-5 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light mb-20"
+          className="w-full border border-dashed border-gray-400 rounded-lg p-3 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light mb-20"
           onClick={() => setShowAddForm(true)}
         >
           <Plus className="h-4 w-4" />
