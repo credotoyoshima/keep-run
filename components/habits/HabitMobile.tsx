@@ -127,10 +127,12 @@ export function HabitMobile() {
     })
   }
 
-  // 円形プログレスバーの値を計算
-  const progressPercentage = currentHabit 
-    ? Math.round((currentHabit.completedDays / currentHabit.targetDays) * 100)
-    : 0
+  // 円形プログレスバーの値を計算（14分の1ずつ正確に増える）
+  const progressSegments = currentHabit ? currentHabit.completedDays : 0
+  const totalSegments = currentHabit ? currentHabit.targetDays : 14
+  const circumference = 2 * Math.PI * 45 // r=45の円周
+  const segmentLength = circumference / totalSegments // 1セグメント分の長さ
+  const progressLength = progressSegments * segmentLength
 
   // 今日完了済みかチェック
   const todayCompleted = currentHabit?.records.find(r => r.date === getTodayDate())?.completed || false
@@ -237,7 +239,8 @@ export function HabitMobile() {
                   fill="none"
                   stroke="#000000"
                   strokeWidth="6"
-                  strokeDasharray={`${progressPercentage * 2.827} 283`}
+                  strokeDasharray={`${progressLength} ${circumference}`}
+                  strokeDashoffset="0"
                   className="transition-all duration-500 ease-out"
                 />
               </svg>
