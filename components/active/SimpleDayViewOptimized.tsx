@@ -364,7 +364,7 @@ export function SimpleDayViewOptimized() {
         <div className="space-y-3 mb-5" style={{ minHeight: '200px' }}>
           {timeBlocks && timeBlocks.length > 0 ? timeBlocks.map((block) => {
             const isExpanded = expandedBlocks.has(block.id)
-            const blockCompletedTasks = block.tasks?.filter(task => task.completed).length || 0
+            const blockCompletedTasks = block.tasks?.filter((task: Task) => task.completed).length || 0
             const isCompleted = block.tasks.length > 0 && blockCompletedTasks === block.tasks.length
 
             return editingBlock?.id === block.id ? (
