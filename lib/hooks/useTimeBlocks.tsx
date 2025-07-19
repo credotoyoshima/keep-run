@@ -157,6 +157,10 @@ export function useTimeBlocks(page: number) {
   // Delete task mutation
   const deleteTaskMutation = useMutation({
     mutationFn: async ({ blockId, taskId }: { blockId: string; taskId: string }) => {
+      // 一時的な楽観的タスクの場合はサーバー呼び出し不要
+      if (taskId.startsWith('temp-')) {
+        return { success: true }
+      }
       const response = await fetch('/api/day', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
