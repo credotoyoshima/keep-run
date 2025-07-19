@@ -1,5 +1,5 @@
-import { HabitMobile } from '@/components/habits/HabitMobile'
+import { RoutinesPageClient } from '@/components/habits/RoutinesPageClient'
 
 export default function RoutinesPage() {
-  return <HabitMobile />
+  return <RoutinesPageClient />
 }

@@ -1,5 +1,5 @@
-import { EvaluationMobile } from '@/components/evaluations/EvaluationMobile'
+import { AnalyticsPageClient } from '@/components/evaluations/AnalyticsPageClient'
 
 export default function AnalyticsPage() {
-  return <EvaluationMobile />
+  return <AnalyticsPageClient />
 }

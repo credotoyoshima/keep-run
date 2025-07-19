@@ -1,5 +1,5 @@
-import { TodoMobile } from '@/components/todos/TodoMobile'
+import { TodoPageClient } from '@/components/todos/TodoPageClient'
 
 export default function TodoPage() {
-  return <TodoMobile />
+  return <TodoPageClient />
 }

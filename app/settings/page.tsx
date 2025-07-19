@@ -1,5 +1,5 @@
-import { SettingsMobile } from '@/components/settings/SettingsMobileFixed'
+import { SettingsPageClient } from '@/components/settings/SettingsPageClient'
 
 export default function SettingsPage() {
-  return <SettingsMobile />
+  return <SettingsPageClient />
 }
