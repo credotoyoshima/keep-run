@@ -628,3 +628,32 @@ Import trace for requested module:
  ✓ Compiled in 962ms (1420 modules)
  ✓ Compiled in 334ms (1420 modules)
  ✓ Compiled in 1180ms (1434 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 757ms (850 modules)
+ ⨯ Error: ENOENT: no such file or directory, open '/home/credo/projects/keep-run/.next/server/vendor-chunks/next.js'
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:111:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:162:22)
+    at <unknown> (.next/server/app/page.js:543:47)
+    at Object.<anonymous> (.next/server/app/page.js:546:3) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/credo/projects/keep-run/.next/server/vendor-chunks/next.js',
+  page: '/'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 1360ms (1760 modules)
+ GET / 500 in 2704ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 765ms (953 modules)
+ GET /favicon.ico 200 in 848ms
+ ✓ Compiled in 1895ms (1768 modules)
+ ✓ Compiled in 660ms (1768 modules)
+ ✓ Compiled in 602ms (1768 modules)
+ ✓ Compiled in 732ms (1768 modules)
+ ✓ Compiled in 690ms (1768 modules)
+ ✓ Compiled in 730ms (1768 modules)

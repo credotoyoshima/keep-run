@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { MobileLayout } from '@/components/layout/MobileLayout'
 import { Input } from '@/components/ui/input'
@@ -89,7 +89,18 @@ export function SimpleDayViewOptimized() {
     toggleTask: toggleTaskMutation,
     updateTimeBlock: updateTimeBlockMutation,
   } = useTimeBlocks(currentPage)
-  
+
+  // 時間ブロックを日の開始時間に基づいて時間順にソート
+  const sortedTimeBlocks = useMemo(() => {
+    const toMin = (t: string) => { const [h, m] = t.split(':').map(Number); return h * 60 + m }
+    const base = toMin(dayStartTime)
+    return [...(timeBlocks || [])].sort((a, b) => {
+      const am = toMin(a.startTime), bm = toMin(b.startTime)
+      const calc = (m: number) => (m < base ? m + 1440 : m)
+      return calc(am) - calc(bm)
+    })
+  }, [timeBlocks, dayStartTime])
+
   // 日付変更を検出してタスクをリセット
   useDayChangeDetection(dayStartTime, async () => {
     console.log('Day changed, resetting tasks...')
@@ -166,30 +177,32 @@ export function SimpleDayViewOptimized() {
 
   // 初回ロード時に展開状態を設定
   useEffect(() => {
-    if (timeBlocks && timeBlocks.length > 0 && typeof window !== 'undefined' && !localStorage.getItem('expandedTimeBlocks')) {
-      const allBlockIds = timeBlocks.map((block: TimeBlock) => block.id)
+    if (sortedTimeBlocks && sortedTimeBlocks.length > 0 && typeof window !== 'undefined' && !localStorage.getItem('expandedTimeBlocks')) {
+      const allBlockIds = sortedTimeBlocks.map((block: TimeBlock) => block.id)
       setExpandedBlocks(new Set(allBlockIds))
       localStorage.setItem('expandedTimeBlocks', JSON.stringify(allBlockIds))
     }
-  }, [timeBlocks])
+  }, [sortedTimeBlocks])
 
-  // 時間ブロックを追加
+  // 時間ブロックを追加: フォームを即時閉じ（楽観的更新）
   const addTimeBlock = () => {
     if (!newBlockTitle || !newBlockTime) return
+
+    // 即座にフォームを閉じる
+    setShowBlockForm(false)
+    setNewBlockTitle('')
+    setNewBlockTime('00:00')
 
     addTimeBlockMutation({
       title: newBlockTitle,
       startTime: newBlockTime,
       pageNumber: currentPage
     }, {
-      onSuccess: () => {
-        setNewBlockTitle('')
-        setNewBlockTime('00:00')
-        setShowBlockForm(false)
-      },
       onError: (error) => {
         console.error('Error adding time block:', error)
         alert('時間ブロックの追加に失敗しました')
+        // 失敗時はフォームを再表示
+        setShowBlockForm(true)
       }
     })
   }
@@ -381,7 +394,7 @@ export function SimpleDayViewOptimized() {
 
         {/* Time Blocks */}
         <div className="space-y-3 mb-5" style={{ minHeight: '200px' }}>
-          {timeBlocks && timeBlocks.length > 0 ? timeBlocks.map((block: TimeBlock) => {
+          {sortedTimeBlocks && sortedTimeBlocks.length > 0 ? sortedTimeBlocks.map((block: TimeBlock) => {
             const isExpanded = expandedBlocks.has(block.id)
             const blockCompletedTasks = block.tasks?.filter((task: Task) => task.completed).length || 0
             const isCompleted = block.tasks.length > 0 && blockCompletedTasks === block.tasks.length
@@ -632,6 +645,17 @@ export function SimpleDayViewOptimized() {
           }) : null}
         </div>
 
+        {/* ブロックがない場合の追加ボタン */}
+        {!showBlockForm && sortedTimeBlocks && sortedTimeBlocks.length === 0 && (
+          <button
+            className="w-full border border-dashed border-gray-400 rounded-lg p-4 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light mb-1"
+            onClick={() => setShowBlockForm(true)}
+          >
+            <Plus className="h-4 w-4" />
+            <span className="text-[15px]">新しい時間ブロックの追加</span>
+          </button>
+        )}
+
         {/* Add Time Block */}
         {showBlockForm ? (
           <div 
@@ -680,13 +704,15 @@ export function SimpleDayViewOptimized() {
             </div>
           </div>
         ) : (
-          <button 
-            className="w-full border border-dashed border-gray-400 rounded-lg p-5 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light mb-1"
-            onClick={() => setShowBlockForm(true)}
-          >
-            <Plus className="h-4 w-4" />
-            <span className="text-[15px]">新しい時間ブロック</span>
-          </button>
+          sortedTimeBlocks && sortedTimeBlocks.length > 0 && (
+            <button 
+              className="w-full border border-dashed border-gray-400 rounded-lg p-4 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light mb-1"
+              onClick={() => setShowBlockForm(true)}
+            >
+              <Plus className="h-4 w-4" />
+              <span className="text-[15px]">新しい時間ブロックの追加</span>
+            </button>
+          )
         )}
       </div>
 
