@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { MobileLayout } from '@/components/layout/MobileLayout'
 import { Input } from '@/components/ui/input'
 import { TimePickerModal } from '@/components/ui/time-picker-modal'
-import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
+import { useDayStartTimeGlobal } from '@/lib/hooks/useDayStartTimeGlobal'
 import { useDayChangeDetection } from '@/lib/day-change-detector'
 import { LoadingSpinnerCenter } from '@/components/ui/LoadingSpinner'
 import { 
@@ -77,8 +77,8 @@ export function SimpleDayView() {
     return 1
   })
   
-  // useDayStartTimeフックを使用
-  const { dayStartTime } = useDayStartTime()
+  // useDayStartTimeGlobalフックを使用
+  const { dayStartTime } = useDayStartTimeGlobal()
   
   // 日付変更を検出してタスクをリセット
   useDayChangeDetection(dayStartTime, async () => {

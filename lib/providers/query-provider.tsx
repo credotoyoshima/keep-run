@@ -9,9 +9,11 @@ export function QueryProvider({ children }: { children: ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 5 * 60 * 1000, // 5 minutes - データを5分間新鮮とみなす
-            gcTime: 10 * 60 * 1000, // 10 minutes - 10分間キャッシュを保持
+            staleTime: 30 * 60 * 1000, // 30 minutes - データを30分間新鮮とみなす（大幅延長）
+            gcTime: 60 * 60 * 1000, // 60 minutes - 1時間キャッシュを保持
             refetchOnWindowFocus: false, // ウィンドウフォーカス時の再取得を無効化
+            refetchOnReconnect: false, // 再接続時の再取得を無効化
+            refetchInterval: false, // 定期的な再取得を無効化
             retry: (failureCount, error: Error & { status?: number }) => {
               // 401/403エラーはリトライしない
               if (error?.status === 401 || error?.status === 403) {
@@ -19,7 +21,8 @@ export function QueryProvider({ children }: { children: ReactNode }) {
               }
               return failureCount < 1
             },
-            refetchOnMount: false, // マウント時の再取得を無効化（キャッシュがある場合）
+            refetchOnMount: 'always', // 初回は必ず取得、その後はキャッシュ優先
+            networkMode: 'offlineFirst', // オフライン優先モード
           },
           mutations: {
             retry: 0, // ミューテーションはリトライしない

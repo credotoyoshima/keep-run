@@ -8,9 +8,10 @@ import {
   TrendingUp, 
   Star
 } from 'lucide-react'
-// import { usePrefetch } from '@/lib/hooks/usePrefetch'
-// import { useEffect, useState } from 'react'
-// import { createClient } from '@/lib/supabase/client'
+import { usePrefetch } from '@/lib/hooks/usePrefetch'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { useQueryClient } from '@tanstack/react-query'
 
 const navigation = [
   {
@@ -37,42 +38,54 @@ const navigation = [
 
 export function BottomNavigation() {
   const pathname = usePathname()
-  // プリフェッチ機能を一時的に無効化
-  // const { prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations } = usePrefetch()
-  // const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const queryClient = useQueryClient()
+  const { prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations } = usePrefetch()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   // 認証状態を確認
-  // useEffect(() => {
-  //   const checkAuth = async () => {
-  //     const supabase = createClient()
-  //     const { data: { session } } = await supabase.auth.getSession()
-  //     setIsAuthenticated(!!session)
-  //   }
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      setIsAuthenticated(!!session)
+    }
 
-  //   checkAuth()
-  // }, [])
+    checkAuth()
+  }, [])
 
-  // 現在のページに基づいて隣接ページのデータをプリフェッチ
-  // useEffect(() => {
-  //   if (!isAuthenticated) return
-  //   if (pathname === '/day' || pathname === '/') {
-  //     // DAYページにいる場合、TodoとRoutinesのデータをプリフェッチ
-  //     prefetchTodos()
-  //     prefetchHabits()
-  //   } else if (pathname === '/todo') {
-  //     // Todoページにいる場合、DAYとRoutinesのデータをプリフェッチ
-  //     prefetchTimeBlocks(1)
-  //     prefetchHabits()
-  //   } else if (pathname === '/routines') {
-  //     // Routinesページにいる場合、TodoとAnalyticsのデータをプリフェッチ
-  //     prefetchTodos()
-  //     prefetchEvaluations()
-  //   } else if (pathname === '/analytics') {
-  //     // Analyticsページにいる場合、RoutinesとDAYのデータをプリフェッチ
-  //     prefetchHabits()
-  //     prefetchTimeBlocks(1)
-  //   }
-  // }, [pathname, isAuthenticated, prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations])
+  // 現在のページに基づいて隣接ページのデータをプリフェッチ（最適化版）
+  useEffect(() => {
+    if (!isAuthenticated) return
+    
+    // スマートプリフェッチ: キャッシュがない場合のみ実行
+    const smartPrefetch = async (queryKey: (string | number)[], fetchFn: () => Promise<unknown>) => {
+      if (!queryClient.getQueryData(queryKey)) {
+        try {
+          await fetchFn()
+        } catch {
+          // 静かに失敗
+        }
+      }
+    }
+    
+    if (pathname === '/day' || pathname === '/') {
+      // DAYページ: TodoとRoutinesをプリフェッチ
+      smartPrefetch(['todos'], prefetchTodos)
+      smartPrefetch(['habits'], prefetchHabits)
+    } else if (pathname === '/todo') {
+      // Todoページ: DAYとRoutinesをプリフェッチ
+      smartPrefetch(['timeBlocks', 1], () => prefetchTimeBlocks(1))
+      smartPrefetch(['habits'], prefetchHabits)
+    } else if (pathname === '/routines') {
+      // Routinesページ: TodoとAnalyticsをプリフェッチ
+      smartPrefetch(['todos'], prefetchTodos)
+      smartPrefetch(['evaluations'], prefetchEvaluations)
+    } else if (pathname === '/analytics') {
+      // Analyticsページ: RoutinesとDAYをプリフェッチ
+      smartPrefetch(['habits'], prefetchHabits)
+      smartPrefetch(['timeBlocks', 1], () => prefetchTimeBlocks(1))
+    }
+  }, [pathname, isAuthenticated, prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations, queryClient])
 
   const handleMouseEnter = () => {
     // プリフェッチ機能を一時的に無効化

@@ -7,7 +7,7 @@ import { DayStartTimeModal } from './DayStartTimeModal'
 import { ResetHabitModal } from './ResetHabitModal'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
+import { useDayStartTimeGlobal } from '@/lib/hooks/useDayStartTimeGlobal'
 import { 
   User, 
   LogOut,
@@ -25,7 +25,7 @@ export function SettingsMobile() {
   const [isLoading, setIsLoading] = useState(true)
   const supabase = createClient()
   const router = useRouter()
-  const { dayStartTime, updateDayStartTime } = useDayStartTime()
+  const { dayStartTime, updateDayStartTime } = useDayStartTimeGlobal()
 
   useEffect(() => {
     const fetchUserData = async () => {

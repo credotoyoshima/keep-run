@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { useDayChangeDetection } from '@/lib/day-change-detector'
-import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
+import { useDayStartTimeGlobal } from '@/lib/hooks/useDayStartTimeGlobal'
 
 interface Todo {
   id: string
@@ -63,8 +63,8 @@ export function TodoMobile() {
     }
   }
 
-  // useDayStartTimeフックを使用
-  const { dayStartTime } = useDayStartTime()
+  // useDayStartTimeGlobalフックを使用
+  const { dayStartTime } = useDayStartTimeGlobal()
 
   // 日付変更を検出してToDoリストを更新
   useDayChangeDetection(dayStartTime, () => {

@@ -1,17 +1,17 @@
 'use client'
 
-// import { useEffect, useState } from 'react'
-// import { usePrefetch } from '@/lib/hooks/usePrefetch'
-// import { createClient } from '@/lib/supabase/client'
+import { useEffect, useState } from 'react'
+import { usePrefetch } from '@/lib/hooks/usePrefetch'
+import { createClient } from '@/lib/supabase/client'
+import { useDayStartTimeGlobal } from '@/lib/hooks/useDayStartTimeGlobal'
 
 export function InitialDataLoaderAuth() {
-  // プリフェッチ機能を一時的に無効化
-  return null
-  
-  /* TODO: 認証エラーを解決後に有効化
   const { prefetchAllPages } = usePrefetch()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isReady, setIsReady] = useState(false)
+  
+  // 設定を事前読み込み（最優先）
+  const { dayStartTime } = useDayStartTimeGlobal()
 
   useEffect(() => {
     // 認証状態を確認
@@ -40,18 +40,21 @@ export function InitialDataLoaderAuth() {
 
     const loadData = async () => {
       try {
-        await prefetchAllPages()
+        // 設定が読み込まれてからプリフェッチ開始
+        if (dayStartTime) {
+          await prefetchAllPages()
+        }
       } catch (error) {
         // エラーは静かに処理（コンソールを汚さない）
+        console.warn('Prefetch failed:', error)
       }
     }
 
-    // 少し遅延させてから実行（初期レンダリングを妨げないため）
-    const timer = setTimeout(loadData, 500)
+    // バックグラウンドで実行（UI描画を妨げない）
+    const timer = setTimeout(loadData, 100)
 
     return () => clearTimeout(timer)
-  }, [isReady, isAuthenticated, prefetchAllPages])
+  }, [isReady, isAuthenticated, dayStartTime, prefetchAllPages])
 
   return null
-  */
 }
