@@ -362,7 +362,7 @@ export function SimpleDayViewOptimized() {
 
         {/* Time Blocks */}
         <div className="space-y-3 mb-5" style={{ minHeight: '200px' }}>
-          {timeBlocks && timeBlocks.length > 0 ? timeBlocks.map((block) => {
+          {timeBlocks && timeBlocks.length > 0 ? timeBlocks.map((block: TimeBlock) => {
             const isExpanded = expandedBlocks.has(block.id)
             const blockCompletedTasks = block.tasks?.filter((task: Task) => task.completed).length || 0
             const isCompleted = block.tasks.length > 0 && blockCompletedTasks === block.tasks.length
@@ -516,7 +516,7 @@ export function SimpleDayViewOptimized() {
                 {isExpanded && (
                   <div className="px-4 pb-4 border-t border-gray-100">
                     <div className="space-y-2">
-                      {block.tasks.map((task) => (
+                      {block.tasks.map((task: Task) => (
                         <div key={task.id} className="flex items-center gap-3 py-2">
                           <button
                             className={`w-[18px] h-[18px] border-2 rounded-sm flex items-center justify-center transition-all ${
