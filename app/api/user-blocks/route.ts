@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
-import { getUserDayStartTime } from '@/lib/server-utils'
+import { getUserDayStartTimeByEmail, getOrCreateUserByEmail } from '@/lib/server-utils'
 
 // ユーザーの時間ブロックを取得（日付に依存しない）
 export async function GET(request: NextRequest) {
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const pageNumber = parseInt(searchParams.get('page') || '1')
     
     // ユーザーの一日の始まり時間を取得
-    const dayStartTime = await getUserDayStartTime(user.id)
+    const dayStartTime = await getUserDayStartTimeByEmail(user.email!)
 
     // ユーザーに紐づく指定ページの時間ブロックを取得
     const timeBlocks = await prisma.$queryRaw<any[]>`
@@ -42,7 +42,8 @@ export async function GET(request: NextRequest) {
       FROM "ActiveTimeBlock" atb
       INNER JOIN "ActiveDay" ad ON atb."dayId" = ad.id
       LEFT JOIN "ActiveTask" at ON at."blockId" = atb.id
-      WHERE ad."userId" = ${user.id} AND atb."pageNumber" = ${pageNumber}
+      INNER JOIN "User" u ON ad."userId" = u.id
+      WHERE u.email = ${user.email} AND atb."pageNumber" = ${pageNumber}
       GROUP BY atb.id, atb.title, atb."startTime", atb."orderIndex", atb."pageNumber", atb."completionRate", atb."createdAt", atb."updatedAt"
       ORDER BY atb."startTime"
     `
@@ -91,16 +92,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { title, startTime, pageNumber = 1 } = body
 
+    // Prismaのユーザーを取得または作成
+    const prismaUser = await getOrCreateUserByEmail(user.email!)
+
     // ユーザーの永続的なActiveDayを取得または作成
     let activeDay = await prisma.activeDay.findFirst({
-      where: { userId: user.id },
+      where: { userId: prismaUser.id },
       orderBy: { createdAt: 'asc' }
     })
 
     if (!activeDay) {
       activeDay = await prisma.activeDay.create({
         data: {
-          userId: user.id,
+          userId: prismaUser.id,
           date: new Date()
         }
       })
@@ -159,7 +163,9 @@ export async function DELETE(request: NextRequest) {
       where: {
         id: blockId,
         day: {
-          userId: user.id
+          user: {
+            email: user.email
+          }
         }
       }
     })
