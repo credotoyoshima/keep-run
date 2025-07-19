@@ -12,6 +12,7 @@ import {
   Calendar,
   X
 } from 'lucide-react'
+import { useSimpleEvaluations } from '@/lib/hooks/useSimpleEvaluations'
 
 interface Evaluation {
   id: string
@@ -27,30 +28,16 @@ export function EvaluationMobile() {
   const [showEvaluationForm, setShowEvaluationForm] = useState(false)
   const [newRating, setNewRating] = useState(0)
   const [newComment, setNewComment] = useState('')
-  const [evaluations, setEvaluations] = useState<Evaluation[]>([])
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
 
-  // データベースから評価データを取得
-  useEffect(() => {
-    const fetchEvaluations = async () => {
-      try {
-        const response = await fetch('/api/evaluations')
-        if (response.ok) {
-          const data = await response.json()
-          setEvaluations(data.evaluations)
-        } else {
-          console.error('Failed to fetch evaluations')
-        }
-      } catch (error) {
-        console.error('Error fetching evaluations:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
+  // ReactQueryを使用して評価データを取得・管理
+  const { 
+    evaluations, 
+    isLoading: loading, 
+    saveEvaluation, 
+    isSaving: saving 
+  } = useSimpleEvaluations()
 
-    fetchEvaluations()
-  }, [])
+  // 評価データ取得は不要（ReactQueryが自動管理）
 
   // 月の名前を取得
   const getMonthName = (date: Date) => {
@@ -210,51 +197,26 @@ export function EvaluationMobile() {
     setShowEvaluationForm(true)
   }
 
-  // 評価を保存
-  const saveEvaluation = async () => {
+  // 評価を保存（ReactQuery版）
+  const handleSaveEvaluation = () => {
     if (!selectedDate || newRating === 0 || saving) return
 
-    setSaving(true)
-    try {
-      const response = await fetch('/api/evaluations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          date: selectedDate,
-          rating: newRating,
-          comment: newComment
-        })
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        const newEvaluation = data.evaluation
-        
-        // 既存の評価を更新または新規追加
-        const existingIndex = evaluations.findIndex(e => e.date === selectedDate)
-        if (existingIndex >= 0) {
-          setEvaluations(prev => prev.map((e, i) => i === existingIndex ? newEvaluation : e))
-        } else {
-          setEvaluations(prev => [...prev, newEvaluation].sort((a, b) => 
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-          ))
-        }
-
+    saveEvaluation({
+      date: selectedDate,
+      rating: newRating,
+      comment: newComment
+    }, {
+      onSuccess: () => {
         setShowEvaluationForm(false)
         setSelectedDate(null)
         setNewRating(0)
         setNewComment('')
-      } else {
-        alert('保存に失敗しました。もう一度お試しください。')
+      },
+      onError: (error) => {
+        console.error('Error saving evaluation:', error)
+        alert('エラーが発生しました。もう一度お試しください。')
       }
-    } catch (error) {
-      console.error('Error saving evaluation:', error)
-      alert('エラーが発生しました。もう一度お試しください。')
-    } finally {
-      setSaving(false)
-    }
+    })
   }
 
   // 評価をキャンセル
@@ -437,7 +399,7 @@ export function EvaluationMobile() {
               </h3>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={saveEvaluation}
+                  onClick={handleSaveEvaluation}
                   disabled={newRating === 0 || saving}
                   className="bg-black hover:bg-gray-800 text-white text-xs px-3 py-1 rounded disabled:opacity-50"
                 >
