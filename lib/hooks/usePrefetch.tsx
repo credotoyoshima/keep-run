@@ -12,6 +12,10 @@ export function usePrefetch() {
       queryFn: async () => {
         const response = await fetch(`/api/user-blocks?page=${page}`)
         if (!response.ok) {
+          // 401/403の場合はエラーを投げない（認証エラーは予期されるもの）
+          if (response.status === 401 || response.status === 403) {
+            return []
+          }
           throw new Error('Failed to fetch time blocks')
         }
         const data = await response.json()
@@ -27,6 +31,9 @@ export function usePrefetch() {
       queryFn: async () => {
         const response = await fetch('/api/todos')
         if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            return []
+          }
           throw new Error('Failed to fetch todos')
         }
         return response.json()
@@ -41,6 +48,9 @@ export function usePrefetch() {
       queryFn: async () => {
         const response = await fetch('/api/habits')
         if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            return []
+          }
           throw new Error('Failed to fetch habits')
         }
         return response.json()
@@ -61,6 +71,9 @@ export function usePrefetch() {
 
         const response = await fetch(url)
         if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            return []
+          }
           throw new Error('Failed to fetch evaluations')
         }
         return response.json()

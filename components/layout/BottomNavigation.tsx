@@ -9,7 +9,8 @@ import {
   Star
 } from 'lucide-react'
 import { usePrefetch } from '@/lib/hooks/usePrefetch'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 const navigation = [
   {
@@ -37,9 +38,22 @@ const navigation = [
 export function BottomNavigation() {
   const pathname = usePathname()
   const { prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations } = usePrefetch()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  // 認証状態を確認
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      setIsAuthenticated(!!session)
+    }
+
+    checkAuth()
+  }, [])
 
   // 現在のページに基づいて隣接ページのデータをプリフェッチ
   useEffect(() => {
+    if (!isAuthenticated) return
     if (pathname === '/day' || pathname === '/') {
       // DAYページにいる場合、TodoとRoutinesのデータをプリフェッチ
       prefetchTodos()
@@ -57,9 +71,12 @@ export function BottomNavigation() {
       prefetchHabits()
       prefetchTimeBlocks(1)
     }
-  }, [pathname, prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations])
+  }, [pathname, isAuthenticated, prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations])
 
   const handleMouseEnter = (href: string) => {
+    // 認証されていない場合はプリフェッチしない
+    if (!isAuthenticated) return
+    
     // ホバー時にデータをプリフェッチ
     if (href === '/day') {
       prefetchTimeBlocks(1)
