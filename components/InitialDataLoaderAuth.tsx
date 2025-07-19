@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 export function InitialDataLoaderAuth() {
   const { prefetchAllPages } = usePrefetch()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
     // 認証状態を確認
@@ -14,14 +15,24 @@ export function InitialDataLoaderAuth() {
       const supabase = createClient()
       const { data: { session } } = await supabase.auth.getSession()
       setIsAuthenticated(!!session)
+      setIsReady(true)
     }
 
     checkAuth()
+
+    // 認証状態の変更を監視
+    const { data: { subscription } } = createClient().auth.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session)
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
   }, [])
 
   useEffect(() => {
-    // 認証されている場合のみプリフェッチを実行
-    if (!isAuthenticated) return
+    // 準備ができていない、または認証されていない場合は実行しない
+    if (!isReady || !isAuthenticated) return
 
     const loadData = async () => {
       try {
@@ -35,7 +46,7 @@ export function InitialDataLoaderAuth() {
     const timer = setTimeout(loadData, 500)
 
     return () => clearTimeout(timer)
-  }, [isAuthenticated, prefetchAllPages])
+  }, [isReady, isAuthenticated, prefetchAllPages])
 
   return null
 }

@@ -25,7 +25,13 @@ export function useTimeBlocks(page: number) {
     queryFn: async () => {
       const response = await fetch(`/api/user-blocks?page=${page}`)
       if (!response.ok) {
-        throw new Error('Failed to fetch time blocks')
+        // 401/403の場合は空配列を返す
+        if (response.status === 401 || response.status === 403) {
+          return []
+        }
+        const error = new Error('Failed to fetch time blocks') as any
+        error.status = response.status
+        throw error
       }
       const data = await response.json()
       return Array.isArray(data) ? data : []

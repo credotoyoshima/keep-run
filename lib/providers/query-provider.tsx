@@ -12,7 +12,13 @@ export function QueryProvider({ children }: { children: ReactNode }) {
             staleTime: 5 * 60 * 1000, // 5 minutes - データを5分間新鮮とみなす
             gcTime: 10 * 60 * 1000, // 10 minutes - 10分間キャッシュを保持
             refetchOnWindowFocus: false, // ウィンドウフォーカス時の再取得を無効化
-            retry: 1,
+            retry: (failureCount, error: any) => {
+              // 401/403エラーはリトライしない
+              if (error?.status === 401 || error?.status === 403) {
+                return false
+              }
+              return failureCount < 1
+            },
             refetchOnMount: false, // マウント時の再取得を無効化（キャッシュがある場合）
           },
           mutations: {

@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { RouteProgress } from "@/components/layout/RouteProgress";
 import { QueryProvider } from "@/lib/providers/query-provider";
-import { InitialDataLoaderAuth } from "@/components/InitialDataLoaderAuth";
+import { ConditionalDataLoader } from "@/components/ConditionalDataLoader";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -55,7 +55,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <QueryProvider>
-          <InitialDataLoaderAuth />
+          <ConditionalDataLoader />
           {children}
         </QueryProvider>
         {/* Service Worker登録を一時的にコメントアウト

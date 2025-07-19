@@ -83,19 +83,24 @@ export function usePrefetch() {
   }, [queryClient])
 
   const prefetchAllPages = useCallback(async () => {
-    // DAYページのデータをプリフェッチ（1-3ページ）
-    await Promise.all([
-      prefetchTimeBlocks(1),
-      prefetchTimeBlocks(2),
-      prefetchTimeBlocks(3),
-    ])
-    
-    // その他のページのデータをプリフェッチ
-    await Promise.all([
-      prefetchTodos(),
-      prefetchHabits(),
-      prefetchEvaluations(new Date().getFullYear(), new Date().getMonth() + 1),
-    ])
+    try {
+      // DAYページのデータをプリフェッチ（1-3ページ）
+      await Promise.allSettled([
+        prefetchTimeBlocks(1),
+        prefetchTimeBlocks(2),
+        prefetchTimeBlocks(3),
+      ])
+      
+      // その他のページのデータをプリフェッチ
+      await Promise.allSettled([
+        prefetchTodos(),
+        prefetchHabits(),
+        prefetchEvaluations(new Date().getFullYear(), new Date().getMonth() + 1),
+      ])
+    } catch (error) {
+      // エラーは静かに処理
+      console.log('Prefetch completed with some errors')
+    }
   }, [prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations])
 
   return {
