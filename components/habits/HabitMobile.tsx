@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { MobileLayout } from '@/components/layout/MobileLayout'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, Plus, Circle } from 'lucide-react'
+import { CheckCircle, Plus, Circle, Loader2 } from 'lucide-react'
 import { CreateHabitModal } from './CreateHabitModal'
 import { HabitHistoryModal } from './HabitHistoryModal'
 import { getTodayInJST, formatDateString } from '@/lib/date-utils'
@@ -34,6 +35,7 @@ interface ContinuousHabit {
 export function HabitMobile() {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showHistoryModal, setShowHistoryModal] = useState(false)
+  const queryClient = useQueryClient()
   
   // useDayStartTimeフックを使用
   const { dayStartTime } = useDayStartTime()
@@ -53,7 +55,9 @@ export function HabitMobile() {
 
   // 日付変更を検出（ReactQueryが自動管理）
   useDayChangeDetection(dayStartTime, () => {
-    console.log('Day changed, React Query will handle data refresh')
+    console.log('Day changed, invalidating habits cache')
+    // 日付が変わったらキャッシュを無効化して最新データを取得
+    queryClient.invalidateQueries({ queryKey: ['continuousHabits'] })
   })
 
   // 一時的な関数（ReactQuery移行完了後に削除）
@@ -108,7 +112,14 @@ export function HabitMobile() {
 
   // 習慣完了をトグル（ReactQuery版）
   const toggleHabitCompletion = () => {
-    if (!currentHabit) return
+    if (!currentHabit) {
+      alert('習慣データの読み込み中です。少々お待ちください。')
+      return
+    }
+
+    if (isRecording) {
+      return // 記録中は重複クリックを防ぐ
+    }
 
     const today = getTodayDate()
     const todayRecord = currentHabit.records.find(r => r.date === today)
@@ -123,7 +134,7 @@ export function HabitMobile() {
     }, {
       onError: (error) => {
         console.error('Error recording habit:', error)
-        alert('習慣の記録に失敗しました')
+        alert('習慣の記録に失敗しました。インターネット接続を確認して、もう一度お試しください。')
       }
     })
   }
@@ -270,10 +281,16 @@ export function HabitMobile() {
            <div className="mb-4">
              <Button
                size="lg"
-               className="px-6 py-4 rounded-lg text-white font-medium bg-black hover:bg-gray-800"
+               className="px-6 py-4 rounded-lg text-white font-medium bg-black hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                onClick={toggleHabitCompletion}
+               disabled={isRecording || !currentHabit}
              >
-               {todayCompleted ? (
+               {isRecording ? (
+                 <span className="flex items-center gap-2">
+                   <Loader2 className="h-5 w-5 animate-spin" />
+                   記録中...
+                 </span>
+               ) : todayCompleted ? (
                  <span className="flex items-center gap-2">
                    <CheckCircle className="h-5 w-5" />
                    達成済み

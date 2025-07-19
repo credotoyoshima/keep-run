@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useDayStartTime } from './useDayStartTime'
 
 interface HabitRecord {
   date: string
@@ -21,6 +22,7 @@ interface ContinuousHabit {
 
 export function useContinuousHabits() {
   const queryClient = useQueryClient()
+  const { dayStartTime } = useDayStartTime()
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['continuousHabits'],
@@ -62,7 +64,7 @@ export function useContinuousHabits() {
       const response = await fetch(`/api/habits/${habitId}/record`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ completed })
+        body: JSON.stringify({ completed, dayStartTime })
       })
       if (!response.ok) throw new Error('Failed to record habit')
       return response.json()
