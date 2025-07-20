@@ -202,9 +202,9 @@ export function EvaluationMobile() {
     if (!selectedDate || newRating === 0 || saving) return
 
     saveEvaluation({
-      date: selectedDate,
-      rating: newRating,
-      comment: newComment
+          date: selectedDate,
+          rating: newRating,
+          comment: newComment
     }, {
       onSuccess: () => {
         setShowEvaluationForm(false)
@@ -213,9 +213,9 @@ export function EvaluationMobile() {
         setNewComment('')
       },
       onError: (error) => {
-        console.error('Error saving evaluation:', error)
-        alert('エラーが発生しました。もう一度お試しください。')
-      }
+      console.error('Error saving evaluation:', error)
+      alert('エラーが発生しました。もう一度お試しください。')
+    }
     })
   }
 

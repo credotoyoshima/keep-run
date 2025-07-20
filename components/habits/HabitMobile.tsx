@@ -1,10 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 import { MobileLayout } from '@/components/layout/MobileLayout'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, Plus, Circle, Loader2 } from 'lucide-react'
+import { CheckCircle, Plus, Circle } from 'lucide-react'
 import { CreateHabitModal } from './CreateHabitModal'
 import { HabitHistoryModal } from './HabitHistoryModal'
 import { getTodayInJST, formatDateString } from '@/lib/date-utils'
@@ -35,7 +34,6 @@ interface ContinuousHabit {
 export function HabitMobile() {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showHistoryModal, setShowHistoryModal] = useState(false)
-  const queryClient = useQueryClient()
   
   // useDayStartTimeフックを使用
   const { dayStartTime } = useDayStartTime()
@@ -55,11 +53,19 @@ export function HabitMobile() {
 
   // 日付変更を検出（ReactQueryが自動管理）
   useDayChangeDetection(dayStartTime, () => {
-    console.log('Day changed, invalidating habits cache')
-    // 日付が変わったらキャッシュを無効化して最新データを取得
-    queryClient.invalidateQueries({ queryKey: ['continuousHabits'] })
+    console.log('Day changed, React Query will handle data refresh')
   })
 
+  // 一時的な関数（ReactQuery移行完了後に削除）
+  const fetchHabit = async () => {
+    console.log('fetchHabit: ReactQuery移行待ち')
+    // 元のfetch実装は一時的にコメントアウト
+  }
+
+  const setCurrentHabit = (habit: any) => {
+    console.log('setCurrentHabit: ReactQuery移行待ち', habit)
+    // 元のstate設定は一時的にコメントアウト
+  }
 
   // 習慣をリセット
   const handleReset = async (habitId: string) => {
@@ -70,6 +76,7 @@ export function HabitMobile() {
       
       if (response.ok) {
         alert('2日連続で未達成のため、振り出しに戻りました。')
+        await fetchHabit()
       }
     } catch (error) {
       console.error('Error resetting habit:', error)
@@ -85,6 +92,7 @@ export function HabitMobile() {
       
       if (response.ok) {
         alert('おめでとうございます！14日間達成しました！新しい習慣を登録できます。')
+        await fetchHabit()
       }
     } catch (error) {
       console.error('Error completing habit:', error)
@@ -100,14 +108,7 @@ export function HabitMobile() {
 
   // 習慣完了をトグル（ReactQuery版）
   const toggleHabitCompletion = () => {
-    if (!currentHabit) {
-      alert('習慣データの読み込み中です。少々お待ちください。')
-      return
-    }
-
-    if (isRecording) {
-      return // 記録中は重複クリックを防ぐ
-    }
+    if (!currentHabit) return
 
     const today = getTodayDate()
     const todayRecord = currentHabit.records.find(r => r.date === today)
@@ -122,17 +123,15 @@ export function HabitMobile() {
     }, {
       onError: (error) => {
         console.error('Error recording habit:', error)
-        alert('習慣の記録に失敗しました。インターネット接続を確認して、もう一度お試しください。')
-      }
+        alert('習慣の記録に失敗しました')
+    }
     })
   }
 
-  // 円形プログレスバーの値を計算（14分の1ずつ正確に増える）
-  const progressSegments = currentHabit ? currentHabit.completedDays : 0
-  const totalSegments = currentHabit ? currentHabit.targetDays : 14
-  const circumference = 2 * Math.PI * 45 // r=45の円周
-  const segmentLength = circumference / totalSegments // 1セグメント分の長さ
-  const progressLength = progressSegments * segmentLength
+  // 円形プログレスバーの値を計算
+  const progressPercentage = currentHabit 
+    ? Math.round((currentHabit.completedDays / currentHabit.targetDays) * 100)
+    : 0
 
   // 今日完了済みかチェック
   const todayCompleted = currentHabit?.records.find(r => r.date === getTodayDate())?.completed || false
@@ -203,6 +202,7 @@ export function HabitMobile() {
           onClose={() => setShowCreateModal(false)}
           onSuccess={() => {
             setShowCreateModal(false)
+            fetchHabit()
           }}
         />
         
@@ -239,8 +239,7 @@ export function HabitMobile() {
                   fill="none"
                   stroke="#000000"
                   strokeWidth="6"
-                  strokeDasharray={`${progressLength} ${circumference}`}
-                  strokeDashoffset="0"
+                  strokeDasharray={`${progressPercentage * 2.827} 283`}
                   className="transition-all duration-500 ease-out"
                 />
               </svg>
@@ -271,16 +270,10 @@ export function HabitMobile() {
            <div className="mb-4">
              <Button
                size="lg"
-               className="px-6 py-4 rounded-lg text-white font-medium bg-black hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+               className="px-6 py-4 rounded-lg text-white font-medium bg-black hover:bg-gray-800"
                onClick={toggleHabitCompletion}
-               disabled={isRecording || !currentHabit}
              >
-               {isRecording ? (
-                 <span className="flex items-center gap-2">
-                   <Loader2 className="h-5 w-5 animate-spin" />
-                   記録中...
-                 </span>
-               ) : todayCompleted ? (
+               {todayCompleted ? (
                  <span className="flex items-center gap-2">
                    <CheckCircle className="h-5 w-5" />
                    達成済み
@@ -326,6 +319,7 @@ export function HabitMobile() {
         onClose={() => setShowCreateModal(false)}
         onSuccess={() => {
           setShowCreateModal(false)
+          fetchHabit()
         }}
       />
       

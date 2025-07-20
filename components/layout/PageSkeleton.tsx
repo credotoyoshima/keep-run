@@ -1,3 +1,5 @@
+import { LoadingSpinnerCenter } from '../ui/LoadingSpinner'
+
 export function PageSkeleton({ title }: { title?: string }) {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -11,23 +13,9 @@ export function PageSkeleton({ title }: { title?: string }) {
         </div>
       </div>
 
-      {/* Content skeleton */}
-      <div className="p-5 space-y-4">
-        {/* Cards */}
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-white rounded-lg border border-gray-200 p-4">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="h-5 w-32 bg-gray-200 rounded animate-pulse" />
-                <div className="h-5 w-5 bg-gray-200 rounded animate-pulse" />
-              </div>
-              <div className="space-y-2">
-                <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
-                <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
-              </div>
-            </div>
-          </div>
-        ))}
+      {/* Loading spinner in the center */}
+      <div className="flex-1 flex items-center justify-center" style={{ height: 'calc(100vh - 120px)' }}>
+        <LoadingSpinnerCenter size="lg" />
       </div>
 
       {/* Bottom navigation skeleton */}

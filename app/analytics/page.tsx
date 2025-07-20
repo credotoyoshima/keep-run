@@ -1,5 +1,11 @@
+import { Suspense } from 'react'
 import { AnalyticsPageClient } from '@/components/evaluations/AnalyticsPageClient'
+import { PageSkeleton } from '@/components/layout/PageSkeleton'
 
 export default function AnalyticsPage() {
-  return <AnalyticsPageClient />
+  return (
+    <Suspense fallback={<PageSkeleton title="評価" />}>
+      <AnalyticsPageClient />
+    </Suspense>
+  )
 }

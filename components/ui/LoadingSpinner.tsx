@@ -42,11 +42,7 @@ export function LoadingSpinnerCenter({ size = 'md', className }: LoadingSpinnerP
     <div className="flex items-center justify-center h-full">
       <div className="flex flex-col items-center gap-3">
         <LoadingSpinner size={size} className={className} />
-        <div className="flex items-center gap-1">
-          <span className="text-xs text-gray-400 animate-pulse">●</span>
-          <span className="text-xs text-gray-400 animate-pulse" style={{ animationDelay: '0.2s' }}>●</span>
-          <span className="text-xs text-gray-400 animate-pulse" style={{ animationDelay: '0.4s' }}>●</span>
-        </div>
+        <span className="text-sm text-gray-600 animate-pulse">読み込み中...</span>
       </div>
     </div>
   )
@@ -58,11 +54,7 @@ export function LoadingSpinnerFull({ size = 'lg' }: Pick<LoadingSpinnerProps, 's
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="flex flex-col items-center gap-3">
         <LoadingSpinner size={size} />
-        <div className="flex items-center gap-1">
-          <span className="text-xs text-gray-400 animate-pulse">●</span>
-          <span className="text-xs text-gray-400 animate-pulse" style={{ animationDelay: '0.2s' }}>●</span>
-          <span className="text-xs text-gray-400 animate-pulse" style={{ animationDelay: '0.4s' }}>●</span>
-        </div>
+        <span className="text-sm text-gray-600 animate-pulse">読み込み中...</span>
       </div>
     </div>
   )

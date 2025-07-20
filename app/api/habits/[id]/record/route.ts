@@ -36,6 +36,15 @@ export async function POST(
     // 一日の始まり時間を考慮して正しい日付を取得
     const recordDate = getDateForDayStart(new Date(), dayStartTime || '05:00')
 
+    // デバッグログ：受け取ったパラメータを確認
+    console.log('[DEBUG] Recording habit:', {
+      habitId,
+      completed,
+      dayStartTime,
+      recordDate: recordDate.toISOString(),
+      userId: user.id
+    })
+
     // 既存の記録を確認
     const existingRecord = await prisma.habitRecord.findFirst({
       where: {
@@ -44,12 +53,15 @@ export async function POST(
       }
     })
 
+    console.log('[DEBUG] Existing record:', existingRecord)
+
     if (existingRecord) {
       // 既存の記録を更新
       const updatedRecord = await prisma.habitRecord.update({
         where: { id: existingRecord.id },
         data: { completed }
       })
+      console.log('[DEBUG] Updated record:', updatedRecord)
       return NextResponse.json(updatedRecord)
     } else {
       // 新しい記録を作成
@@ -60,6 +72,15 @@ export async function POST(
           completed
         }
       })
+      console.log('[DEBUG] Created new record:', newRecord)
+      
+      // 作成されたレコードを再取得して確認
+      const verifyRecord = await prisma.habitRecord.findUnique({
+        where: { id: newRecord.id },
+        include: { habit: true }
+      })
+      console.log('[DEBUG] Verified record:', verifyRecord)
+      
       return NextResponse.json(newRecord)
     }
   } catch (error) {

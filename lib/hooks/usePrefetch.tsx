@@ -101,7 +101,7 @@ export function usePrefetch() {
 
     // Stage 1: Most important data (DAY page 1)
     await safePrefetch(() => prefetchTimeBlocks(1), 'TimeBlocks Page 1')
-    
+      
     // Stage 2: Secondary important data (500ms delay)
     await safePrefetch(() => prefetchTodos(), 'Todos', 500)
     
