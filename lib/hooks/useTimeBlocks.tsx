@@ -22,7 +22,7 @@ export function useTimeBlocks(page: number) {
   const { data: timeBlocks = [], isLoading, error } = useQuery({
     queryKey: ['timeBlocks', page],
     queryFn: async () => {
-      const response = await fetch(`/api/user-blocks?page=${page}`)
+      const response = await fetch(`/api/time-blocks?page=${page}&mode=page`)
       if (!response.ok) {
         // 401/403の場合は空配列を返す
         if (response.status === 401 || response.status === 403) {
@@ -40,10 +40,13 @@ export function useTimeBlocks(page: number) {
   // Add time block mutation
   const addTimeBlockMutation = useMutation({
     mutationFn: async ({ title, startTime, pageNumber }: { title: string; startTime: string; pageNumber: number }) => {
-      const response = await fetch('/api/user-blocks', {
+      const response = await fetch('/api/time-blocks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, startTime, pageNumber })
+        body: JSON.stringify({ 
+          type: 'addTimeBlock',
+          data: { title, startTime, pageNumber }
+        })
       })
       if (!response.ok) throw new Error('Failed to add time block')
       return response.json()
@@ -83,7 +86,7 @@ export function useTimeBlocks(page: number) {
   // Delete time block mutation
   const deleteTimeBlockMutation = useMutation({
     mutationFn: async (blockId: string) => {
-      const response = await fetch(`/api/user-blocks?blockId=${blockId}`, {
+      const response = await fetch(`/api/time-blocks?blockId=${blockId}`, {
         method: 'DELETE'
       })
       if (!response.ok) throw new Error('Failed to delete time block')
@@ -108,7 +111,7 @@ export function useTimeBlocks(page: number) {
   // Add task mutation
   const addTaskMutation = useMutation({
     mutationFn: async ({ blockId, title }: { blockId: string; title: string }) => {
-      const response = await fetch('/api/day', {
+      const response = await fetch('/api/time-blocks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -161,7 +164,7 @@ export function useTimeBlocks(page: number) {
       if (taskId.startsWith('temp-')) {
         return { success: true }
       }
-      const response = await fetch('/api/day', {
+      const response = await fetch('/api/time-blocks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -197,7 +200,7 @@ export function useTimeBlocks(page: number) {
   // Toggle task mutation
   const toggleTaskMutation = useMutation({
     mutationFn: async ({ blockId, taskId, completed }: { blockId: string; taskId: string; completed: boolean }) => {
-      const response = await fetch('/api/day', {
+      const response = await fetch('/api/time-blocks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -238,7 +241,7 @@ export function useTimeBlocks(page: number) {
   // Update time block mutation
   const updateTimeBlockMutation = useMutation({
     mutationFn: async ({ blockId, title, startTime }: { blockId: string; title: string; startTime: string }) => {
-      const response = await fetch('/api/day', {
+      const response = await fetch('/api/time-blocks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

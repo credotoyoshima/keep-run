@@ -10,7 +10,7 @@ export function usePrefetch() {
     return queryClient.prefetchQuery({
       queryKey: ['timeBlocks', page],
       queryFn: async () => {
-        const response = await fetch(`/api/user-blocks?page=${page}`)
+        const response = await fetch(`/api/time-blocks?page=${page}&mode=page`)
         if (!response.ok) {
           // 401/403の場合はエラーを投げない（認証エラーは予期されるもの）
           if (response.status === 401 || response.status === 403) {
@@ -83,13 +83,10 @@ export function usePrefetch() {
   }, [queryClient])
 
   const prefetchAllPages = useCallback(async () => {
-    console.log('Starting staged prefetch...')
+    console.log('Starting parallel prefetch...')
     
-    // Helper function for delayed execution with error handling
-    const safePrefetch = async (prefetchFn: () => Promise<void>, name: string, delay: number = 0) => {
-      if (delay > 0) {
-        await new Promise(resolve => setTimeout(resolve, delay))
-      }
+    // Helper function for error handling
+    const safePrefetch = async (prefetchFn: () => Promise<void>, name: string) => {
       try {
         await prefetchFn()
         console.log(`✓ Prefetched ${name}`)
@@ -99,29 +96,26 @@ export function usePrefetch() {
       }
     }
 
-    // Stage 1: Most important data (DAY page 1)
-    await safePrefetch(() => prefetchTimeBlocks(1), 'TimeBlocks Page 1')
+    // 並列でプリフェッチを実行（パフォーマンス向上）
+    const prefetchPromises = [
+      // 最重要: TimeBlocks Page 1-3
+      safePrefetch(() => prefetchTimeBlocks(1), 'TimeBlocks Page 1'),
+      safePrefetch(() => prefetchTimeBlocks(2), 'TimeBlocks Page 2'),
+      safePrefetch(() => prefetchTimeBlocks(3), 'TimeBlocks Page 3'),
       
-    // Stage 2: Secondary important data (500ms delay)
-    await safePrefetch(() => prefetchTodos(), 'Todos', 500)
+      // その他のデータ
+      safePrefetch(() => prefetchTodos(), 'Todos'),
+      safePrefetch(() => prefetchHabits(), 'Habits'),
+      safePrefetch(
+        () => prefetchEvaluations(new Date().getFullYear(), new Date().getMonth() + 1), 
+        'Evaluations'
+      ),
+    ]
     
-    // Stage 3: Additional data (300ms delay)  
-    await safePrefetch(() => prefetchHabits(), 'Habits', 300)
+    // すべてのプリフェッチを並列実行
+    await Promise.all(prefetchPromises)
     
-    // Stage 4: Supplementary data (300ms delay)
-    await safePrefetch(
-      () => prefetchEvaluations(new Date().getFullYear(), new Date().getMonth() + 1), 
-      'Evaluations', 
-      300
-    )
-    
-    // Stage 5: Extended DAY pages (400ms delay)
-    await safePrefetch(() => prefetchTimeBlocks(2), 'TimeBlocks Page 2', 400)
-    
-    // Stage 6: Final DAY page (300ms delay)
-    await safePrefetch(() => prefetchTimeBlocks(3), 'TimeBlocks Page 3', 300)
-    
-    console.log('Staged prefetch completed')
+    console.log('Parallel prefetch completed')
   }, [prefetchTimeBlocks, prefetchTodos, prefetchHabits, prefetchEvaluations])
 
   return {
