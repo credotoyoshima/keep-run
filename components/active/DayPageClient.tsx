@@ -1,7 +1,7 @@
 'use client'
 
-import { SimpleDayViewOptimized } from './SimpleDayViewOptimized'
+import { OptimizedDayView } from './OptimizedDayView'
 
 export function DayPageClient() {
-  return <SimpleDayViewOptimized />
+  return <OptimizedDayView />
 }

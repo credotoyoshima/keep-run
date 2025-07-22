@@ -9,23 +9,17 @@ export function QueryProvider({ children }: { children: ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 10 * 60 * 1000, // 10 minutes - より現実的な時間に短縮
-            gcTime: 30 * 60 * 1000, // 30 minutes - メモリ効率を考慮して短縮
-            refetchOnWindowFocus: false, // ウィンドウフォーカス時の再取得を無効化
-            refetchOnReconnect: false, // 再接続時の再取得を無効化
-            refetchInterval: false, // 定期的な再取得を無効化
-            retry: (failureCount, error: Error & { status?: number }) => {
-              // 401/403エラーはリトライしない
-              if (error?.status === 401 || error?.status === 403) {
-                return false
-              }
-              return failureCount < 1
-            },
-            refetchOnMount: false, // キャッシュ優先でマウント時の再取得を無効化
-            networkMode: 'online', // オンライン時のみクエリを実行
+            staleTime: 30 * 1000, // 30秒（短縮）
+            gcTime: 5 * 60 * 1000, // 5分（短縮）
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
+            refetchInterval: false,
+            retry: false, // リトライ無効化で高速化
+            refetchOnMount: 'always', // 常に最新データを取得
+            networkMode: 'online',
           },
           mutations: {
-            retry: 1, // 1回だけリトライ（ネットワークエラーに対応）
+            retry: false, // ミューテーションのリトライも無効化
             networkMode: 'online',
           },
         },
