@@ -97,14 +97,37 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
     updateTimeBlock: updateTimeBlockMutation,
   } = useTimeBlocksFast(currentPage)
 
-  // 簡易ソート（パフォーマンス重視）
+  // dayStartTimeを考慮した並び替え
   const sortedTimeBlocks = useMemo(() => {
-    return [...(timeBlocks || [])].sort((a, b) => {
-      const timeA = a.startTime.replace(':', '')
-      const timeB = b.startTime.replace(':', '')
-      return timeA.localeCompare(timeB)
+    if (!timeBlocks || !dayStartTime) return []
+    
+    const [dayStartHour, dayStartMinute] = dayStartTime.split(':').map(Number)
+    const dayStartTotalMinutes = dayStartHour * 60 + dayStartMinute
+    
+    return [...timeBlocks].sort((a, b) => {
+      // 時刻を分単位に変換
+      const [aHour, aMinute] = a.startTime.split(':').map(Number)
+      const [bHour, bMinute] = b.startTime.split(':').map(Number)
+      const aTotalMinutes = aHour * 60 + aMinute
+      const bTotalMinutes = bHour * 60 + bMinute
+      
+      // dayStartTime以降かどうかを判定
+      const aIsAfterDayStart = aTotalMinutes >= dayStartTotalMinutes
+      const bIsAfterDayStart = bTotalMinutes >= dayStartTotalMinutes
+      
+      // 一日の始まり時間以降のものを優先
+      if (aIsAfterDayStart && !bIsAfterDayStart) return -1
+      if (!aIsAfterDayStart && bIsAfterDayStart) return 1
+      
+      // 同じカテゴリ内では時刻順
+      if (aIsAfterDayStart && bIsAfterDayStart) {
+        return aTotalMinutes - bTotalMinutes
+      } else {
+        // 翌日扱いの時刻も時刻順
+        return aTotalMinutes - bTotalMinutes
+      }
     })
-  }, [timeBlocks])
+  }, [timeBlocks, dayStartTime])
 
   // ページ切り替え（localStorageに保存）
   const setCurrentPageAndSave = (page: number) => {
