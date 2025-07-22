@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
-import { getOrCreateUserByEmail } from '@/lib/server-utils'
+import { getOrCreateUserByEmail, getUserDayStartTimeByEmail } from '@/lib/server-utils'
+import { getTodayInJST, formatDateString } from '@/lib/date-utils'
 
 // 統合されたGETエンドポイント
 // クエリパラメータ:
@@ -21,42 +22,31 @@ export async function GET(request: NextRequest) {
     const pageNumber = parseInt(searchParams.get('page') || '1')
     const mode = searchParams.get('mode') || 'page'
     
+    // ユーザーの一日の始まり時間を取得
+    const dayStartTime = await getUserDayStartTimeByEmail(user.email)
+    console.log('[DEBUG API time-blocks] dayStartTime:', dayStartTime)
+    
     // Prismaユーザーを取得または作成
     const prismaUser = await getOrCreateUserByEmail(user.email)
     
     if (mode === 'today') {
-      // 今日の日付を取得（日本時間を考慮）
-      const now = new Date()
-      const jstOffset = 9 * 60 * 60 * 1000 
-      const todayJST = new Date(now.getTime() + jstOffset)
+      // 一日の始まり時間を考慮した今日の日付を取得
+      const today = getTodayInJST(dayStartTime)
+      const todayStr = formatDateString(today)
       
-      const startOfDayJST = new Date(todayJST)
-      startOfDayJST.setHours(0, 0, 0, 0)
-      const endOfDayJST = new Date(todayJST)
-      endOfDayJST.setHours(23, 59, 59, 999)
-      
-      const startOfDayUTC = new Date(startOfDayJST.getTime() - jstOffset)
-      const endOfDayUTC = new Date(endOfDayJST.getTime() - jstOffset)
+      console.log('[DEBUG API time-blocks] Date calculation:', {
+        dayStartTime,
+        today: today.toISOString(),
+        todayStr
+      })
 
-      // 今日のActiveDayを取得
+      // 今日のActiveDayを取得または作成
       let activeDay = await prisma.activeDay.findFirst({
-        where: {
+        where: { 
           userId: prismaUser.id,
           date: {
-            gte: startOfDayUTC,
-            lte: endOfDayUTC
-          }
-        },
-        include: {
-          timeBlocks: {
-            where: { archived: false },
-            include: {
-              tasks: {
-                where: { archived: false },
-                orderBy: { orderIndex: 'asc' }
-              }
-            },
-            orderBy: { orderIndex: 'asc' }
+            gte: new Date(todayStr),
+            lt: new Date(todayStr + 'T23:59:59.999Z')
           }
         }
       })
@@ -66,7 +56,7 @@ export async function GET(request: NextRequest) {
         activeDay = await prisma.activeDay.create({
           data: {
             userId: prismaUser.id,
-            date: startOfDayUTC,
+            date: today,
             timeBlocks: {
               create: [
                 {
@@ -111,17 +101,54 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json(activeDay)
     } else {
-      // ページモード（永続的なActiveDay）
-      let activeDay = await prisma.activeDay.findFirst({
-        where: { userId: prismaUser.id }
+      // ページモード（永続的なActiveDay、互換性を考慮）
+      const today = getTodayInJST(dayStartTime)
+      const todayStr = formatDateString(today)
+      
+      console.log('[DEBUG API time-blocks] Page mode date calculation:', {
+        dayStartTime,
+        today: today.toISOString(),
+        todayStr
       })
+      
+      // まず新しいロジック（dayStartTime考慮）で検索
+      let activeDay = await prisma.activeDay.findFirst({
+        where: { 
+          userId: prismaUser.id,
+          date: {
+            gte: new Date(todayStr),
+            lt: new Date(todayStr + 'T23:59:59.999Z')
+          }
+        }
+      })
+      
+      // 見つからない場合は、従来のロジック（JST 00:00基準）でも検索
+      if (!activeDay) {
+        console.log('[DEBUG API time-blocks] No ActiveDay found with new logic, trying legacy logic')
+        
+        // 既存のActiveDayを検索（互換性のため）
+        activeDay = await prisma.activeDay.findFirst({
+          where: { userId: prismaUser.id },
+          orderBy: { date: 'desc' } // 最新のActiveDayを取得
+        })
+        
+        console.log('[DEBUG API time-blocks] Found legacy ActiveDay:', {
+          id: activeDay?.id,
+          exists: !!activeDay
+        })
+      }
       
       if (!activeDay) {
         activeDay = await prisma.activeDay.create({
           data: {
             userId: prismaUser.id,
-            date: new Date()
+            date: today
           }
+        })
+        
+        console.log('[DEBUG API time-blocks] Created new ActiveDay for page mode:', {
+          id: activeDay.id,
+          date: today.toISOString()
         })
       }
       
@@ -165,25 +192,51 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { type, dayId, blockId, data } = body
     
+    // ユーザーの一日の始まり時間を取得
+    const dayStartTime = await getUserDayStartTimeByEmail(user.email)
+    
     // Prismaユーザーを取得
     const prismaUser = await getOrCreateUserByEmail(user.email)
 
     switch (type) {
       case 'addTimeBlock': {
-        // dayIdが提供されない場合、ユーザーの永続的なActiveDayを使用
+        // dayIdが提供されない場合、ユーザーの永続的なActiveDayを使用（互換性を考慮）
         let targetDayId = dayId
         if (!targetDayId) {
-          const activeDay = await prisma.activeDay.findFirst({
-            where: { userId: prismaUser.id }
+          const today = getTodayInJST(dayStartTime)
+          const todayStr = formatDateString(today)
+          
+          // まず新しいロジックで検索
+          let activeDay = await prisma.activeDay.findFirst({
+            where: { 
+              userId: prismaUser.id,
+              date: {
+                gte: new Date(todayStr),
+                lt: new Date(todayStr + 'T23:59:59.999Z')
+              }
+            }
           })
+          
+          // 見つからない場合は既存のActiveDayを使用
+          if (!activeDay) {
+            activeDay = await prisma.activeDay.findFirst({
+              where: { userId: prismaUser.id },
+              orderBy: { date: 'desc' }
+            })
+          }
+          
           if (!activeDay) {
             const newDay = await prisma.activeDay.create({
               data: {
                 userId: prismaUser.id,
-                date: new Date()
+                date: today
               }
             })
             targetDayId = newDay.id
+            console.log('[DEBUG API time-blocks] Created new ActiveDay in POST:', {
+              id: newDay.id,
+              date: today.toISOString()
+            })
           } else {
             targetDayId = activeDay.id
           }

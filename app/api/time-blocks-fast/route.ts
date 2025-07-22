@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
+import { getUserDayStartTimeByEmail } from '@/lib/server-utils'
+import { getTodayInJST, formatDateString } from '@/lib/date-utils'
 
 // 高速化されたtime-blocksエンドポイント
 export async function GET(request: NextRequest) {
@@ -15,6 +17,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const pageNumber = parseInt(searchParams.get('page') || '1')
     
+    // ユーザーの一日の始まり時間を取得
+    const dayStartTime = await getUserDayStartTimeByEmail(user.email)
+    console.log('[DEBUG API time-blocks-fast] dayStartTime:', dayStartTime)
+    
     // ユーザー取得（軽量化：selectで必要フィールドのみ）
     let prismaUser = await prisma.user.findUnique({
       where: { email: user.email },
@@ -28,25 +34,66 @@ export async function GET(request: NextRequest) {
           email: user.email,
           name: null,
           avatarUrl: null,
-          dayStartTime: '05:00'
+          dayStartTime: dayStartTime
         },
         select: { id: true }
       })
     }
     
-    // 永続的なActiveDayを取得または作成（軽量化）
+    // 一日の始まり時間を考慮した今日の日付を取得
+    const today = getTodayInJST(dayStartTime)
+    const todayStr = formatDateString(today)
+    
+    console.log('[DEBUG API time-blocks-fast] Date calculation:', {
+      dayStartTime,
+      today: today.toISOString(),
+      todayStr
+    })
+    
+    // 永続的なActiveDayを取得または作成（互換性を考慮）
+    // まず新しいロジック（dayStartTime考慮）で検索
     let activeDay = await prisma.activeDay.findFirst({
-      where: { userId: prismaUser.id },
+      where: { 
+        userId: prismaUser.id,
+        date: {
+          gte: new Date(todayStr),
+          lt: new Date(todayStr + 'T23:59:59.999Z')
+        }
+      },
       select: { id: true }
     })
+    
+    // 見つからない場合は、従来のロジック（JST 00:00基準）でも検索
+    if (!activeDay) {
+      console.log('[DEBUG API time-blocks-fast] No ActiveDay found with new logic, trying legacy logic')
+      
+      // 既存のActiveDayを検索（互換性のため）
+      activeDay = await prisma.activeDay.findFirst({
+        where: { 
+          userId: prismaUser.id
+        },
+        select: { id: true },
+        orderBy: { date: 'desc' } // 最新のActiveDayを取得
+      })
+      
+      console.log('[DEBUG API time-blocks-fast] Found legacy ActiveDay:', {
+        id: activeDay?.id,
+        exists: !!activeDay
+      })
+    }
     
     if (!activeDay) {
       activeDay = await prisma.activeDay.create({
         data: {
           userId: prismaUser.id,
-          date: new Date()
+          date: today
         },
         select: { id: true }
+      })
+      
+      console.log('[DEBUG API time-blocks-fast] Created new ActiveDay:', {
+        id: activeDay.id,
+        date: today.toISOString()
       })
     }
     
@@ -76,6 +123,83 @@ export async function GET(request: NextRequest) {
       },
       orderBy: { orderIndex: 'asc' }
     })
+
+    console.log('[DEBUG API time-blocks-fast] Final result:', {
+      activeDayId: activeDay.id,
+      pageNumber,
+      timeBlocksCount: timeBlocks.length,
+      timeBlockTitles: timeBlocks.map(block => block.title)
+    })
+
+    // 総ページ数計算
+    const totalBlocks = await prisma.activeTimeBlock.count({
+      where: {
+        dayId: activeDay.id,
+        archived: false
+      }
+    })
+
+    console.log('[DEBUG API time-blocks-fast] Total blocks in ActiveDay:', totalBlocks)
+    
+    // ⚠️ デバッグ用：データがない場合はサンプルデータを作成
+    if (timeBlocks.length === 0) {
+      console.log('[DEBUG API time-blocks-fast] No time blocks found, creating sample data...')
+      
+      // サンプル時間ブロックを作成
+      const sampleBlocks = await prisma.activeTimeBlock.createMany({
+        data: [
+          {
+            dayId: activeDay.id,
+            title: '朝のルーティン',
+            startTime: '06:00',
+            orderIndex: 0,
+            pageNumber: 1,
+            archived: false
+          },
+          {
+            dayId: activeDay.id,
+            title: '午前の作業',
+            startTime: '09:00',
+            orderIndex: 1,
+            pageNumber: 1,
+            archived: false
+          }
+        ]
+      })
+      
+      console.log('[DEBUG API time-blocks-fast] Created sample blocks:', sampleBlocks.count)
+      
+      // 作成後、再度データを取得
+      const newTimeBlocks = await prisma.activeTimeBlock.findMany({
+        where: {
+          dayId: activeDay.id,
+          pageNumber: pageNumber,
+          archived: false
+        },
+        select: {
+          id: true,
+          title: true,
+          startTime: true,
+          orderIndex: true,
+          completionRate: true,
+          tasks: {
+            where: { archived: false },
+            select: {
+              id: true,
+              title: true,
+              completed: true,
+              orderIndex: true
+            },
+            orderBy: { orderIndex: 'asc' }
+          }
+        },
+        orderBy: { orderIndex: 'asc' }
+      })
+      
+      console.log('[DEBUG API time-blocks-fast] After sample creation:', newTimeBlocks.length)
+      
+      return NextResponse.json(newTimeBlocks)
+    }
     
     return NextResponse.json(timeBlocks)
   } catch (error) {

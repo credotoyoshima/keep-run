@@ -13,17 +13,16 @@ export function useDayStartTime() {
   // 設定を取得する関数（簡略化版）
   const fetchSettings = useCallback(async () => {
     try {
-      // 1. localStorageから即座に読み込み（高速化）
+      // 1. localStorageから即座に読み込み（初期表示用）
       if (typeof window !== 'undefined') {
         const localValue = localStorage.getItem('dayStartTime')
         if (localValue) {
           setDayStartTime(localValue)
-          setIsLoading(false)
-          return // localStorageの値で終了（DBアクセスをスキップ）
+          // isLoadingはtrueのまま保持（DBから取得完了まで）
         }
       }
 
-      // 2. localStorageに値がない場合のみ認証チェック
+      // 2. 常に認証チェックとDB値の取得を実行
       const { data: { user } } = await supabase.auth.getUser()
       
       if (user) {

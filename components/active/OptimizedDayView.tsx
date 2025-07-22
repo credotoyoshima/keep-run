@@ -6,6 +6,8 @@ import { MobileLayout } from '@/components/layout/MobileLayout'
 import { Input } from '@/components/ui/input'
 import { TimePickerModal } from '@/components/ui/time-picker-modal'
 import { useTimeBlocksFast } from '@/lib/hooks/useTimeBlocksFast'
+import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
+import { useDayChangeDetection } from '@/lib/day-change-detector'
 import { 
   ChevronDown, 
   ChevronRight, 
@@ -42,39 +44,47 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
   // 元のデザインに近い状態管理（最適化版）
   const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('expandedTimeBlocks')
-      if (saved) {
-        try {
-          return new Set(JSON.parse(saved))
-        } catch (e) {
-          return new Set()
-        }
-      }
+      const stored = localStorage.getItem('expandedBlocks')
+      return stored ? new Set(JSON.parse(stored)) : new Set()
     }
     return new Set()
   })
-  const [newBlockTitle, setNewBlockTitle] = useState('')
-  const [newBlockTime, setNewBlockTime] = useState('00:00')
-  const [showBlockForm, setShowBlockForm] = useState(false)
+
+  // dayStartTimeを取得
+  const { dayStartTime } = useDayStartTime()
+
+  // 日付変更を検出（一日の始まり時間を考慮）
+  useDayChangeDetection(dayStartTime, () => {
+    console.log('Day changed on DAY page - refreshing time blocks')
+    // React Queryが自動的にデータを更新するため、明示的な処理は不要
+  })
+
+  const [currentPage, setCurrentPage] = useState(1)
   const [showTimePicker, setShowTimePicker] = useState(false)
-  const [newTaskInputs, setNewTaskInputs] = useState<{ [blockId: string]: string }>({})
-  const [showTaskInput, setShowTaskInput] = useState<{ [blockId: string]: boolean }>({})
+  const [newBlockTitle, setNewBlockTitle] = useState('')
+  const [newBlockTime, setNewBlockTime] = useState('09:00')
+  const [newTaskTitle, setNewTaskTitle] = useState('')
+  const [activeBlockForTask, setActiveBlockForTask] = useState<string | null>(null)
+
+  // スワイプ関連の状態
   const [swipedBlock, setSwipedBlock] = useState<string | null>(null)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
+
+  // タスクメニュー関連
   const [showTaskMenu, setShowTaskMenu] = useState<string | null>(null)
-  const [editingBlock, setEditingBlock] = useState<TimeBlock | null>(null)
+
+  // ブロック編集関連
+  const [editingBlock, setEditingBlock] = useState<string | null>(null)
   const [editBlockTitle, setEditBlockTitle] = useState('')
   const [editBlockTime, setEditBlockTime] = useState('')
   const [showEditTimePicker, setShowEditTimePicker] = useState(false)
-  const [currentPage, setCurrentPage] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const savedPage = localStorage.getItem('selectedDayPage')
-      return savedPage ? parseInt(savedPage, 10) : 1
-    }
-    return 1
-  })
-  
+
+  // 追加の状態変数（エラー修正用）
+  const [showBlockForm, setShowBlockForm] = useState(false)
+  const [newTaskInputs, setNewTaskInputs] = useState<{ [blockId: string]: string }>({})
+  const [showTaskInput, setShowTaskInput] = useState<{ [blockId: string]: boolean }>({})
+
   // データフェッチング（最適化版）
   const {
     timeBlocks,
@@ -223,7 +233,7 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
 
   // 編集開始
   const startEditingBlock = (block: TimeBlock) => {
-    setEditingBlock(block)
+    setEditingBlock(block.id)
     setEditBlockTitle(block.title)
     setEditBlockTime(block.startTime)
     setSwipedBlock(null)
@@ -234,7 +244,7 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
     if (!editingBlock) return
 
     updateTimeBlockMutation({
-      blockId: editingBlock.id,
+      blockId: editingBlock,
       title: editBlockTitle,
       startTime: editBlockTime
     })
@@ -371,7 +381,7 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
             const blockCompletedTasks = block.tasks?.filter((task: Task) => task.completed).length || 0
             const isCompleted = block.tasks.length > 0 && blockCompletedTasks === block.tasks.length
 
-            return editingBlock?.id === block.id ? (
+            return editingBlock === block.id ? (
               // 編集フォーム
               <div 
                 key={block.id} 
