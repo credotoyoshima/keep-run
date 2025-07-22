@@ -35,10 +35,11 @@ export function useTimeBlocksFast(page: number) {
       const data = await response.json()
       return Array.isArray(data) ? data : []
     },
-    staleTime: 2 * 60 * 1000, // 2分間キャッシュ（本番環境では効果的）
-    gcTime: 10 * 60 * 1000, // 10分間メモリ保持
+    staleTime: 5 * 60 * 1000, // 5分間キャッシュ（延長）
+    gcTime: 30 * 60 * 1000, // 30分間メモリ保持（延長）
     refetchOnWindowFocus: false,
     refetchOnMount: false, // キャッシュ優先
+    refetchOnReconnect: false, // 再接続時も再取得しない
   })
 
   // 楽観的更新による高速操作

@@ -96,6 +96,26 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        // 静的アセットのキャッシュ設定
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // 画像のキャッシュ設定
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=604800, stale-while-revalidate=86400',
+          },
+        ],
+      },
     ];
   },
 };

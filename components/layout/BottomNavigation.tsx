@@ -45,7 +45,7 @@ export function BottomNavigation() {
           <ViewTransitionLink
             key={item.name}
             href={item.href}
-            prefetch={false}
+            prefetch={true}
             className={`flex flex-col items-center justify-center text-xs transition-colors ${
               isActive 
                 ? 'text-black' 

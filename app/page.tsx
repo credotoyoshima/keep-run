@@ -13,17 +13,25 @@ export default function HomePage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // 最適化：sessionのみで認証チェック（getUserは不要）
-        const { data: { session } } = await supabase.auth.getSession()
+        // 高速化：まずローカルストレージをチェック
+        const storedSession = localStorage.getItem('sb-pzwxrocchxqmdqeduwjy-auth-token')
         
-        if (session?.user) {
+        if (storedSession) {
+          // セッションがある場合は即座にリダイレクト（検証は後で）
           setIsAuthenticated(true)
-          // 即座にリダイレクト
           router.replace('/day')
           return
         }
         
-        // セッションがない場合は未認証
+        // ローカルストレージにない場合のみSupabaseチェック
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (session?.user) {
+          setIsAuthenticated(true)
+          router.replace('/day')
+          return
+        }
+        
         setIsAuthenticated(false)
         
       } catch (error) {

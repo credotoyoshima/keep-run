@@ -2,6 +2,28 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+// 認証キャッシュ（メモリキャッシュ）
+const authCache = new Map<string, { authenticated: boolean; timestamp: number }>()
+const CACHE_TTL = 30 * 1000 // 30秒
+const MAX_CACHE_SIZE = 1000 // 最大キャッシュサイズ
+
+// 古いキャッシュエントリをクリーンアップ
+function cleanupCache() {
+  const now = Date.now()
+  for (const [key, value] of authCache.entries()) {
+    if (now - value.timestamp > CACHE_TTL) {
+      authCache.delete(key)
+    }
+  }
+  // キャッシュサイズが大きすぎる場合は古いものから削除
+  if (authCache.size > MAX_CACHE_SIZE) {
+    const sortedEntries = Array.from(authCache.entries())
+      .sort((a, b) => a[1].timestamp - b[1].timestamp)
+    const toDelete = sortedEntries.slice(0, authCache.size - MAX_CACHE_SIZE)
+    toDelete.forEach(([key]) => authCache.delete(key))
+  }
+}
+
 export async function middleware(request: NextRequest) {
   // ルートページは認証チェックをスキップ（クライアントで処理）
   if (request.nextUrl.pathname === '/') {
@@ -22,6 +44,31 @@ export async function middleware(request: NextRequest) {
 
   if (!isProtectedRoute) {
     return NextResponse.next()
+  }
+
+  // セッショントークンを取得してキャッシュをチェック
+  const sessionToken = request.cookies.get('sb-pzwxrocchxqmdqeduwjy-auth-token')?.value
+  
+  if (sessionToken) {
+    // キャッシュをチェック
+    const cached = authCache.get(sessionToken)
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      if (!cached.authenticated) {
+        console.log('Cached: User not authenticated, redirecting')
+        return NextResponse.redirect(new URL('/', request.url))
+      }
+      // 認証済みの場合はそのまま続行
+      console.log('Cached: User authenticated')
+      const response = NextResponse.next()
+      // キャッシュからの情報でもヘッダーを設定
+      response.headers.set('x-cached-auth', 'true')
+      return response
+    }
+  }
+
+  // 定期的にキャッシュをクリーンアップ
+  if (Math.random() < 0.1) { // 10%の確率でクリーンアップ
+    cleanupCache()
   }
 
   let response = NextResponse.next({
@@ -88,6 +135,10 @@ export async function middleware(request: NextRequest) {
     // 保護されたルートで未認証の場合のみリダイレクト
     if (!session && isProtectedRoute) {
       console.log('Redirecting unauthenticated user to home')
+      // キャッシュに保存
+      if (sessionToken) {
+        authCache.set(sessionToken, { authenticated: false, timestamp: Date.now() })
+      }
       return NextResponse.redirect(new URL('/', request.url))
     }
 
@@ -95,6 +146,11 @@ export async function middleware(request: NextRequest) {
     if (session?.user) {
       response.headers.set('x-user-id', session.user.id)
       response.headers.set('x-user-email', session.user.email || '')
+      
+      // キャッシュに保存
+      if (sessionToken) {
+        authCache.set(sessionToken, { authenticated: true, timestamp: Date.now() })
+      }
     }
 
   } catch (error) {
