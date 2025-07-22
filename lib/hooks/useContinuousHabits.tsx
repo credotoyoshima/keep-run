@@ -31,6 +31,9 @@ export function useContinuousHabits() {
       }
       return response.json()
     },
+    staleTime: 5 * 60 * 1000, // 5分間キャッシュを有効
+    refetchOnWindowFocus: false,
+    refetchOnMount: false, // キャッシュ優先
   })
 
   // 現在のアクティブな習慣と新規作成可能フラグを処理

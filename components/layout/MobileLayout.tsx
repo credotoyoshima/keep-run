@@ -12,7 +12,7 @@ interface MobileLayoutProps {
 
 export function MobileLayout({ children, title, showBackButton = false }: MobileLayoutProps) {
   return (
-    <div className="fixed inset-0 bg-gray-50 flex flex-col max-w-md mx-auto">
+    <div className="min-h-dvh bg-gray-50 flex flex-col max-w-md mx-auto" style={{ height: '100dvh' }}>
       
       {/* App Header - Fixed at top */}
       <div className="flex-shrink-0">

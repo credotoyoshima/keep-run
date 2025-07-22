@@ -21,8 +21,16 @@ export const metadata: Metadata = {
   creator: "Keep Run",
   publisher: "Keep Run",
   icons: [
-    { rel: "apple-touch-icon", url: "/icon-192.svg" },
-    { rel: "icon", url: "/favicon.svg" },
+    // ファビコン設定
+    { rel: "icon", url: "/favicon.png", sizes: "32x32", type: "image/png" },
+    { rel: "shortcut icon", url: "/favicon.png", type: "image/png" }, // レガシーブラウザ対応
+    
+    // Apple用
+    { rel: "apple-touch-icon", url: "/apple-touch-icon.png", sizes: "180x180" },
+    
+    // PWA用アイコン
+    { rel: "icon", url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    { rel: "icon", url: "/icon-512.png", sizes: "512x512", type: "image/png" },
   ],
 };
 
@@ -48,7 +56,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Keep Run" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="apple-touch-startup-image" href="/icons/icon.svg" />
+        <link rel="apple-touch-startup-image" href="/apple-touch-icon.png" />
         {/* suppress-devtools.jsの読み込みを一時的にコメントアウト
         <script src="/suppress-devtools.js" defer></script>
         */}

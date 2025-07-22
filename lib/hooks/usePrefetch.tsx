@@ -44,7 +44,7 @@ export function usePrefetch() {
 
   const prefetchHabits = useCallback(() => {
     return queryClient.prefetchQuery({
-      queryKey: ['habits'],
+      queryKey: ['continuousHabits'],
       queryFn: async () => {
         const response = await fetch('/api/habits')
         if (!response.ok) {

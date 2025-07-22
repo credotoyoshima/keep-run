@@ -3,6 +3,17 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  // 保護されたルートのチェックを先に行い、不要な認証チェックを回避
+  const protectedRoutes = ['/day', '/todo', '/routines', '/analytics', '/settings']
+  const isProtectedRoute = protectedRoutes.some(route => 
+    request.nextUrl.pathname.startsWith(route)
+  )
+
+  // 保護されていないルートは認証チェックをスキップ
+  if (!isProtectedRoute) {
+    return NextResponse.next()
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -56,12 +67,6 @@ export async function middleware(request: NextRequest) {
   )
 
   const { data: { session } } = await supabase.auth.getSession()
-
-  // 保護されたルートのチェック
-  const protectedRoutes = ['/day', '/todo', '/routines', '/analytics', '/settings']
-  const isProtectedRoute = protectedRoutes.some(route => 
-    request.nextUrl.pathname.startsWith(route)
-  )
 
   if (!session && isProtectedRoute) {
     return NextResponse.redirect(new URL('/', request.url))

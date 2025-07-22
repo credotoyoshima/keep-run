@@ -5,7 +5,31 @@ const nextConfig: NextConfig = {
     // ビルド時にESLintエラーを無視
     ignoreDuringBuilds: true,
   },
+  // 実験的機能で高速化
+  experimental: {
+    optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  },
+  // パフォーマンス最適化
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
   webpack: (config, { isServer }) => {
+    // キャッシュ最適化
+    config.cache = {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [__filename],
+      },
+    }
+    
     if (!isServer) {
       // クライアントサイドでNode.js専用モジュールを無視
       config.resolve.fallback = {

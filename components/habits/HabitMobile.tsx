@@ -56,48 +56,7 @@ export function HabitMobile() {
     console.log('Day changed, React Query will handle data refresh')
   })
 
-  // 一時的な関数（ReactQuery移行完了後に削除）
-  const fetchHabit = async () => {
-    console.log('fetchHabit: ReactQuery移行待ち')
-    // 元のfetch実装は一時的にコメントアウト
-  }
-
-  const setCurrentHabit = (habit: any) => {
-    console.log('setCurrentHabit: ReactQuery移行待ち', habit)
-    // 元のstate設定は一時的にコメントアウト
-  }
-
-  // 習慣をリセット
-  const handleReset = async (habitId: string) => {
-    try {
-      const response = await fetch(`/api/habits/${habitId}/reset`, {
-        method: 'POST'
-      })
-      
-      if (response.ok) {
-        alert('2日連続で未達成のため、振り出しに戻りました。')
-        await fetchHabit()
-      }
-    } catch (error) {
-      console.error('Error resetting habit:', error)
-    }
-  }
-
-  // 習慣を完了
-  const handleComplete = async (habitId: string) => {
-    try {
-      const response = await fetch(`/api/habits/${habitId}/complete`, {
-        method: 'POST'
-      })
-      
-      if (response.ok) {
-        alert('おめでとうございます！14日間達成しました！新しい習慣を登録できます。')
-        await fetchHabit()
-      }
-    } catch (error) {
-      console.error('Error completing habit:', error)
-    }
-  }
+  // これらの関数はReactQueryのmutationで置き換え済み
 
   // 今日の日付を取得（一日の始まり時間を考慮）
   const getTodayDate = () => {
@@ -202,7 +161,7 @@ export function HabitMobile() {
           onClose={() => setShowCreateModal(false)}
           onSuccess={() => {
             setShowCreateModal(false)
-            fetchHabit()
+            // ReactQueryが自動的にデータを更新
           }}
         />
         
@@ -319,7 +278,7 @@ export function HabitMobile() {
         onClose={() => setShowCreateModal(false)}
         onSuccess={() => {
           setShowCreateModal(false)
-          fetchHabit()
+          // ReactQueryが自動的にデータを更新
         }}
       />
       

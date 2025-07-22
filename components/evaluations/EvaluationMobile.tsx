@@ -464,7 +464,14 @@ export function EvaluationMobile() {
             return Object.entries(groupedEvaluations).map(([yearMonth, evaluations]) => (
               <div key={yearMonth}>
                 {/* 年月の帯 */}
-                <div className="bg-black px-4 py-2 text-sm font-medium text-white sticky top-0 z-10">
+                <div 
+                  className="bg-black px-4 py-2 text-sm font-medium text-white sticky top-0 z-10"
+                  style={{ 
+                    position: '-webkit-sticky' as any,
+                    scrollBehavior: 'auto',
+                    contain: 'layout'
+                  }}
+                >
                   {yearMonth}
                 </div>
                 
