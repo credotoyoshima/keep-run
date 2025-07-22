@@ -1,6 +1,5 @@
 'use client'
 
-import { Suspense } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { OptimizedDayView } from './OptimizedDayView'
 
@@ -27,9 +26,5 @@ export function DayPageClient() {
     }
   }
 
-  return (
-    <Suspense fallback={<div className="p-4 text-gray-500">読み込み中...</div>}>
-      <OptimizedDayView onRefresh={handleDayRefresh} />
-    </Suspense>
-  )
+  return <OptimizedDayView onRefresh={handleDayRefresh} />
 }

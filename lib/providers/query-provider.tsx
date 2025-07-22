@@ -9,13 +9,13 @@ export function QueryProvider({ children }: { children: ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 30 * 1000, // 30秒（短縮）
-            gcTime: 5 * 60 * 1000, // 5分（短縮）
+            staleTime: 5 * 60 * 1000, // 5分（キャッシュを優先）
+            gcTime: 30 * 60 * 1000, // 30分（長期保持）
             refetchOnWindowFocus: false,
             refetchOnReconnect: false,
             refetchInterval: false,
             retry: false, // リトライ無効化で高速化
-            refetchOnMount: 'always', // 常に最新データを取得
+            refetchOnMount: false, // キャッシュがあれば使用（超重要）
             networkMode: 'online',
           },
           mutations: {

@@ -54,11 +54,9 @@ export async function middleware(request: NextRequest) {
     const cached = authCache.get(sessionToken)
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       if (!cached.authenticated) {
-        console.log('Cached: User not authenticated, redirecting')
         return NextResponse.redirect(new URL('/', request.url))
       }
       // 認証済みの場合はそのまま続行
-      console.log('Cached: User authenticated')
       const response = NextResponse.next()
       // キャッシュからの情報でもヘッダーを設定
       response.headers.set('x-cached-auth', 'true')
@@ -128,13 +126,11 @@ export async function middleware(request: NextRequest) {
     const { data: { session }, error } = await supabase.auth.getSession()
 
     if (error) {
-      console.log('Middleware auth error:', error)
       return NextResponse.redirect(new URL('/', request.url))
     }
 
     // 保護されたルートで未認証の場合のみリダイレクト
     if (!session && isProtectedRoute) {
-      console.log('Redirecting unauthenticated user to home')
       // キャッシュに保存
       if (sessionToken) {
         authCache.set(sessionToken, { authenticated: false, timestamp: Date.now() })
@@ -154,7 +150,6 @@ export async function middleware(request: NextRequest) {
     }
 
   } catch (error) {
-    console.log('Middleware error:', error)
     return NextResponse.redirect(new URL('/', request.url))
   }
 

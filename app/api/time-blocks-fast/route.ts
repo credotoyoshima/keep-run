@@ -145,19 +145,26 @@ export async function GET(request: NextRequest) {
         }
       })
       
-      // 完了率も再計算
-      for (const block of processedTimeBlocks) {
-        const completedTasks = block.tasks.filter(t => t.completed).length
-        const totalTasks = block.tasks.length
-        const newCompletionRate = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0
-        
-        if (Math.abs(block.completionRate - newCompletionRate) > 0.01) {
-          await prisma.activeTimeBlock.update({
-            where: { id: block.id },
-            data: { completionRate: newCompletionRate }
-          })
-          block.completionRate = newCompletionRate
-        }
+      // 完了率も再計算（バッチ処理で高速化）
+      const updatePromises = processedTimeBlocks
+        .map(block => {
+          const completedTasks = block.tasks.filter(t => t.completed).length
+          const totalTasks = block.tasks.length
+          const newCompletionRate = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0
+          
+          if (Math.abs(block.completionRate - newCompletionRate) > 0.01) {
+            block.completionRate = newCompletionRate
+            return prisma.activeTimeBlock.update({
+              where: { id: block.id },
+              data: { completionRate: newCompletionRate }
+            })
+          }
+          return null
+        })
+        .filter(p => p !== null)
+      
+      if (updatePromises.length > 0) {
+        await Promise.all(updatePromises)
       }
     }
 
