@@ -28,7 +28,7 @@ export class SyncedStorage<T> {
   constructor(config: SyncedStorageConfig<T>) {
     this.config = {
       ...config,
-      validator: config.validator || (() => true),
+      validator: config.validator || ((value: unknown): value is T => true),
       maxStaleTime: config.maxStaleTime || 5 * 60 * 1000 // 5 minutes
     }
   }
