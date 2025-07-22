@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { MobileLayout } from '@/components/layout/MobileLayout'
 import { Input } from '@/components/ui/input'
 import { TimePickerModal } from '@/components/ui/time-picker-modal'
-import { useTimeBlocks } from '@/lib/hooks/useTimeBlocks'
+import { useTimeBlocksFast } from '@/lib/hooks/useTimeBlocksFast'
 import { 
   ChevronDown, 
   ChevronRight, 
@@ -81,7 +81,7 @@ export function OptimizedDayView() {
     deleteTask: deleteTaskMutation,
     toggleTask: toggleTaskMutation,
     updateTimeBlock: updateTimeBlockMutation,
-  } = useTimeBlocks(currentPage)
+  } = useTimeBlocksFast(currentPage)
 
   // 簡易ソート（パフォーマンス重視）
   const sortedTimeBlocks = useMemo(() => {

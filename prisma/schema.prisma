@@ -40,6 +40,7 @@ model ActiveDay {
   updatedAt       DateTime  @updatedAt
   
   @@unique([userId, date])
+  @@index([userId, date]) // パフォーマンス向上のためのインデックス
 }
 
 model ActiveTimeBlock {
@@ -55,6 +56,9 @@ model ActiveTimeBlock {
   tasks           ActiveTask[]
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  
+  @@index([dayId, pageNumber, archived]) // 複合インデックス
+  @@index([dayId, archived]) // アーカイブフィルタ用
 }
 
 model ActiveTask {
@@ -67,6 +71,8 @@ model ActiveTask {
   block           ActiveTimeBlock @relation(fields: [blockId], references: [id])
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  
+  @@index([blockId, archived, orderIndex]) // 複合インデックス
 }
 
 model Todo {
