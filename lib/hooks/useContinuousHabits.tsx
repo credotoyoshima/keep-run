@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { getTodayInJST, formatDateString } from '@/lib/date-utils'
 
 interface HabitRecord {
   date: string
@@ -19,7 +20,7 @@ interface ContinuousHabit {
   isCompleted?: boolean
 }
 
-export function useContinuousHabits() {
+export function useContinuousHabits(dayStartTime: string = '05:00') {
   const queryClient = useQueryClient()
 
   const { data, isLoading, error } = useQuery({
@@ -29,7 +30,21 @@ export function useContinuousHabits() {
       if (!response.ok) {
         throw new Error('Failed to fetch habits')
       }
-      return response.json()
+      const result = await response.json()
+      
+      console.log('[DEBUG Frontend] GET /api/habits response:', {
+        hasData: !!result,
+        isHabit: !!result?.id,
+        completedDays: result?.completedDays,
+        todayCompleted: result?.todayCompleted,
+        recordsCount: result?.records?.length,
+        records: result?.records?.map((r: any) => ({
+          date: r.date,
+          completed: r.completed
+        }))
+      })
+      
+      return result
     },
     staleTime: 5 * 60 * 1000, // 5分間キャッシュを有効
     refetchOnWindowFocus: false,
@@ -65,7 +80,7 @@ export function useContinuousHabits() {
       const response = await fetch(`/api/habits/${habitId}/record`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ completed })
+        body: JSON.stringify({ completed, dayStartTime }) // dayStartTimeを送信
       })
       if (!response.ok) throw new Error('Failed to record habit')
       return response.json()
@@ -74,20 +89,43 @@ export function useContinuousHabits() {
       await queryClient.cancelQueries({ queryKey: ['continuousHabits'] })
       const previousData = queryClient.getQueryData(['continuousHabits'])
       
+      // API側と同じ日付計算を使用（修正）
+      const today = getTodayInJST(dayStartTime)
+      const todayString = formatDateString(today)
+      
       // 楽観的更新: todayCompletedだけでなくcompletedDaysとrecordsも更新
       queryClient.setQueryData(['continuousHabits'], (old: any) => {
         if (!old || old.id !== habitId) return old
-        const todayString = new Date().toISOString().split('T')[0]
-        // completedDaysを増減
-        const delta = completed ? 1 : -1
-        // recordsを追加または削除
-        const updatedRecords = completed
-          ? [...old.records, { date: todayString, completed }]
-          : old.records.filter((r: any) => r.date !== todayString)
+        
+        // 既存の今日の記録を確認
+        const existingTodayRecord = old.records.find((r: any) => r.date === todayString)
+        
+        // completedDaysの正確な計算
+        let newCompletedDays = old.completedDays
+        if (completed && !existingTodayRecord?.completed) {
+          newCompletedDays += 1 // 新規完了
+        } else if (!completed && existingTodayRecord?.completed) {
+          newCompletedDays -= 1 // 完了取り消し
+        }
+        
+        // recordsの更新
+        let updatedRecords
+        if (completed) {
+          // 完了の場合：既存記録を更新または新規追加
+          updatedRecords = existingTodayRecord
+            ? old.records.map((r: any) => r.date === todayString ? { ...r, completed: true } : r)
+            : [...old.records, { date: todayString, completed: true }]
+        } else {
+          // 取り消しの場合：該当記録を削除または未完了に更新
+          updatedRecords = old.records.map((r: any) => 
+            r.date === todayString ? { ...r, completed: false } : r
+          )
+        }
+        
         return {
           ...old,
           todayCompleted: completed,
-          completedDays: old.completedDays + delta,
+          completedDays: newCompletedDays,
           records: updatedRecords
         }
       })
@@ -95,6 +133,7 @@ export function useContinuousHabits() {
       return { previousData }
     },
     onError: (err, variables, context) => {
+      console.error('Record habit error:', err)
       queryClient.setQueryData(['continuousHabits'], context?.previousData)
     },
     onSettled: () => {

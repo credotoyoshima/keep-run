@@ -49,7 +49,7 @@ export function HabitMobile() {
     isCreating,
     isRecording,
     isResetting
-  } = useContinuousHabits()
+  } = useContinuousHabits(dayStartTime)
 
   // 日付変更を検出（ReactQueryが自動管理）
   useDayChangeDetection(dayStartTime, () => {
@@ -64,7 +64,6 @@ export function HabitMobile() {
     return formatDateString(today)
   }
 
-
   // 習慣完了をトグル（ReactQuery版）
   const toggleHabitCompletion = () => {
     if (!currentHabit) return
@@ -74,6 +73,14 @@ export function HabitMobile() {
     
     // 今日すでに完了している場合は未完了に戻す、そうでない場合は完了にする
     const newCompleted = todayRecord?.completed ? false : true
+    
+    console.log('[DEBUG Frontend] Toggle completion:', {
+      today,
+      todayRecord,
+      newCompleted,
+      currentCompleted: todayRecord?.completed,
+      completedDays: currentHabit.completedDays
+    })
     
     // ReactQueryのmutationを使用（楽観的更新付き）
     recordHabit({

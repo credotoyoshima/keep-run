@@ -13,6 +13,7 @@ export async function POST(
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
+      console.log('[DEBUG API] Auth error:', authError)
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -20,6 +21,14 @@ export async function POST(
     const habitId = params.id
     const body = await request.json()
     const { completed, dayStartTime } = body
+
+    console.log('[DEBUG API] POST /api/habits/[id]/record - Request received:', {
+      habitId,
+      completed,
+      dayStartTime,
+      userId: user.id,
+      userEmail: user.email
+    })
 
     // ユーザーが所有する習慣か確認
     const habit = await prisma.continuousHabit.findFirst({
@@ -30,19 +39,24 @@ export async function POST(
     })
 
     if (!habit) {
+      console.log('[DEBUG API] Habit not found:', { habitId, userId: user.id })
       return NextResponse.json({ error: 'Habit not found' }, { status: 404 })
     }
+
+    console.log('[DEBUG API] Found habit:', {
+      habitId: habit.id,
+      title: habit.title,
+      isActive: habit.isActive
+    })
 
     // 一日の始まり時間を考慮して正しい日付を取得
     const recordDate = getDateForDayStart(new Date(), dayStartTime || '05:00')
 
-    // デバッグログ：受け取ったパラメータを確認
-    console.log('[DEBUG] Recording habit:', {
-      habitId,
-      completed,
-      dayStartTime,
+    console.log('[DEBUG API] Date calculation:', {
+      now: new Date().toISOString(),
+      dayStartTime: dayStartTime || '05:00',
       recordDate: recordDate.toISOString(),
-      userId: user.id
+      recordDateString: recordDate.toISOString().split('T')[0]
     })
 
     // 既存の記録を確認
@@ -53,38 +67,65 @@ export async function POST(
       }
     })
 
-    console.log('[DEBUG] Existing record:', existingRecord)
+    console.log('[DEBUG API] Existing record check:', {
+      habitId,
+      searchDate: recordDate.toISOString(),
+      existingRecord: existingRecord ? {
+        id: existingRecord.id,
+        date: existingRecord.date.toISOString(),
+        completed: existingRecord.completed
+      } : null
+    })
 
+    let result
     if (existingRecord) {
       // 既存の記録を更新
-      const updatedRecord = await prisma.habitRecord.update({
+      result = await prisma.habitRecord.update({
         where: { id: existingRecord.id },
         data: { completed }
       })
-      console.log('[DEBUG] Updated record:', updatedRecord)
-      return NextResponse.json(updatedRecord)
+      console.log('[DEBUG API] Updated existing record:', {
+        id: result.id,
+        date: result.date.toISOString(),
+        completed: result.completed
+      })
     } else {
       // 新しい記録を作成
-      const newRecord = await prisma.habitRecord.create({
+      result = await prisma.habitRecord.create({
         data: {
           habitId,
           date: recordDate,
           completed
         }
       })
-      console.log('[DEBUG] Created new record:', newRecord)
-      
-      // 作成されたレコードを再取得して確認
-      const verifyRecord = await prisma.habitRecord.findUnique({
-        where: { id: newRecord.id },
-        include: { habit: true }
+      console.log('[DEBUG API] Created new record:', {
+        id: result.id,
+        date: result.date.toISOString(),
+        completed: result.completed
       })
-      console.log('[DEBUG] Verified record:', verifyRecord)
-      
-      return NextResponse.json(newRecord)
     }
+
+    // 作成/更新後の検証
+    const verifyRecord = await prisma.habitRecord.findUnique({
+      where: { id: result.id }
+    })
+    console.log('[DEBUG API] Verification - record exists:', verifyRecord ? 'YES' : 'NO')
+
+    // 全記録を確認（デバッグ用）
+    const allRecords = await prisma.habitRecord.findMany({
+      where: { habitId },
+      orderBy: { date: 'desc' },
+      take: 5
+    })
+    console.log('[DEBUG API] Recent records for habit:', allRecords.map(r => ({
+      date: r.date.toISOString().split('T')[0],
+      completed: r.completed
+    })))
+
+    return NextResponse.json(result)
   } catch (error) {
-    console.error('Error recording habit:', error)
+    console.error('[DEBUG API] Error in record route:', error)
+    console.error('[DEBUG API] Error stack:', error instanceof Error ? error.stack : 'No stack')
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

@@ -61,10 +61,11 @@ export async function GET() {
     const today = getTodayInJST(dayStartTime)
     const todayStr = formatDateString(today)
 
-    // 今日の記録を確認
-    const todayRecord = habit.records.find(r => 
-      r.date.toISOString().split('T')[0] === todayStr
-    )
+    // 今日の記録を確認（修正：正確な日付比較）
+    const todayRecord = habit.records.find(r => {
+      const recordDateStr = formatDateString(new Date(r.date))
+      return recordDateStr === todayStr
+    })
 
     // 開始日からの経過日数を計算
     const startDate = new Date(habit.startDate)
@@ -73,13 +74,46 @@ export async function GET() {
     
     // 完了日数を計算（重複を除く、開始日以降の記録のみ）
     const uniqueCompletedDates = new Set()
+    console.log('[DEBUG API GET] Calculating completedDays for habit:', {
+      habitId: habit.id,
+      startDate: habit.startDate.toISOString(),
+      totalRecords: habit.records.length
+    })
+    
     habit.records.forEach(record => {
-      if (record.completed && record.date >= habit.startDate) {
-        const dateStr = record.date.toISOString().split('T')[0]
-        uniqueCompletedDates.add(dateStr)
+      console.log('[DEBUG API GET] Processing record:', {
+        date: record.date.toISOString(),
+        completed: record.completed,
+        isAfterStartDate: record.date >= habit.startDate
+      })
+      
+      if (record.completed) {
+        // 開始日以降の記録のみカウント（日付比較を修正）
+        const recordDate = new Date(record.date)
+        const startDate = new Date(habit.startDate)
+        
+        // 時刻をリセットして日付のみで比較
+        recordDate.setHours(0, 0, 0, 0)
+        startDate.setHours(0, 0, 0, 0)
+        
+        if (recordDate >= startDate) {
+          const dateStr = formatDateString(recordDate)
+          console.log('[DEBUG API GET] Adding to uniqueCompletedDates:', dateStr)
+          uniqueCompletedDates.add(dateStr)
+        } else {
+          console.log('[DEBUG API GET] Record before start date, skipping:', {
+            recordDate: recordDate.toISOString(),
+            startDate: startDate.toISOString()
+          })
+        }
       }
     })
+    
     const completedDays = uniqueCompletedDates.size
+    console.log('[DEBUG API GET] Final calculation:', {
+      uniqueCompletedDates: Array.from(uniqueCompletedDates),
+      completedDays
+    })
 
     // 2日連続で未達成かチェック
     let shouldReset = false
@@ -93,12 +127,12 @@ export async function GET() {
       const yesterdayStr = formatDateString(yesterday)
       const dayBeforeYesterdayStr = formatDateString(dayBeforeYesterday)
       
-      // 各日の記録を確認
+      // 各日の記録を確認（修正：統一した日付比較）
       const yesterdayRecord = habit.records.find(r => 
-        r.date.toISOString().split('T')[0] === yesterdayStr
+        formatDateString(new Date(r.date)) === yesterdayStr
       )
       const dayBeforeRecord = habit.records.find(r => 
-        r.date.toISOString().split('T')[0] === dayBeforeYesterdayStr
+        formatDateString(new Date(r.date)) === dayBeforeYesterdayStr
       )
       
       // 両日とも記録がない、または未達成の場合はリセット
