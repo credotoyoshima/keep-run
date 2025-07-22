@@ -31,7 +31,11 @@ interface Todo {
 
 
 
-export function TodoMobile() {
+interface TodoMobileProps {
+  onRefresh?: () => Promise<void>
+}
+
+export function TodoMobile({ onRefresh }: TodoMobileProps) {
   const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('pending')
   const [showAddForm, setShowAddForm] = useState(false)
   const [newTodoTitle, setNewTodoTitle] = useState('')
@@ -236,7 +240,7 @@ export function TodoMobile() {
   }
 
   return (
-    <MobileLayout title="ToDo">
+    <MobileLayout title="ToDo" onRefresh={onRefresh}>
       <div className="p-5 pb-0">
       {/* Progress Summary */}
       <div className="bg-black text-white rounded-lg p-4 mb-5 relative">

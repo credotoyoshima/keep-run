@@ -34,7 +34,11 @@ interface TimeBlock {
   completionRate: number
 }
 
-export function OptimizedDayView() {
+interface OptimizedDayViewProps {
+  onRefresh?: () => Promise<void>
+}
+
+export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
   // 元のデザインに近い状態管理（最適化版）
   const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(() => {
     if (typeof window !== 'undefined') {
@@ -308,7 +312,7 @@ export function OptimizedDayView() {
   const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
 
   return (
-    <MobileLayout title="DAY">
+    <MobileLayout title="DAY" onRefresh={onRefresh}>
       <div className="p-5">
         {/* Progress Summary */}
         <div className="bg-black text-white rounded-lg p-4 mb-5 relative">
