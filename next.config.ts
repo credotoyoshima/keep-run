@@ -8,6 +8,15 @@ const nextConfig: NextConfig = {
   // 実験的機能で高速化
   experimental: {
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+    // より積極的な最適化
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
   },
   // パフォーマンス最適化
   compiler: {
@@ -20,11 +29,26 @@ const nextConfig: NextConfig = {
     formats: ['image/webp', 'image/avif'],
   },
   webpack: (config, { isServer }) => {
-    // キャッシュ最適化
+    // より積極的なキャッシュ最適化
     config.cache = {
       type: 'filesystem',
+      maxMemoryGenerations: 1,
       buildDependencies: {
         config: [__filename],
+      },
+    }
+    
+    // パフォーマンス向上のための最適化
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        cacheGroups: {
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
+          },
+        },
       },
     }
     
@@ -52,7 +76,7 @@ const nextConfig: NextConfig = {
   },
   // 静的ファイルのホスト名を修正
   assetPrefix: process.env.NODE_ENV === 'production' ? undefined : '',
-  // 開発環境での設定
+  // パフォーマンス向上のためのヘッダー設定
   async headers() {
     return [
       {
@@ -61,6 +85,14 @@ const nextConfig: NextConfig = {
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin'
           },
         ],
       },

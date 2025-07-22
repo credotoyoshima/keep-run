@@ -428,7 +428,7 @@ export function ActiveDayMobile() {
       </div>
 
       {/* Time Blocks */}
-      <div className="space-y-3 mb-5">
+      <div className="space-y-3">
         {activeDay.timeBlocks.map((block) => {
           const blockCompletedTasks = block.tasks.filter(task => task.completed).length
           const isCompleted = block.completionRate === 1 && block.tasks.length > 0
@@ -670,7 +670,7 @@ export function ActiveDayMobile() {
       {/* Add Block Form */}
       {showBlockForm ? (
         <div 
-          className="bg-white border border-gray-200 rounded-lg p-4 mb-5 add-form"
+          className="bg-white border border-gray-200 rounded-lg p-4 mt-3 add-form"
           onClick={(e) => {
             // クリックターゲットがフォーム内の要素でない場合はキャンセル
             if (e.target === e.currentTarget) {
@@ -716,7 +716,7 @@ export function ActiveDayMobile() {
         </div>
       ) : (
         <button 
-          className="w-full border border-dashed border-gray-400 rounded-lg p-5 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light mb-1"
+          className="w-full border border-dashed border-gray-400 rounded-lg p-5 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light mt-3"
           onClick={() => setShowBlockForm(true)}
         >
           <Plus className="h-4 w-4" />

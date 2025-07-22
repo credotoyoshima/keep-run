@@ -307,16 +307,16 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
   if (isLoading && timeBlocks.length === 0) {
     return (
       <MobileLayout title="DAY">
-        <div className="p-5">
+        <div className="px-4 py-4">
           {/* Progress Summary Skeleton */}
-          <div className="bg-gray-200 animate-pulse rounded-lg p-4 mb-5">
+          <div className="bg-gray-200 animate-pulse rounded-lg p-4 mb-4">
             <div className="h-8 w-20 bg-gray-300 rounded mx-auto mb-2"></div>
             <div className="h-4 w-32 bg-gray-300 rounded ml-auto mb-2"></div>
             <div className="h-0.5 bg-gray-300 rounded"></div>
           </div>
           
           {/* Page Tabs Skeleton */}
-          <div className="flex bg-gray-100 rounded-lg p-1 mb-5">
+          <div className="flex bg-gray-100 rounded-lg p-1 mb-4">
             <div className="flex-1 h-10 bg-gray-200 animate-pulse rounded-md mx-1"></div>
             <div className="flex-1 h-10 bg-gray-200 animate-pulse rounded-md mx-1"></div>
             <div className="flex-1 h-10 bg-gray-200 animate-pulse rounded-md mx-1"></div>
@@ -346,9 +346,9 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
 
   return (
     <MobileLayout title="DAY" onRefresh={onRefresh}>
-      <div className="p-5">
+      <div className="px-4 py-4">
         {/* Progress Summary */}
-        <div className="bg-black text-white rounded-lg p-4 mb-5 relative">
+        <div className="bg-black text-white rounded-lg p-4 mb-4 relative">
           <div className="text-3xl font-extralight mb-1 tracking-tight text-center">
             {progressPercentage}%
           </div>
@@ -364,7 +364,7 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
         </div>
 
         {/* Page Tabs */}
-        <div className="flex bg-gray-100 rounded-lg p-1 mb-5">
+        <div className="flex bg-gray-100 rounded-lg p-1 mb-4">
           <button
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
               currentPage === 1 
@@ -398,7 +398,7 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
         </div>
 
         {/* Time Blocks */}
-        <div className="space-y-3 mb-5" style={{ minHeight: sortedTimeBlocks.length > 0 ? '200px' : undefined }}>
+        <div className="space-y-3 mb-3">
           {sortedTimeBlocks && sortedTimeBlocks.length > 0 ? sortedTimeBlocks.map((block: TimeBlock) => {
             const isExpanded = expandedBlocks.has(block.id)
             const blockCompletedTasks = block.tasks?.filter((task: Task) => task.completed).length || 0
@@ -528,7 +528,7 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
 
                 {/* タスク表示エリア */}
                 {isExpanded && (
-                  <div className="px-4 pb-4 border-t border-gray-100">
+                  <div className="px-4 pb-3 border-t border-gray-100">
                     <div className="space-y-2">
                       {block.tasks.map((task: Task) => (
                         <div key={task.id} className="flex items-center gap-3 py-2">
@@ -628,7 +628,7 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
             // ブロック0件時の表示
             !showBlockForm && (
               <button
-                className="w-full border border-dashed border-gray-400 rounded-lg p-4 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light mb-1"
+                className="w-full border border-dashed border-gray-400 rounded-lg p-4 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light"
                 onClick={() => setShowBlockForm(true)}
               >
                 <Plus className="h-4 w-4" />
@@ -640,7 +640,7 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
 
         {/* 時間ブロック追加フォーム */}
         {showBlockForm ? (
-          <div className="bg-white border border-gray-200 rounded-lg p-4 mb-1 add-form">
+          <div className="bg-white border border-gray-200 rounded-lg p-4 add-form">
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setShowTimePicker(true)}
@@ -669,7 +669,7 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
         ) : (
           sortedTimeBlocks && sortedTimeBlocks.length > 0 && (
             <button 
-              className="w-full border border-dashed border-gray-400 rounded-lg p-4 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light mb-1"
+              className="w-full border border-dashed border-gray-400 rounded-lg p-4 flex items-center justify-center gap-2 text-gray-700 hover:border-black hover:text-black transition-all font-light"
               onClick={() => setShowBlockForm(true)}
             >
               <Plus className="h-4 w-4" />

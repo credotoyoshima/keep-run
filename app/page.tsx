@@ -13,23 +13,19 @@ export default function HomePage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // 最速認証チェック：sessionから確認
+        // 最適化：sessionのみで認証チェック（getUserは不要）
         const { data: { session } } = await supabase.auth.getSession()
         
-        if (session) {
+        if (session?.user) {
           setIsAuthenticated(true)
-          // 即座にリダイレクト（prefetchなし）
+          // 即座にリダイレクト
           router.replace('/day')
           return
         }
-
-        // セッションがない場合のみユーザー確認
-        const { data: { user } } = await supabase.auth.getUser()
-        setIsAuthenticated(!!user)
         
-        if (user) {
-          router.replace('/day')
-        }
+        // セッションがない場合は未認証
+        setIsAuthenticated(false)
+        
       } catch (error) {
         console.log('Auth check failed:', error)
         setIsAuthenticated(false)
@@ -38,12 +34,13 @@ export default function HomePage() {
 
     checkAuth()
 
-    // リアルタイム認証状態監視
+    // 最適化：より軽量なリアルタイム認証状態監視
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
+      if (session?.user) {
         setIsAuthenticated(true)
         router.replace('/day')
-      } else {
+      } else if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
+        // 必要なイベントのみ処理
         setIsAuthenticated(false)
       }
     })

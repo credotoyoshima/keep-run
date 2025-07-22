@@ -77,6 +77,7 @@ export async function middleware(request: NextRequest) {
       }
     )
 
+    // より高速なgetSession（キャッシュ活用）
     const { data: { session }, error } = await supabase.auth.getSession()
 
     if (error) {
@@ -88,6 +89,12 @@ export async function middleware(request: NextRequest) {
     if (!session && isProtectedRoute) {
       console.log('Redirecting unauthenticated user to home')
       return NextResponse.redirect(new URL('/', request.url))
+    }
+
+    // 認証済みユーザーの情報をヘッダーに追加（API側で再認証を回避）
+    if (session?.user) {
+      response.headers.set('x-user-id', session.user.id)
+      response.headers.set('x-user-email', session.user.email || '')
     }
 
   } catch (error) {

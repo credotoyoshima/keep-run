@@ -19,7 +19,7 @@ export function LightDataLoader() {
             const data = await response.json()
             return Array.isArray(data) ? data : []
           },
-          staleTime: 2 * 60 * 1000, // 2分間キャッシュ
+          staleTime: 30 * 1000, // 30秒間キャッシュに短縮
         })
         
         console.log('Light prefetch completed')
@@ -29,8 +29,8 @@ export function LightDataLoader() {
       }
     }
     
-    // 少し遅延してからプリフェッチ（画面表示を優先）
-    const timer = setTimeout(prefetchEssentials, 500)
+    // 遅延を短縮してよりレスポンシブに
+    const timer = setTimeout(prefetchEssentials, 100)
     return () => clearTimeout(timer)
   }, [queryClient])
 

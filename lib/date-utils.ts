@@ -31,3 +31,12 @@ export function getTodayInJST(dayStartTime: string): Date {
 export function formatDateString(date: Date): string {
   return date.toISOString().split('T')[0]
 }
+
+// 最後の更新が日をまたいでいるかチェック
+export function hasPassedDayBoundary(lastUpdated: Date, dayStartTime: string): boolean {
+  const lastUpdatedDay = getDateForDayStart(lastUpdated, dayStartTime)
+  const currentDay = getTodayInJST(dayStartTime)
+  
+  // 更新日が今日より前の場合のみ日をまたいでいると判定
+  return lastUpdatedDay.getTime() < currentDay.getTime()
+}
