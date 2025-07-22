@@ -8,18 +8,16 @@ const nextConfig: NextConfig = {
   // 実験的機能で高速化
   experimental: {
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
   },
   // パフォーマンス最適化
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
+  },
+  // 静的最適化
+  output: 'standalone',
+  // 画像最適化
+  images: {
+    formats: ['image/webp', 'image/avif'],
   },
   webpack: (config, { isServer }) => {
     // キャッシュ最適化

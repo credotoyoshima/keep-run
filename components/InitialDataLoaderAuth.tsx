@@ -4,16 +4,26 @@ import { useEffect } from 'react'
 import { usePrefetch } from '@/lib/hooks/usePrefetch'
 
 export function InitialDataLoaderAuth() {
-  const { prefetchAllPages } = usePrefetch()
+  const { prefetchTimeBlocks, prefetchTodos } = usePrefetch()
 
   useEffect(() => {
-    // 段階的プリフェッチにより本番環境でも安全に実行
-    const timer = setTimeout(() => {
-      prefetchAllPages()
-    }, 2000) // 本番環境では少し長めの遅延で安全性を確保
-
-    return () => clearTimeout(timer)
-  }, [prefetchAllPages])
+    // 遅延なしで最重要データのみプリフェッチ
+    const prefetchEssentials = async () => {
+      try {
+        // DAYページで必要な最小限のデータのみ
+        await Promise.all([
+          prefetchTimeBlocks(1), // 最初のページのみ
+          prefetchTodos()        // TODOデータ
+        ])
+        console.log('Essential data prefetched')
+      } catch (error) {
+        console.log('Prefetch failed:', error)
+        // エラーでも続行（ページ表示は問題なし）
+      }
+    }
+    
+    prefetchEssentials()
+  }, [prefetchTimeBlocks, prefetchTodos])
 
   return null
 }

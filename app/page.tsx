@@ -12,30 +12,50 @@ export default function HomePage() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setIsAuthenticated(!!user)
+      try {
+        // 最速認証チェック：sessionから確認
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (session) {
+          setIsAuthenticated(true)
+          // 即座にリダイレクト（prefetchなし）
+          router.replace('/day')
+          return
+        }
+
+        // セッションがない場合のみユーザー確認
+        const { data: { user } } = await supabase.auth.getUser()
+        setIsAuthenticated(!!user)
+        
+        if (user) {
+          router.replace('/day')
+        }
+      } catch (error) {
+        console.log('Auth check failed:', error)
+        setIsAuthenticated(false)
+      }
     }
 
     checkAuth()
 
+    // リアルタイム認証状態監視
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setIsAuthenticated(!!session)
+      if (session) {
+        setIsAuthenticated(true)
+        router.replace('/day')
+      } else {
+        setIsAuthenticated(false)
+      }
     })
 
     return () => subscription.unsubscribe()
-  }, [supabase])
+  }, [supabase, router])
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/day')
-    }
-  }, [isAuthenticated, router])
-
-  // ローディング中
+  // 認証中のローディング画面（シンプル）
   if (isAuthenticated === null) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">読み込み中...</div>
+        <div className="text-gray-500">認証確認中...</div>
       </div>
     )
   }

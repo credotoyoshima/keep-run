@@ -3,13 +3,23 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  // 保護されたルートのチェックを先に行い、不要な認証チェックを回避
+  // ルートページは認証チェックをスキップ（クライアントで処理）
+  if (request.nextUrl.pathname === '/') {
+    return NextResponse.next()
+  }
+
+  // 静的ファイルと認証不要ルートはスキップ
+  const publicRoutes = ['/auth/login', '/auth/error', '/auth/reset-password', '/auth/update-password', '/auth/callback']
+  if (publicRoutes.some(route => request.nextUrl.pathname.startsWith(route))) {
+    return NextResponse.next()
+  }
+
+  // 保護されたルートのみ認証チェックを実行
   const protectedRoutes = ['/day', '/todo', '/routines', '/analytics', '/settings']
   const isProtectedRoute = protectedRoutes.some(route => 
     request.nextUrl.pathname.startsWith(route)
   )
 
-  // 保護されていないルートは認証チェックをスキップ
   if (!isProtectedRoute) {
     return NextResponse.next()
   }
@@ -20,59 +30,68 @@ export async function middleware(request: NextRequest) {
     },
   })
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
+  try {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return request.cookies.get(name)?.value
+          },
+          set(name: string, value: string, options: any) {
+            request.cookies.set({
+              name,
+              value,
+              ...options,
+            })
+            response = NextResponse.next({
+              request: {
+                headers: request.headers,
+              },
+            })
+            response.cookies.set({
+              name,
+              value,
+              ...options,
+            })
+          },
+          remove(name: string, options: any) {
+            request.cookies.set({
+              name,
+              value: '',
+              ...options,
+            })
+            response = NextResponse.next({
+              request: {
+                headers: request.headers,
+              },
+            })
+            response.cookies.set({
+              name,
+              value: '',
+              ...options,
+            })
+          },
         },
-        set(name: string, value: string, options: any) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-        },
-        remove(name: string, options: any) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-        },
-      },
+      }
+    )
+
+    const { data: { session }, error } = await supabase.auth.getSession()
+
+    if (error) {
+      console.log('Middleware auth error:', error)
+      return NextResponse.redirect(new URL('/', request.url))
     }
-  )
 
-  const { data: { session } } = await supabase.auth.getSession()
+    // 保護されたルートで未認証の場合のみリダイレクト
+    if (!session && isProtectedRoute) {
+      console.log('Redirecting unauthenticated user to home')
+      return NextResponse.redirect(new URL('/', request.url))
+    }
 
-  if (!session && isProtectedRoute) {
-    return NextResponse.redirect(new URL('/', request.url))
-  }
-
-  if (session && request.nextUrl.pathname === '/login') {
+  } catch (error) {
+    console.log('Middleware error:', error)
     return NextResponse.redirect(new URL('/', request.url))
   }
 
