@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
-import { getUserDayStartTimeByEmail } from '@/lib/server-utils'
-import { getTodayInJST, formatDateString, hasPassedDayBoundary } from '@/lib/date-utils'
 import { safeGetOrCreateUser } from '@/lib/utils/safeUserMigration'
 
 // 高速化されたtime-blocksエンドポイント
@@ -10,12 +8,14 @@ export async function GET(request: NextRequest) {
   try {
     // タイムアウト対策: レスポンスタイムを測定
     const startTime = Date.now()
+    console.log(`[time-blocks-fast] Request started`)
     
     // ミドルウェアからの認証情報を使用（高速化）
     let userEmail = request.headers.get('x-user-email')
     let userId = request.headers.get('x-user-id')
     
     if (!userEmail || !userId) {
+      console.log(`[time-blocks-fast] No cached auth, falling back to Supabase`)
       // フォールバック：ミドルウェアが動かない場合のみ
       const supabase = await createClient()
       const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -28,48 +28,44 @@ export async function GET(request: NextRequest) {
       userId = user.id
     }
 
+    console.log(`[time-blocks-fast] Auth completed in ${Date.now() - startTime}ms`)
+
     const { searchParams } = new URL(request.url)
     const pageNumber = parseInt(searchParams.get('page') || '1')
     
-    // ユーザーを取得または作成（並列実行で高速化）
-    const [prismaUser, dayStartTime] = await Promise.all([
-      safeGetOrCreateUser(userId, userEmail),
-      getUserDayStartTimeByEmail(userEmail)
-    ])
+    // ユーザーを取得（キャッシュを活用）- dayStartTimeの取得をスキップ
+    const prismaUser = await safeGetOrCreateUser(userId, userEmail)
+    console.log(`[time-blocks-fast] User fetch completed in ${Date.now() - startTime}ms`)
     
-    // 一日の始まり時間を考慮した今日の日付を取得
-    const today = getTodayInJST(dayStartTime)
-    const todayStr = formatDateString(today)
-    
-    // 永続的なActiveDayを取得または作成
-    let activeDay = null
-    
-    // 最適化: 単一クエリでActiveDayを取得または作成
-    activeDay = await prisma.activeDay.findFirst({
+    // ActiveDayを取得または作成（シンプル化）
+    let activeDay = await prisma.activeDay.findFirst({
       where: { userId: prismaUser.id },
-      select: { id: true, updatedAt: true },
+      select: { id: true },
       orderBy: { updatedAt: 'desc' }
     })
+    console.log(`[time-blocks-fast] ActiveDay query completed in ${Date.now() - startTime}ms`)
     
-    // それでもない場合は新規作成
+    // 存在しない場合は新規作成
     if (!activeDay) {
+      const today = new Date()
       activeDay = await prisma.activeDay.create({
         data: {
           userId: prismaUser.id,
           date: today
         },
-        select: { id: true, updatedAt: true }
+        select: { id: true }
       })
+      console.log(`[time-blocks-fast] ActiveDay created in ${Date.now() - startTime}ms`)
     }
 
 
 
-    // 最適化されたクエリ：インデックスを活用
+    // 最適化されたクエリ：必要最小限のフィールドのみ取得
     const timeBlocks = await prisma.activeTimeBlock.findMany({
       where: {
         dayId: activeDay.id,
         pageNumber: pageNumber,
-        archived: false // インデックスが効く
+        archived: false
       },
       select: {
         id: true,
@@ -77,6 +73,7 @@ export async function GET(request: NextRequest) {
         startTime: true,
         orderIndex: true,
         completionRate: true,
+        // タスクは別クエリで取得することを検討
         tasks: {
           where: { archived: false },
           select: {
@@ -85,19 +82,27 @@ export async function GET(request: NextRequest) {
             completed: true,
             orderIndex: true
           },
-          orderBy: { orderIndex: 'asc' }
+          orderBy: { orderIndex: 'asc' },
+          take: 100 // タスク数も制限
         }
       },
       orderBy: { orderIndex: 'asc' },
-      take: 50 // 最大50ブロックに制限
+      take: 20 // ブロック数を20に制限（パフォーマンス向上）
     })
+    console.log(`[time-blocks-fast] TimeBlocks query completed in ${Date.now() - startTime}ms, found ${timeBlocks.length} blocks`)
 
     // 日またぎチェックをスキップ（パフォーマンスのため）
     // クライアント側で処理するか、別のバックグラウンドジョブで実行
     const processedTimeBlocks = timeBlocks
 
     // レスポンスタイムをログ出力（デバッグ用）
-    console.log(`time-blocks-fast GET completed in ${Date.now() - startTime}ms`)
+    const totalTime = Date.now() - startTime
+    console.log(`[time-blocks-fast] Total request completed in ${totalTime}ms`)
+    
+    // タイムアウト警告
+    if (totalTime > 5000) {
+      console.warn(`[time-blocks-fast] WARNING: Request took ${totalTime}ms (>5s)`)
+    }
 
     return NextResponse.json(processedTimeBlocks)
   } catch (error) {
@@ -171,8 +176,7 @@ export async function POST(request: NextRequest) {
           }
           
           if (!activeDay) {
-            const dayStartTime = await getUserDayStartTimeByEmail(userEmail)
-            const today = getTodayInJST(dayStartTime)
+            const today = new Date()
             activeDay = await prisma.activeDay.create({
               data: {
                 userId: prismaUser.id,
