@@ -25,9 +25,12 @@ function cleanupCache() {
 }
 
 export async function middleware(request: NextRequest) {
-  // ルートページは認証チェックをスキップ（クライアントで処理）
+  // ルートページは完全に認証チェックをスキップ（パフォーマンス最適化）
   if (request.nextUrl.pathname === '/') {
-    return NextResponse.next()
+    const response = NextResponse.next()
+    // キャッシュ制御ヘッダーを追加してさらに高速化
+    response.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate')
+    return response
   }
 
   // 静的ファイルと認証不要ルートはスキップ

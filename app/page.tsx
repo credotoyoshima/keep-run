@@ -3,75 +3,56 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { AuthMobile } from '@/components/auth/AuthMobile'
+import dynamic from 'next/dynamic'
+
+// AuthMobileを動的インポートでロード
+const AuthMobile = dynamic(() => import('@/components/auth/AuthMobile').then(mod => ({ default: mod.AuthMobile })), {
+  ssr: false,
+  loading: () => null
+})
 
 export default function HomePage() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
-  const supabase = createClient()
+  const [showAuth, setShowAuth] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // 高速化：まずローカルストレージをチェック
-        const storedSession = localStorage.getItem('sb-pzwxrocchxqmdqeduwjy-auth-token')
-        
-        if (storedSession) {
-          // セッションがある場合は即座にリダイレクト（検証は後で）
-          setIsAuthenticated(true)
-          router.replace('/day')
-          return
-        }
-        
-        // ローカルストレージにない場合のみSupabaseチェック
-        const { data: { session } } = await supabase.auth.getSession()
-        
-        if (session?.user) {
-          setIsAuthenticated(true)
-          router.replace('/day')
-          return
-        }
-        
-        setIsAuthenticated(false)
-        
-      } catch (error) {
-        console.log('Auth check failed:', error)
-        setIsAuthenticated(false)
-      }
+    // 即座にローカルストレージをチェック
+    const storedSession = localStorage.getItem('sb-pzwxrocchxqmdqeduwjy-auth-token')
+    
+    if (storedSession) {
+      // セッションがある場合は即座にリダイレクト
+      router.replace('/day')
+      return
     }
-
-    checkAuth()
-
-    // 最適化：より軽量なリアルタイム認証状態監視
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    
+    // セッションがない場合のみSupabaseチェック
+    const supabase = createClient()
+    
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        setIsAuthenticated(true)
         router.replace('/day')
-      } else if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
-        // 必要なイベントのみ処理
-        setIsAuthenticated(false)
+      } else {
+        // 認証なしの場合のみAuthMobileを表示
+        setShowAuth(true)
+      }
+    }).catch(() => {
+      // エラー時もAuthMobileを表示
+      setShowAuth(true)
+    })
+
+    // 認証状態の変更を監視（SIGNED_INイベントのみ）
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        router.replace('/day')
       }
     })
 
     return () => subscription.unsubscribe()
-  }, [supabase, router])
+  }, [router])
 
-  // 認証中のローディング画面（シンプル）
-  if (isAuthenticated === null) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">認証確認中...</div>
-      </div>
-    )
-  }
-
-  // 認証済みの場合はローディング表示（リダイレクト中）
-  if (isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">リダイレクト中...</div>
-      </div>
-    )
+  // AuthMobileが読み込まれるまでは何も表示しない（フラッシュを防ぐ）
+  if (!showAuth) {
+    return null
   }
   
   return <AuthMobile />
