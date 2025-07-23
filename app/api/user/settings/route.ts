@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
-import { migrateOrGetUser } from '@/lib/utils/userMigration'
+import { safeGetOrCreateUser } from '@/lib/utils/safeUserMigration'
 
 // GET /api/user/settings - ユーザー設定を取得
 export async function GET() {
@@ -13,16 +13,20 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // ユーザーを取得または移行
-    const dbUser = await migrateOrGetUser(user.id, user.email!)
+    // ユーザーを取得または作成
+    const dbUser = await safeGetOrCreateUser(user.id, user.email!)
 
     return NextResponse.json({
       dayStartTime: dbUser.dayStartTime
     })
   } catch (error) {
     console.error('Error fetching user settings:', error)
+    // より詳細なエラーメッセージ（開発環境のみ）
+    const errorMessage = process.env.NODE_ENV === 'development' 
+      ? `Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      : 'Internal server error'
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: errorMessage },
       { status: 500 }
     )
   }
@@ -49,12 +53,12 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // ユーザーを取得または移行
-    await migrateOrGetUser(user.id, user.email!)
+    // ユーザーを取得または作成
+    const dbUser = await safeGetOrCreateUser(user.id, user.email!)
     
-    // 設定を更新
+    // 設定を更新（実際のユーザーIDを使用）
     const updatedUser = await prisma.user.update({
-      where: { id: user.id },
+      where: { id: dbUser.id },
       data: {
         ...(dayStartTime !== undefined && { dayStartTime })
       },
@@ -69,8 +73,12 @@ export async function PUT(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error updating user settings:', error)
+    // より詳細なエラーメッセージ（開発環境のみ）
+    const errorMessage = process.env.NODE_ENV === 'development' 
+      ? `Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      : 'Internal server error'
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: errorMessage },
       { status: 500 }
     )
   }

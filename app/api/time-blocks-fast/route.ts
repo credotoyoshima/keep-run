@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
 import { getUserDayStartTimeByEmail } from '@/lib/server-utils'
 import { getTodayInJST, formatDateString, hasPassedDayBoundary } from '@/lib/date-utils'
-import { migrateOrGetUser } from '@/lib/utils/userMigration'
+import { safeGetOrCreateUser } from '@/lib/utils/safeUserMigration'
 
 // 高速化されたtime-blocksエンドポイント
 export async function GET(request: NextRequest) {
@@ -31,8 +31,8 @@ export async function GET(request: NextRequest) {
     // ユーザーの一日の始まり時間を取得
     const dayStartTime = await getUserDayStartTimeByEmail(userEmail)
     
-    // ユーザーを取得または移行
-    const prismaUser = await migrateOrGetUser(userId, userEmail)
+    // ユーザーを取得または作成
+    const prismaUser = await safeGetOrCreateUser(userId, userEmail)
     
     // 一日の始まり時間を考慮した今日の日付を取得
     const today = getTodayInJST(dayStartTime)

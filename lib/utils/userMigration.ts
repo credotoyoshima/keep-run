@@ -22,57 +22,70 @@ export async function migrateOrGetUser(supabaseUserId: string, email: string) {
       where: { email }
     })
 
-    if (existingUserByEmail) {
-      // 古いユーザーが見つかった場合、新しいユーザーを作成してデータを移行
+    if (existingUserByEmail && existingUserByEmail.id !== supabaseUserId) {
+      // 古いユーザーが見つかった場合、データを移行
       console.log(`Migrating user data from ${existingUserByEmail.id} to ${supabaseUserId}`)
       
-      // 新しいユーザーを作成
-      user = await prisma.user.create({
-        data: {
-          id: supabaseUserId,
-          email: existingUserByEmail.email,
-          name: existingUserByEmail.name,
-          avatarUrl: existingUserByEmail.avatarUrl,
-          dayStartTime: existingUserByEmail.dayStartTime,
-          createdAt: existingUserByEmail.createdAt
-        }
-      })
+      try {
+        // トランザクションで全ての操作を実行
+        const result = await prisma.$transaction(async (tx) => {
+          // 新しいユーザーを作成
+          const newUser = await tx.user.create({
+            data: {
+              id: supabaseUserId,
+              email: existingUserByEmail.email,
+              name: existingUserByEmail.name,
+              avatarUrl: existingUserByEmail.avatarUrl,
+              dayStartTime: existingUserByEmail.dayStartTime,
+              createdAt: existingUserByEmail.createdAt
+            }
+          })
 
-      // 関連データを新しいユーザーIDに更新
-      await prisma.$transaction([
-        // ActiveDayの更新
-        prisma.activeDay.updateMany({
-          where: { userId: existingUserByEmail.id },
-          data: { userId: supabaseUserId }
-        }),
-        // Todoの更新
-        prisma.todo.updateMany({
-          where: { userId: existingUserByEmail.id },
-          data: { userId: supabaseUserId }
-        }),
-        // DailyEvaluationの更新
-        prisma.dailyEvaluation.updateMany({
-          where: { userId: existingUserByEmail.id },
-          data: { userId: supabaseUserId }
-        }),
-        // ContinuousHabitの更新
-        prisma.continuousHabit.updateMany({
-          where: { userId: existingUserByEmail.id },
-          data: { userId: supabaseUserId }
-        }),
-        // HabitHistoryの更新
-        prisma.habitHistory.updateMany({
-          where: { userId: existingUserByEmail.id },
-          data: { userId: supabaseUserId }
-        }),
-        // 古いユーザーレコードを削除
-        prisma.user.delete({
-          where: { id: existingUserByEmail.id }
+          // ActiveDayの更新
+          await tx.activeDay.updateMany({
+            where: { userId: existingUserByEmail.id },
+            data: { userId: supabaseUserId }
+          })
+
+          // Todoの更新
+          await tx.todo.updateMany({
+            where: { userId: existingUserByEmail.id },
+            data: { userId: supabaseUserId }
+          })
+
+          // DailyEvaluationの更新
+          await tx.dailyEvaluation.updateMany({
+            where: { userId: existingUserByEmail.id },
+            data: { userId: supabaseUserId }
+          })
+
+          // ContinuousHabitの更新
+          await tx.continuousHabit.updateMany({
+            where: { userId: existingUserByEmail.id },
+            data: { userId: supabaseUserId }
+          })
+
+          // HabitHistoryの更新
+          await tx.habitHistory.updateMany({
+            where: { userId: existingUserByEmail.id },
+            data: { userId: supabaseUserId }
+          })
+
+          // 古いユーザーレコードを削除
+          await tx.user.delete({
+            where: { id: existingUserByEmail.id }
+          })
+
+          return newUser
         })
-      ])
 
-      console.log(`User migration completed for ${email}`)
-      return user
+        console.log(`User migration completed for ${email}`)
+        return result
+      } catch (migrationError) {
+        console.error('Migration failed, returning existing user:', migrationError)
+        // 移行に失敗した場合は既存のユーザーを返す
+        return existingUserByEmail
+      }
     }
 
     // どちらも見つからない場合は新規作成
