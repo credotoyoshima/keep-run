@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
-import { getOrCreateUser, getUserDayStartTimeByEmail } from '@/lib/server-utils'
+import { getUserDayStartTimeByEmail } from '@/lib/server-utils'
+import { migrateOrGetUser } from '@/lib/utils/userMigration'
 import { getTodayInJST, formatDateString } from '@/lib/date-utils'
 
 // 統合されたGETエンドポイント
@@ -26,8 +27,8 @@ export async function GET(request: NextRequest) {
     const dayStartTime = await getUserDayStartTimeByEmail(user.email)
     console.log('[DEBUG API time-blocks] dayStartTime:', dayStartTime)
     
-    // Prismaユーザーを取得または作成
-    const prismaUser = await getOrCreateUser(user.id, user.email)
+    // Prismaユーザーを取得または移行
+    const prismaUser = await migrateOrGetUser(user.id, user.email)
     
     if (mode === 'today') {
       // 一日の始まり時間を考慮した今日の日付を取得
@@ -196,7 +197,7 @@ export async function POST(request: NextRequest) {
     const dayStartTime = await getUserDayStartTimeByEmail(user.email)
     
     // Prismaユーザーを取得
-    const prismaUser = await getOrCreateUser(user.id, user.email)
+    const prismaUser = await migrateOrGetUser(user.id, user.email)
 
     switch (type) {
       case 'addTimeBlock': {

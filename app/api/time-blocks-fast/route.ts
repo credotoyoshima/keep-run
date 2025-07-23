@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
 import { getUserDayStartTimeByEmail } from '@/lib/server-utils'
 import { getTodayInJST, formatDateString, hasPassedDayBoundary } from '@/lib/date-utils'
+import { migrateOrGetUser } from '@/lib/utils/userMigration'
 
 // 高速化されたtime-blocksエンドポイント
 export async function GET(request: NextRequest) {
@@ -30,25 +31,8 @@ export async function GET(request: NextRequest) {
     // ユーザーの一日の始まり時間を取得
     const dayStartTime = await getUserDayStartTimeByEmail(userEmail)
     
-    // ユーザー取得（軽量化：selectで必要フィールドのみ）
-    let prismaUser = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, email: true, dayStartTime: true }
-    })
-    
-    // ユーザーが存在しない場合のみ作成
-    if (!prismaUser) {
-      prismaUser = await prisma.user.create({
-        data: {
-          id: userId,
-          email: userEmail,
-          name: null,
-          avatarUrl: null,
-          dayStartTime: dayStartTime
-        },
-        select: { id: true, email: true, dayStartTime: true }
-      })
-    }
+    // ユーザーを取得または移行
+    const prismaUser = await migrateOrGetUser(userId, userEmail)
     
     // 一日の始まり時間を考慮した今日の日付を取得
     const today = getTodayInJST(dayStartTime)

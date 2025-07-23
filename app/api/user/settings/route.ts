@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
+import { migrateOrGetUser } from '@/lib/utils/userMigration'
 
 // GET /api/user/settings - ユーザー設定を取得
 export async function GET() {
@@ -12,17 +13,8 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // ユーザーが存在しない場合は作成
-    const dbUser = await prisma.user.upsert({
-      where: { id: user.id },
-      update: {},
-      create: {
-        id: user.id,
-        email: user.email!,
-        name: user.user_metadata?.name || null,
-        avatarUrl: user.user_metadata?.avatar_url || null
-      }
-    })
+    // ユーザーを取得または移行
+    const dbUser = await migrateOrGetUser(user.id, user.email!)
 
     return NextResponse.json({
       dayStartTime: dbUser.dayStartTime
@@ -57,17 +49,13 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // ユーザーが存在しない場合は作成、存在する場合は更新
-    const updatedUser = await prisma.user.upsert({
+    // ユーザーを取得または移行
+    await migrateOrGetUser(user.id, user.email!)
+    
+    // 設定を更新
+    const updatedUser = await prisma.user.update({
       where: { id: user.id },
-      update: {
-        ...(dayStartTime !== undefined && { dayStartTime })
-      },
-      create: {
-        id: user.id,
-        email: user.email!,
-        name: user.user_metadata?.name || null,
-        avatarUrl: user.user_metadata?.avatar_url || null,
+      data: {
         ...(dayStartTime !== undefined && { dayStartTime })
       },
       select: {
