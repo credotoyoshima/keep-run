@@ -16,34 +16,37 @@ export default function HomePage() {
   const router = useRouter()
 
   useEffect(() => {
-    // 即座にローカルストレージをチェック
-    const storedSession = localStorage.getItem('sb-pzwxrocchxqmdqeduwjy-auth-token')
-    
-    if (storedSession) {
-      // セッションがある場合は即座にリダイレクト
-      router.replace('/day')
-      return
-    }
-    
-    // セッションがない場合のみSupabaseチェック
-    const supabase = createClient()
-    
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        router.replace('/day')
-      } else {
-        // 認証なしの場合のみAuthMobileを表示
+    const checkAuth = async () => {
+      try {
+        // Supabaseクライアントを作成
+        const supabase = createClient()
+        
+        // セッションを確認
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (session?.user) {
+          // 認証済みの場合はリダイレクト
+          router.replace('/day')
+        } else {
+          // 未認証の場合はAuthMobileを表示
+          setShowAuth(true)
+        }
+      } catch (error) {
+        console.error('Auth check error:', error)
+        // エラー時もAuthMobileを表示
         setShowAuth(true)
       }
-    }).catch(() => {
-      // エラー時もAuthMobileを表示
-      setShowAuth(true)
-    })
+    }
 
-    // 認証状態の変更を監視（SIGNED_INイベントのみ）
+    checkAuth()
+
+    // 認証状態の変更を監視
+    const supabase = createClient()
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
         router.replace('/day')
+      } else if (event === 'SIGNED_OUT') {
+        setShowAuth(true)
       }
     })
 
