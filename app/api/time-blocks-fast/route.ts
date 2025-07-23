@@ -162,9 +162,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(responseBlocks)
   } catch (error) {
     console.error('Error fetching time blocks (fast):', error)
+    // 開発環境では詳細なエラー情報を返す
+    const errorDetails = {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: process.env.NODE_ENV === 'development' && error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined
+    }
     return NextResponse.json({ 
       error: 'Internal server error',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details: errorDetails
     }, { status: 500 })
   }
 }
@@ -374,9 +380,15 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error('Error updating time blocks (fast):', error)
+    // 開発環境では詳細なエラー情報を返す
+    const errorDetails = {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: process.env.NODE_ENV === 'development' && error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined
+    }
     return NextResponse.json({ 
       error: 'Internal server error',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details: errorDetails
     }, { status: 500 })
   }
 } 
