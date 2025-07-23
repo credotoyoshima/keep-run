@@ -21,15 +21,15 @@ export default function HomePage() {
         // Supabaseクライアントを作成
         const supabase = createClient()
         
-        // セッションを確認
-        const { data: { session } } = await supabase.auth.getSession()
+        // getUser()を使用してサーバーで認証を確認
+        const { data: { user }, error } = await supabase.auth.getUser()
         
-        if (session?.user) {
-          // 認証済みの場合はリダイレクト
-          router.replace('/day')
-        } else {
+        if (error || !user) {
           // 未認証の場合はAuthMobileを表示
           setShowAuth(true)
+        } else {
+          // 認証済みの場合はリダイレクト
+          router.replace('/day')
         }
       } catch (error) {
         console.error('Auth check error:', error)
@@ -42,9 +42,12 @@ export default function HomePage() {
 
     // 認証状態の変更を監視
     const supabase = createClient()
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) {
-        router.replace('/day')
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        // サインイン後は少し待ってからリダイレクト
+        setTimeout(() => {
+          router.replace('/day')
+        }, 100)
       } else if (event === 'SIGNED_OUT') {
         setShowAuth(true)
       }

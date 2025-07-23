@@ -112,7 +112,11 @@ export function AuthMobile() {
       return
     }
 
-    router.push('/')
+    // ログイン成功後は直接/dayへリダイレクト
+    setSuccess('ログインしました！')
+    setTimeout(() => {
+      router.push('/day')
+    }, 500)
     setLoading(false)
   }
 
