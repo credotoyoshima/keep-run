@@ -7,10 +7,6 @@
     "app/*/page.tsx": {
       "maxDuration": 10,
       "memory": 1024
-    },
-    "middleware.ts": {
-      "maxDuration": 10,
-      "memory": 512
     }
   },
   "regions": ["hnd1"],
@@ -18,12 +14,6 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "outputDirectory": ".next",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/$1"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
