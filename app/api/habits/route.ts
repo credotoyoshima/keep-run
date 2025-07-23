@@ -67,10 +67,11 @@ export async function GET() {
       return recordDateStr === todayStr
     })
 
-    // 開始日からの経過日数を計算
-    const startDate = new Date(habit.startDate)
-    startDate.setHours(0, 0, 0, 0)
-    const daysSinceStart = Math.floor((today.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1
+    // 開始日からの経過日数を計算（日本時間基準）
+    const jstOptions = { timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit' } as const
+    const todayJST = new Date(today.toLocaleDateString('en-CA', jstOptions))
+    const startDateJST = new Date(habit.startDate.toLocaleDateString('en-CA', jstOptions))
+    const daysSinceStart = Math.floor((todayJST.getTime() - startDateJST.getTime()) / (24 * 60 * 60 * 1000)) + 1
     
     // 完了日数を計算（重複を除く、開始日以降の記録のみ）
     const uniqueCompletedDates = new Set()
@@ -92,18 +93,20 @@ export async function GET() {
         const recordDate = new Date(record.date)
         const startDate = new Date(habit.startDate)
         
-        // 時刻をリセットして日付のみで比較
-        recordDate.setHours(0, 0, 0, 0)
-        startDate.setHours(0, 0, 0, 0)
+        // 日本時間基準で時刻をリセットして日付のみで比較
+        const recordDateJST = new Date(recordDate.toLocaleDateString('en-CA', jstOptions))
+        const startDateJSTForComparison = new Date(startDate.toLocaleDateString('en-CA', jstOptions))
         
-        if (recordDate >= startDate) {
+        if (recordDateJST >= startDateJSTForComparison) {
           const dateStr = formatDateString(recordDate)
           console.log('[DEBUG API GET] Adding to uniqueCompletedDates:', dateStr)
           uniqueCompletedDates.add(dateStr)
         } else {
           console.log('[DEBUG API GET] Record before start date, skipping:', {
             recordDate: recordDate.toISOString(),
-            startDate: startDate.toISOString()
+            startDate: startDate.toISOString(),
+            recordDateJST: recordDateJST.toISOString(),
+            startDateJST: startDateJSTForComparison.toISOString()
           })
         }
       }

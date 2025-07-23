@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
+import { getRandomResetMessage } from '@/lib/constants/motivationMessages'
 
 // 習慣をリセット（振り出しに戻す）
 export async function POST(
@@ -45,7 +46,7 @@ export async function POST(
             completed: true
           }
         }),
-        status: 'failed',
+        status: 'abandoned',
         userId: user.id
       }
     })
@@ -61,7 +62,13 @@ export async function POST(
       data: { isActive: false }
     })
 
-    return NextResponse.json({ success: true })
+    // 3日坊主リセットメッセージをランダムに取得
+    const resetMessage = getRandomResetMessage()
+
+    return NextResponse.json({ 
+      success: true,
+      resetMessage
+    })
   } catch (error) {
     console.error('Error resetting habit:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

@@ -11,6 +11,7 @@ import { useDayChangeDetection } from '@/lib/day-change-detector'
 import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
 import { LoadingSpinnerCenter } from '@/components/ui/LoadingSpinner'
 import { useContinuousHabits } from '@/lib/hooks/useContinuousHabits'
+import { MotivationMessageModal } from './MotivationMessageModal'
 
 interface HabitRecord {
   date: string
@@ -34,6 +35,9 @@ interface ContinuousHabit {
 export function HabitMobile() {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showHistoryModal, setShowHistoryModal] = useState(false)
+  const [motivationMessage, setMotivationMessage] = useState<string | null>(null)
+  const [showResetMessage, setShowResetMessage] = useState(false)
+  const [resetMessage, setResetMessage] = useState<string>('')
   
   // useDayStartTimeフックを使用
   const { dayStartTime } = useDayStartTime()
@@ -55,6 +59,20 @@ export function HabitMobile() {
   useDayChangeDetection(dayStartTime, () => {
     console.log('Day changed, React Query will handle data refresh')
   })
+
+  // shouldResetがtrueの場合、自動的にリセットメッセージを表示
+  useEffect(() => {
+    if (currentHabit?.shouldReset && !showResetMessage) {
+      resetHabit(currentHabit.id, {
+        onSuccess: (data: any) => {
+          if (data?.resetMessage) {
+            setResetMessage(data.resetMessage)
+            setShowResetMessage(true)
+          }
+        }
+      })
+    }
+  }, [currentHabit?.shouldReset, showResetMessage, resetHabit, currentHabit?.id])
 
   // これらの関数はReactQueryのmutationで置き換え済み
 
@@ -87,10 +105,15 @@ export function HabitMobile() {
       habitId: currentHabit.id,
       completed: newCompleted
     }, {
+      onSuccess: (data: any) => {
+        if (data?.motivationMessage) {
+          setMotivationMessage(data.motivationMessage)
+        }
+      },
       onError: (error) => {
         console.error('Error recording habit:', error)
         alert('習慣の記録に失敗しました')
-    }
+      }
     })
   }
 
@@ -292,6 +315,24 @@ export function HabitMobile() {
       <HabitHistoryModal
         isOpen={showHistoryModal}
         onClose={() => setShowHistoryModal(false)}
+      />
+      
+      {/* モチベーションメッセージモーダル */}
+      <MotivationMessageModal
+        isOpen={!!motivationMessage}
+        message={motivationMessage || ''}
+        onClose={() => setMotivationMessage(null)}
+      />
+      
+      {/* リセットメッセージモーダル */}
+      <MotivationMessageModal
+        isOpen={showResetMessage}
+        message={resetMessage}
+        isResetMessage={true}
+        onClose={() => {
+          setShowResetMessage(false)
+          setResetMessage('')
+        }}
       />
     </MobileLayout>
   )

@@ -79,14 +79,11 @@ export function TimePickerModal({ isOpen, onClose, onSelect, initialTime = '00:0
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center md:items-center pb-20 md:pb-0" role="dialog">
+    <div className="fixed inset-x-0 bottom-20 top-0 md:inset-0 z-50 flex items-end justify-center md:items-center" role="dialog">
       {/* 背景のオーバーレイ */}
       <div 
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
-        style={{ 
-          clipPath: 'inset(0 0 80px 0)' // ボトムメニューの高さ分を切り取る
-        }}
       />
       
       {/* モーダル本体 */}
