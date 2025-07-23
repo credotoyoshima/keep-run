@@ -14,9 +14,10 @@ export async function GET() {
 
     // ユーザーが存在しない場合は作成
     const dbUser = await prisma.user.upsert({
-      where: { email: user.email! },
+      where: { id: user.id },
       update: {},
       create: {
+        id: user.id,
         email: user.email!,
         name: user.user_metadata?.name || null,
         avatarUrl: user.user_metadata?.avatar_url || null
@@ -58,11 +59,12 @@ export async function PUT(request: NextRequest) {
 
     // ユーザーが存在しない場合は作成、存在する場合は更新
     const updatedUser = await prisma.user.upsert({
-      where: { email: user.email! },
+      where: { id: user.id },
       update: {
         ...(dayStartTime !== undefined && { dayStartTime })
       },
       create: {
+        id: user.id,
         email: user.email!,
         name: user.user_metadata?.name || null,
         avatarUrl: user.user_metadata?.avatar_url || null,

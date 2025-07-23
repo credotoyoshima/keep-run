@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     
     // ユーザー取得（軽量化：selectで必要フィールドのみ）
     let prismaUser = await prisma.user.findUnique({
-      where: { email: userEmail },
+      where: { id: userId },
       select: { id: true, email: true, dayStartTime: true }
     })
     
@@ -40,6 +40,7 @@ export async function GET(request: NextRequest) {
     if (!prismaUser) {
       prismaUser = await prisma.user.create({
         data: {
+          id: userId,
           email: userEmail,
           name: null,
           avatarUrl: null,

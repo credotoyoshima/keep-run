@@ -21,22 +21,14 @@ export async function getUserDayStartTime(userId: string): Promise<string> {
 
 /**
  * メールアドレスからユーザーのdayStartTime設定を取得する
- * ユーザーが存在しない場合は作成する
- * @param email ユーザーのメールアドレス
+ * @param email ユーザーのメールアドレス  
  * @returns dayStartTime（デフォルト: "05:00"）
  */
 export async function getUserDayStartTimeByEmail(email: string): Promise<string> {
   try {
-    // ユーザーが存在しない場合は作成
-    const user = await prisma.user.upsert({
+    // メールアドレスでユーザーを検索（作成はしない）
+    const user = await prisma.user.findUnique({
       where: { email },
-      update: {},
-      create: {
-        email,
-        name: null,
-        avatarUrl: null,
-        dayStartTime: '05:00'
-      },
       select: { dayStartTime: true }
     })
     
@@ -49,14 +41,16 @@ export async function getUserDayStartTimeByEmail(email: string): Promise<string>
 
 /**
  * Supabaseのユーザー情報からPrismaのユーザーを取得または作成
+ * @param userId SupabaseのユーザーID
  * @param email ユーザーのメールアドレス
  * @returns Prismaのユーザー
  */
-export async function getOrCreateUserByEmail(email: string) {
+export async function getOrCreateUser(userId: string, email: string) {
   return await prisma.user.upsert({
-    where: { email },
+    where: { id: userId },
     update: {},
     create: {
+      id: userId,
       email,
       name: null,
       avatarUrl: null,
