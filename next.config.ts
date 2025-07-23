@@ -7,7 +7,19 @@ const nextConfig: NextConfig = {
   },
   // 実験的機能で高速化
   experimental: {
-    optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+    optimizePackageImports: [
+      '@radix-ui/react-icons', 
+      'lucide-react',
+      '@supabase/ssr',
+      '@supabase/supabase-js',
+      '@tanstack/react-query',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-checkbox',
+      '@radix-ui/react-select',
+      '@radix-ui/react-popover'
+    ],
     // より積極的な最適化
     turbo: {
       rules: {

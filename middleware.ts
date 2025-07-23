@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 
 // 認証キャッシュ（メモリキャッシュ）
 const authCache = new Map<string, { authenticated: boolean; timestamp: number }>()
-const CACHE_TTL = 30 * 1000 // 30秒
+const CACHE_TTL = 5 * 60 * 1000 // 5分に延長（本番環境のパフォーマンス向上）
 const MAX_CACHE_SIZE = 1000 // 最大キャッシュサイズ
 
 // 古いキャッシュエントリをクリーンアップ
@@ -33,8 +33,19 @@ export async function middleware(request: NextRequest) {
     return response
   }
 
-  // 静的ファイルと認証不要ルートはスキップ
-  const publicRoutes = ['/auth/login', '/auth/error', '/auth/reset-password', '/auth/update-password', '/auth/callback']
+  // 静的ファイルと認証不要ルートはスキップ（拡張）
+  const publicRoutes = [
+    '/auth/login', 
+    '/auth/error', 
+    '/auth/reset-password', 
+    '/auth/update-password', 
+    '/auth/callback',
+    '/api/auth/callback',
+    '/_next',
+    '/favicon',
+    '/manifest.json',
+    '/sw.js'
+  ]
   if (publicRoutes.some(route => request.nextUrl.pathname.startsWith(route))) {
     return NextResponse.next()
   }

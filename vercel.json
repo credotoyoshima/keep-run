@@ -1,0 +1,46 @@
+{
+  "functions": {
+    "app/api/*/route.ts": {
+      "maxDuration": 10,
+      "memory": 1024
+    },
+    "app/*/page.tsx": {
+      "maxDuration": 10,
+      "memory": 1024
+    },
+    "middleware.ts": {
+      "maxDuration": 10,
+      "memory": 512
+    }
+  },
+  "regions": ["hnd1"],
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
+}
