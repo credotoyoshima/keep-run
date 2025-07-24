@@ -49,6 +49,7 @@ export function AuthForm() {
           body: JSON.stringify({
             email: authData.user.email!,
             name: name || null,
+            userId: authData.user.id, // ユーザーIDを追加
           }),
         })
 

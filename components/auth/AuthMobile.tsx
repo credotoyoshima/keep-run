@@ -73,6 +73,7 @@ export function AuthMobile() {
           body: JSON.stringify({
             email: authData.user.email!,
             name: nickname || null,
+            userId: authData.user.id, // ユーザーIDを追加
           }),
         })
 
