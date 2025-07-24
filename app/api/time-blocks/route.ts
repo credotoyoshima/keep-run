@@ -5,6 +5,95 @@ import { getUserDayStartTimeByEmail } from '@/lib/server-utils'
 import { migrateOrGetUser } from '@/lib/utils/userMigration'
 import { getTodayInJST, formatDateString } from '@/lib/date-utils'
 
+// 前日のActiveDay構造を継承して新しいActiveDayを作成する関数
+async function createActiveDayFromTemplate(userId: string, date: Date) {
+  // 前日までのActiveDayから最新のものを取得（アーカイブされていないブロック・タスクのみ）
+  const previousActiveDay = await prisma.activeDay.findFirst({
+    where: { 
+      userId,
+      date: { lt: date } // 指定日より前
+    },
+    include: {
+      timeBlocks: {
+        where: { archived: false },
+        include: {
+          tasks: {
+            where: { archived: false },
+            orderBy: { orderIndex: 'asc' }
+          }
+        },
+        orderBy: { orderIndex: 'asc' }
+      }
+    },
+    orderBy: { date: 'desc' } // 最新の過去の日を取得
+  })
+
+  if (previousActiveDay && previousActiveDay.timeBlocks.length > 0) {
+    // 前日の構造を継承して新しいActiveDayを作成
+    const newActiveDay = await prisma.activeDay.create({
+      data: {
+        userId,
+        date,
+        timeBlocks: {
+          create: previousActiveDay.timeBlocks.map(block => ({
+            title: block.title,
+            startTime: block.startTime,
+            orderIndex: block.orderIndex,
+            pageNumber: block.pageNumber,
+            completionRate: 0, // 完了率はリセット
+            tasks: {
+              create: block.tasks.map(task => ({
+                title: task.title,
+                orderIndex: task.orderIndex,
+                completed: false, // 完了状態はリセット
+                archived: false
+              }))
+            }
+          }))
+        }
+      },
+      include: {
+        timeBlocks: {
+          where: { archived: false },
+          include: {
+            tasks: {
+              where: { archived: false },
+              orderBy: { orderIndex: 'asc' }
+            }
+          },
+          orderBy: { orderIndex: 'asc' }
+        }
+      }
+    })
+    
+    console.log('[DEBUG] Created ActiveDay from template, inherited blocks:', previousActiveDay.timeBlocks.length)
+    return newActiveDay
+  } else {
+    // 前日の構造がない場合は空のActiveDayを作成（デフォルトタスクなし）
+    const newActiveDay = await prisma.activeDay.create({
+      data: {
+        userId,
+        date
+      },
+      include: {
+        timeBlocks: {
+          where: { archived: false },
+          include: {
+            tasks: {
+              where: { archived: false },
+              orderBy: { orderIndex: 'asc' }
+            }
+          },
+          orderBy: { orderIndex: 'asc' }
+        }
+      }
+    })
+    
+    console.log('[DEBUG] Created empty ActiveDay (no previous template found)')
+    return newActiveDay
+  }
+}
+
 // 統合されたGETエンドポイント
 // クエリパラメータ:
 // - page: ページ番号（デフォルト: 1）
@@ -54,50 +143,7 @@ export async function GET(request: NextRequest) {
 
       if (!activeDay) {
         // 今日のActiveDayが存在しない場合は作成
-        activeDay = await prisma.activeDay.create({
-          data: {
-            userId: prismaUser.id,
-            date: today,
-            timeBlocks: {
-              create: [
-                {
-                  title: '朝のルーティン',
-                  startTime: '06:00',
-                  orderIndex: 0,
-                  tasks: {
-                    create: [
-                      { title: '起床・身支度', orderIndex: 0 },
-                      { title: '朝食', orderIndex: 1 }
-                    ]
-                  }
-                },
-                {
-                  title: '午前の作業',
-                  startTime: '09:00',
-                  orderIndex: 1,
-                  tasks: {
-                    create: [
-                      { title: 'メールチェック', orderIndex: 0 },
-                      { title: '重要タスクの処理', orderIndex: 1 }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-          include: {
-            timeBlocks: {
-              where: { archived: false },
-              include: {
-                tasks: {
-                  where: { archived: false },
-                  orderBy: { orderIndex: 'asc' }
-                }
-              },
-              orderBy: { orderIndex: 'asc' }
-            }
-          }
-        })
+        activeDay = await createActiveDayFromTemplate(prismaUser.id, today)
       }
 
       return NextResponse.json(activeDay)
@@ -140,12 +186,7 @@ export async function GET(request: NextRequest) {
       }
       
       if (!activeDay) {
-        activeDay = await prisma.activeDay.create({
-          data: {
-            userId: prismaUser.id,
-            date: today
-          }
-        })
+        activeDay = await createActiveDayFromTemplate(prismaUser.id, today)
         
         console.log('[DEBUG API time-blocks] Created new ActiveDay for page mode:', {
           id: activeDay.id,
@@ -227,12 +268,7 @@ export async function POST(request: NextRequest) {
           }
           
           if (!activeDay) {
-            const newDay = await prisma.activeDay.create({
-              data: {
-                userId: prismaUser.id,
-                date: today
-              }
-            })
+            const newDay = await createActiveDayFromTemplate(prismaUser.id, today)
             targetDayId = newDay.id
             console.log('[DEBUG API time-blocks] Created new ActiveDay in POST:', {
               id: newDay.id,
