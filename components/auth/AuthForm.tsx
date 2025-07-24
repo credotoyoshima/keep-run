@@ -23,6 +23,7 @@ export function AuthForm() {
     setLoading(true)
     setError(null)
 
+    // Step 1: Supabase認証でユーザーを作成
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -40,22 +41,32 @@ export function AuthForm() {
     }
 
     if (authData.user) {
-      const { error: userError } = await supabase
-        .from('User')
-        .insert({
-          id: authData.user.id,
-          email: authData.user.email!,
-          name: name || null,
-          updatedAt: new Date().toISOString(),
+      // Step 2: APIを通じてPrismaでユーザーレコードを作成
+      try {
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: authData.user.email!,
+            name: name || null,
+          }),
         })
 
-      if (userError) {
-        setError(userError.message)
+        if (!response.ok) {
+          const errorData = await response.json()
+          setError(errorData.error || 'ユーザー登録に失敗しました')
+          setLoading(false)
+          return
+        }
+
+        // 成功：ログインページにリダイレクト
+        router.push('/day')
+      } catch (error) {
+        console.error('Error creating user record:', error)
+        setError('ユーザー登録に失敗しました。もう一度お試しください。')
         setLoading(false)
         return
       }
-
-      router.push('/day')
     }
 
     setLoading(false)

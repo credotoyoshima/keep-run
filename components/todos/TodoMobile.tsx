@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input'
 import { useDayChangeDetection } from '@/lib/day-change-detector'
 import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
 import { useTodos } from '@/lib/hooks/useTodos'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface Todo {
   id: string
@@ -62,10 +63,12 @@ export function TodoMobile({ onRefresh }: TodoMobileProps) {
 
   // useDayStartTimeフックを使用
   const { dayStartTime } = useDayStartTime()
+  const queryClient = useQueryClient()
 
-  // 日付変更を検出（ReactQueryが自動的にデータを管理）
-  useDayChangeDetection(dayStartTime, () => {
-    console.log('Day changed, data will be automatically refreshed by React Query')
+  // 日付変更を検出してキャッシュを無効化
+  useDayChangeDetection(dayStartTime, async () => {
+    console.log('Day changed, invalidating todo cache...')
+    await queryClient.invalidateQueries({ queryKey: ['todos'] })
   })
 
   useEffect(() => {

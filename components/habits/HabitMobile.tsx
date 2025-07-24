@@ -12,6 +12,7 @@ import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
 import { LoadingSpinnerCenter } from '@/components/ui/LoadingSpinner'
 import { useContinuousHabits } from '@/lib/hooks/useContinuousHabits'
 import { MotivationMessageModal } from './MotivationMessageModal'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface HabitRecord {
   date: string
@@ -39,6 +40,7 @@ export function HabitMobile() {
   const [showResetMessage, setShowResetMessage] = useState(false)
   const [resetMessage, setResetMessage] = useState<string>('')
   
+  const queryClient = useQueryClient()
   // useDayStartTimeフックを使用
   const { dayStartTime } = useDayStartTime()
 
@@ -191,8 +193,8 @@ export function HabitMobile() {
           onClose={() => setShowCreateModal(false)}
           onSuccess={() => {
             setShowCreateModal(false)
-            // ReactQueryが自動的にデータを更新
           }}
+          onCreateHabit={createHabit}
         />
         
         <HabitHistoryModal
@@ -308,8 +310,8 @@ export function HabitMobile() {
         onClose={() => setShowCreateModal(false)}
         onSuccess={() => {
           setShowCreateModal(false)
-          // ReactQueryが自動的にデータを更新
         }}
+        onCreateHabit={createHabit}
       />
       
       <HabitHistoryModal

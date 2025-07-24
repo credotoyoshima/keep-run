@@ -47,6 +47,7 @@ export function AuthMobile() {
     setError(null)
     setSuccess(null)
 
+    // Step 1: Supabase認証でユーザーを作成
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -64,16 +65,25 @@ export function AuthMobile() {
     }
 
     if (authData.user) {
-      const { error: userError } = await supabase
-        .from('User')
-        .insert({
-          id: authData.user.id,
-          email: authData.user.email!,
-          name: nickname || null,
-          updatedAt: new Date().toISOString(),
+      // Step 2: APIを通じてPrismaでユーザーレコードを作成
+      try {
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: authData.user.email!,
+            name: nickname || null,
+          }),
         })
 
-      if (userError) {
+        if (!response.ok) {
+          const errorData = await response.json()
+          setError(errorData.error || 'ユーザー情報の保存に失敗しました')
+          setLoading(false)
+          return
+        }
+      } catch (error) {
+        console.error('Error creating user record:', error)
         setError('ユーザー情報の保存に失敗しました')
         setLoading(false)
         return

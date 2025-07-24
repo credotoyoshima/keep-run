@@ -8,6 +8,7 @@ import { TimePickerModal } from '@/components/ui/time-picker-modal'
 import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
 import { useDayChangeDetection } from '@/lib/day-change-detector'
 import { useTimeBlocks } from '@/lib/hooks/useTimeBlocks'
+import { useQueryClient } from '@tanstack/react-query'
 import { 
   ChevronDown, 
   ChevronRight, 
@@ -77,6 +78,7 @@ export function SimpleDayViewOptimized() {
   
   // useDayStartTimeフックを使用（最適化版）
   const { dayStartTime } = useDayStartTime()
+  const queryClient = useQueryClient()
   
   // useTimeBlocksフックを使用
   const {
@@ -109,7 +111,9 @@ export function SimpleDayViewOptimized() {
         method: 'POST'
       })
       if (response.ok) {
-        // React Query will refetch automatically
+        // React Queryのキャッシュを無効化してデータを再取得
+        await queryClient.invalidateQueries({ queryKey: ['timeBlocks'] })
+        await queryClient.invalidateQueries({ queryKey: ['activeDay'] })
       }
     } catch (error) {
       console.error('Error resetting tasks:', error)

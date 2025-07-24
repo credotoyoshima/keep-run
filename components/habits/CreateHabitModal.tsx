@@ -9,9 +9,10 @@ interface CreateHabitModalProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: () => void
+  onCreateHabit?: (habitData: { title: string; category: string; targetDays?: number }) => void
 }
 
-export function CreateHabitModal({ isOpen, onClose, onSuccess }: CreateHabitModalProps) {
+export function CreateHabitModal({ isOpen, onClose, onSuccess, onCreateHabit }: CreateHabitModalProps) {
   const [title, setTitle] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -20,27 +21,40 @@ export function CreateHabitModal({ isOpen, onClose, onSuccess }: CreateHabitModa
 
     setLoading(true)
     try {
-      const response = await fetch('/api/habits', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      if (onCreateHabit) {
+        // 親コンポーネントから渡されたcreateHabit関数を使用
+        await onCreateHabit({
           title: title.trim(),
           category: 'other',
           targetDays: 14
         })
-      })
-
-      if (response.ok) {
         onSuccess()
         setTitle('')
         onClose()
       } else {
-        const error = await response.json()
-        alert(error.error || '習慣の作成に失敗しました')
+        // フォールバック：直接APIを呼び出す
+        const response = await fetch('/api/habits', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: title.trim(),
+            category: 'other',
+            targetDays: 14
+          })
+        })
+
+        if (response.ok) {
+          onSuccess()
+          setTitle('')
+          onClose()
+        } else {
+          const error = await response.json()
+          alert(error.error || '習慣の作成に失敗しました')
+        }
       }
     } catch (error) {
       console.error('Error creating habit:', error)
-      alert('習慣の作成に失敗しました')
+      alert(error instanceof Error ? error.message : '習慣の作成に失敗しました')
     } finally {
       setLoading(false)
     }
