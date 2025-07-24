@@ -22,6 +22,12 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(new URL('/auth/update-password', request.url))
       }
       
+      // サインアップ確認の場合
+      if (type === 'signup' || type === 'email') {
+        // ログインページにリダイレクトして成功メッセージを表示
+        return NextResponse.redirect(new URL('/auth/login?confirmed=true', request.url))
+      }
+      
       // その他の確認タイプの場合は、指定されたページまたはホームにリダイレクト
       return NextResponse.redirect(new URL(next, request.url))
     }
