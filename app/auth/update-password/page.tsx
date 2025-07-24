@@ -18,9 +18,29 @@ export default function UpdatePasswordPage() {
   useEffect(() => {
     // Check if user is authenticated via reset link
     const checkAuth = async () => {
+      // URLのハッシュフラグメントをチェック
+      const hashParams = new URLSearchParams(window.location.hash.substring(1))
+      const accessToken = hashParams.get('access_token')
+      const type = hashParams.get('type')
+      
+      // リセットトークンがURLに含まれている場合は処理を続行
+      if (accessToken && type === 'recovery') {
+        console.log('Recovery token found in URL, processing...')
+        // トークンはsupabase.auth.updateUserで使用されるため、ここでは何もしない
+        return
+      }
+      
+      // セッションチェック
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
-        router.push('/auth/login')
+        console.log('No session found, checking for recovery session...')
+        
+        // リカバリーセッションがあるかチェック
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          console.log('No user found, redirecting to login...')
+          router.push('/auth/login')
+        }
       }
     }
     checkAuth()

@@ -53,7 +53,8 @@ export default function HomePage() {
               if (!error) {
                 console.log('Session set successfully, redirecting to update-password...')
                 // 成功したらパスワード更新ページへリダイレクト
-                router.replace('/auth/update-password')
+                // ハッシュフラグメントも含めてリダイレクト
+                window.location.href = '/auth/update-password'
                 return
               } else {
                 console.error('Error setting session from recovery token:', error)
@@ -68,7 +69,7 @@ export default function HomePage() {
               
               if (!error) {
                 console.log('OTP verified successfully, redirecting to update-password...')
-                router.replace('/auth/update-password')
+                window.location.href = '/auth/update-password'
                 return
               } else {
                 console.error('Error verifying OTP:', error)
