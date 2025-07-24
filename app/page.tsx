@@ -22,24 +22,60 @@ export default function HomePage() {
         const supabase = createClient()
         
         // URLのハッシュフラグメントをチェック（パスワードリセットなど）
+        console.log('Current URL:', window.location.href)
+        console.log('Hash:', window.location.hash)
+        
         const hashParams = new URLSearchParams(window.location.hash.substring(1))
         const accessToken = hashParams.get('access_token')
         const type = hashParams.get('type')
         
+        console.log('Hash params:', {
+          accessToken: accessToken ? 'present' : 'missing',
+          type,
+          allParams: Array.from(hashParams.entries())
+        })
+        
         // パスワードリセットトークンが含まれている場合
         if (accessToken && type === 'recovery') {
-          // トークンを使ってセッションを設定
-          const { error } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: hashParams.get('refresh_token') || ''
-          })
+          console.log('Recovery token detected, setting session...')
           
-          if (!error) {
-            // 成功したらパスワード更新ページへリダイレクト
-            router.replace('/auth/update-password')
-            return
-          } else {
-            console.error('Error setting session from recovery token:', error)
+          // トークンを使ってセッションを設定
+          const refreshToken = hashParams.get('refresh_token')
+          
+          try {
+            if (refreshToken) {
+              // refresh_tokenがある場合はsetSessionを使用
+              const { error } = await supabase.auth.setSession({
+                access_token: accessToken,
+                refresh_token: refreshToken
+              })
+              
+              if (!error) {
+                console.log('Session set successfully, redirecting to update-password...')
+                // 成功したらパスワード更新ページへリダイレクト
+                router.replace('/auth/update-password')
+                return
+              } else {
+                console.error('Error setting session from recovery token:', error)
+              }
+            } else {
+              // refresh_tokenがない場合は直接verifyOtpを試す
+              console.log('No refresh token, trying verifyOtp...')
+              const { error } = await supabase.auth.verifyOtp({
+                token_hash: accessToken,
+                type: 'recovery'
+              })
+              
+              if (!error) {
+                console.log('OTP verified successfully, redirecting to update-password...')
+                router.replace('/auth/update-password')
+                return
+              } else {
+                console.error('Error verifying OTP:', error)
+              }
+            }
+          } catch (err) {
+            console.error('Unexpected error handling recovery token:', err)
           }
         }
         
