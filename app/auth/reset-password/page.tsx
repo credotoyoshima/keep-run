@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
 
 export default function ResetPasswordPage() {
   const [email, setEmail] = useState('')
@@ -13,6 +14,15 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const supabase = createClient()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    // URLパラメータからエラーメッセージを取得
+    const errorParam = searchParams.get('error')
+    if (errorParam) {
+      setError(decodeURIComponent(errorParam))
+    }
+  }, [searchParams])
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault()

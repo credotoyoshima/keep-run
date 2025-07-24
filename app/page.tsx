@@ -25,19 +25,39 @@ export default function HomePage() {
         console.log('Current URL:', window.location.href)
         console.log('Hash:', window.location.hash)
         
-        const hashParams = new URLSearchParams(window.location.hash.substring(1))
-        const accessToken = hashParams.get('access_token')
-        const type = hashParams.get('type')
+        // URLのクエリパラメータもチェック（別の形式の場合）
+        const queryParams = new URLSearchParams(window.location.search)
+        const queryToken = queryParams.get('access_token')
+        const queryType = queryParams.get('type')
         
-        console.log('Hash params:', {
-          accessToken: accessToken ? 'present' : 'missing',
+        const hashParams = new URLSearchParams(window.location.hash.substring(1))
+        const accessToken = hashParams.get('access_token') || queryToken
+        const type = hashParams.get('type') || queryType
+        
+        console.log('URL params:', {
+          hashAccessToken: hashParams.get('access_token') ? 'present' : 'missing',
+          queryAccessToken: queryToken ? 'present' : 'missing',
+          accessToken: accessToken ? `${accessToken.substring(0, 10)}...` : 'missing',
+          accessTokenLength: accessToken ? accessToken.length : 0,
           type,
-          allParams: Array.from(hashParams.entries())
+          allHashParams: Array.from(hashParams.entries()),
+          allQueryParams: Array.from(queryParams.entries()),
+          fullHash: window.location.hash,
+          fullSearch: window.location.search
         })
         
         // パスワードリセットトークンが含まれている場合
         if (accessToken && type === 'recovery') {
           console.log('Recovery token detected, setting session...')
+          
+          // トークンの長さをチェック（JWTトークンは通常100文字以上）
+          if (accessToken.length < 50) {
+            console.error('Token appears to be truncated:', accessToken)
+            // トークンが短すぎる場合はエラーページへリダイレクト
+            const errorMsg = 'パスワードリセットリンクが無効です。もう一度パスワードリセットをお試しください。'
+            window.location.href = `/auth/reset-password?error=${encodeURIComponent(errorMsg)}`
+            return
+          }
           
           // トークンを使ってセッションを設定
           const refreshToken = hashParams.get('refresh_token')
