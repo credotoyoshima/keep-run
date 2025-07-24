@@ -21,6 +21,40 @@ export default function HomePage() {
         // Supabaseクライアントを作成
         const supabase = createClient()
         
+        // URLのハッシュフラグメントをチェック（パスワードリセットなど）
+        const hashParams = new URLSearchParams(window.location.hash.substring(1))
+        const accessToken = hashParams.get('access_token')
+        const type = hashParams.get('type')
+        
+        // パスワードリセットトークンが含まれている場合
+        if (accessToken && type === 'recovery') {
+          // トークンを使ってセッションを設定
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: hashParams.get('refresh_token') || ''
+          })
+          
+          if (!error) {
+            // 成功したらパスワード更新ページへリダイレクト
+            router.replace('/auth/update-password')
+            return
+          } else {
+            console.error('Error setting session from recovery token:', error)
+          }
+        }
+        
+        // エラーパラメータのチェック
+        const urlParams = new URLSearchParams(window.location.search)
+        const errorParam = urlParams.get('error')
+        const errorDescription = urlParams.get('error_description')
+        
+        if (errorParam) {
+          console.error('Auth error:', errorParam, errorDescription)
+          // エラーがある場合もAuthMobileを表示
+          setShowAuth(true)
+          return
+        }
+        
         // まずセッションの存在確認（高速）
         const { data: { session } } = await supabase.auth.getSession()
         
