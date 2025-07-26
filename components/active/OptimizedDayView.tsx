@@ -8,6 +8,7 @@ import { TimePickerModal } from '@/components/ui/time-picker-modal'
 import { useTimeBlocksFast } from '@/lib/hooks/useTimeBlocksFast'
 import { useDayStartTime } from '@/lib/hooks/useDayStartTime'
 import { useDayChangeDetection } from '@/lib/day-change-detector'
+import { useQueryClient } from '@tanstack/react-query'
 import { 
   ChevronDown, 
   ChevronRight, 
@@ -50,13 +51,27 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
     return new Set()
   })
 
+  // QueryClientを取得
+  const queryClient = useQueryClient()
+
   // dayStartTimeを取得
   const { dayStartTime } = useDayStartTime()
 
   // 日付変更を検出（一日の始まり時間を考慮）
-  useDayChangeDetection(dayStartTime, () => {
-    console.log('Day changed on DAY page - refreshing time blocks')
-    // React Queryが自動的にデータを更新するため、明示的な処理は不要
+  useDayChangeDetection(dayStartTime, async () => {
+    console.log('Day changed, resetting tasks...')
+    try {
+      const response = await fetch('/api/day/reset-tasks', {
+        method: 'POST'
+      })
+      if (response.ok) {
+        // 正しいクエリキーでキャッシュを無効化
+        await queryClient.invalidateQueries({ queryKey: ['timeBlocksFast'] })
+        await queryClient.invalidateQueries({ queryKey: ['userSettings'] })
+      }
+    } catch (error) {
+      console.error('Error resetting tasks:', error)
+    }
   })
 
   const [currentPage, setCurrentPage] = useState(1)
