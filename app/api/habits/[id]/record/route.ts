@@ -123,28 +123,32 @@ export async function POST(
       completed: r.completed
     })))
 
-    // 習慣の現在の日数を計算して適切なメッセージを返す
-    // 日本時間（JST）での日付文字列を取得
-    const jstOptions = { timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit' } as const
-    const recordDateJST = new Date(recordDate.toLocaleDateString('en-CA', jstOptions))
-    const startDateJST = new Date(habit.startDate.toLocaleDateString('en-CA', jstOptions))
+    // メッセージは完了回数に基づいて表示する
+    // 新しい完了の場合は、現在の完了日数+1のメッセージを表示
+    // 完了取り消しの場合はメッセージなし
+    let messageDay = 0
+    if (completed) {
+      // 既存の完了記録を確認
+      const existingRecord = await prisma.habitRecord.findFirst({
+        where: {
+          habitId: params.id,
+          date: recordDate
+        }
+      })
+      
+      // 新規完了の場合は完了日数+1、既存更新の場合は現在の完了日数
+      messageDay = existingRecord?.completed ? habit.completedDays : habit.completedDays + 1
+    }
     
-    // 日数差を計算（開始日を1日目として計算）
-    const daysDiff = Math.floor((recordDateJST.getTime() - startDateJST.getTime()) / (24 * 60 * 60 * 1000))
-    const currentDay = Math.max(1, daysDiff + 1)
-    
-    console.log('[DEBUG API] Day calculation (JST):', {
-      recordDate: recordDate.toISOString(),
-      habitStartDate: habit.startDate.toISOString(),
-      recordDateJST: recordDateJST.toISOString(),
-      startDateJST: startDateJST.toISOString(),
-      daysDiff,
-      currentDay,
-      messageIndex: currentDay - 1,
-      message: currentDay <= 14 ? DAILY_MOTIVATION_MESSAGES[currentDay - 1] : null
+    console.log('[DEBUG API] Message calculation:', {
+      completed,
+      existingCompletedDays: habit.completedDays,
+      messageDay,
+      messageIndex: messageDay - 1,
+      message: messageDay > 0 && messageDay <= 14 ? DAILY_MOTIVATION_MESSAGES[messageDay - 1] : null
     })
     
-    const motivationMessage = completed && currentDay <= 14 ? DAILY_MOTIVATION_MESSAGES[currentDay - 1] : null
+    const motivationMessage = completed && messageDay > 0 && messageDay <= 14 ? DAILY_MOTIVATION_MESSAGES[messageDay - 1] : null
 
     return NextResponse.json({
       ...result,
