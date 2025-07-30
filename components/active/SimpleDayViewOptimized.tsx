@@ -38,25 +38,33 @@ interface TimeBlock {
 }
 
 export function SimpleDayViewOptimized() {
-  // Debug logging on component mount
+  // コンポーネントマウント時にlocalStorageから状態を復元
   useEffect(() => {
     console.log('[SimpleDayView] Component mounted at:', new Date().toISOString())
-  }, [])
-  const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(() => {
-    // localStorageから開閉状態を復元
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('expandedTimeBlocks')
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved)
-          return new Set(parsed)
-        } catch (e) {
-          console.error('Failed to parse expanded blocks:', e)
-        }
+    
+    // ページ選択を復元
+    const savedPage = localStorage.getItem('selectedDayPage')
+    if (savedPage) {
+      const pageNum = parseInt(savedPage, 10)
+      if (pageNum >= 1 && pageNum <= 3) {
+        setCurrentPage(pageNum)
+        console.log('[SimpleDayView] Restored page from localStorage:', pageNum)
       }
     }
-    return new Set()
-  })
+    
+    // 展開状態を復元
+    const savedExpanded = localStorage.getItem('expandedTimeBlocks')
+    if (savedExpanded) {
+      try {
+        const parsed = JSON.parse(savedExpanded)
+        setExpandedBlocks(new Set(parsed))
+        console.log('[SimpleDayView] Restored expanded blocks:', parsed)
+      } catch (e) {
+        console.error('Failed to parse expanded blocks:', e)
+      }
+    }
+  }, [])
+  const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(new Set())
   const [newBlockTitle, setNewBlockTitle] = useState('')
   const [newBlockTime, setNewBlockTime] = useState('00:00')
   const [showBlockForm, setShowBlockForm] = useState(false)
@@ -71,14 +79,7 @@ export function SimpleDayViewOptimized() {
   const [editBlockTitle, setEditBlockTitle] = useState('')
   const [editBlockTime, setEditBlockTime] = useState('')
   const [showEditTimePicker, setShowEditTimePicker] = useState(false)
-  const [currentPage, setCurrentPage] = useState(() => {
-    // Initialize from localStorage if available
-    if (typeof window !== 'undefined') {
-      const savedPage = localStorage.getItem('selectedDayPage')
-      return savedPage ? parseInt(savedPage, 10) : 1
-    }
-    return 1
-  })
+  const [currentPage, setCurrentPage] = useState(1)
   
   // useDayStartTimeフックを使用（最適化版）
   const { dayStartTime } = useDayStartTime()
