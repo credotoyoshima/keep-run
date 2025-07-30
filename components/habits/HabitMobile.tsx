@@ -63,12 +63,12 @@ export function HabitMobile() {
   })
 
   // リセット処理中かどうかを追跡
-  const [isResetting, setIsResetting] = useState(false)
+  const [isProcessingReset, setIsProcessingReset] = useState(false)
 
   // shouldResetがtrueの場合、自動的にリセットメッセージを表示
   useEffect(() => {
-    if (currentHabit?.shouldReset && !showResetMessage && !isResetting) {
-      setIsResetting(true)
+    if (currentHabit?.shouldReset && !showResetMessage && !isProcessingReset) {
+      setIsProcessingReset(true)
       resetHabit(currentHabit.id, {
         onSuccess: (data: any) => {
           if (data?.resetMessage) {
@@ -76,15 +76,15 @@ export function HabitMobile() {
             setShowResetMessage(true)
           }
           // リセット完了後にフラグをリセット
-          setIsResetting(false)
+          setIsProcessingReset(false)
         },
         onError: () => {
           // エラー時もフラグをリセット
-          setIsResetting(false)
+          setIsProcessingReset(false)
         }
       })
     }
-  }, [currentHabit?.shouldReset, showResetMessage, isResetting, resetHabit, currentHabit?.id])
+  }, [currentHabit?.shouldReset, showResetMessage, isProcessingReset, resetHabit, currentHabit?.id])
 
   // これらの関数はReactQueryのmutationで置き換え済み
 

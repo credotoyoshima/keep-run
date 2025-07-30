@@ -208,12 +208,12 @@ export function SimpleDayViewOptimized() {
   useEffect(() => {
     console.log('[SimpleDayView] Checking initial expanded state:', {
       blocksCount: sortedTimeBlocks?.length,
-      hasStoredExpanded: !!safeStorage.getItem('expandedTimeBlocks')
+      hasStoredExpanded: !!localStorage.getItem('expandedTimeBlocks')
     })
-    if (sortedTimeBlocks && sortedTimeBlocks.length > 0 && typeof window !== 'undefined' && !safeStorage.getItem('expandedTimeBlocks')) {
+    if (sortedTimeBlocks && sortedTimeBlocks.length > 0 && typeof window !== 'undefined' && !localStorage.getItem('expandedTimeBlocks')) {
       const allBlockIds = sortedTimeBlocks.map((block: TimeBlock) => block.id)
       setExpandedBlocks(new Set(allBlockIds))
-      safeStorage.setItem('expandedTimeBlocks', JSON.stringify(allBlockIds))
+      localStorage.setItem('expandedTimeBlocks', JSON.stringify(allBlockIds))
       console.log('[SimpleDayView] Set initial expanded blocks:', allBlockIds)
     }
   }, [sortedTimeBlocks])
