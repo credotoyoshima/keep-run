@@ -151,7 +151,11 @@ export function useContinuousHabits(dayStartTime: string = '05:00') {
       return response.json()
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['continuousHabits'] })
+      // リセット後はデータを無効化するが、shouldResetフラグをクリアするために
+      // 少し遅延を入れてから無効化する
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ['continuousHabits'] })
+      }, 100)
     }
   })
 

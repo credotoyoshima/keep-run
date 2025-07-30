@@ -38,6 +38,10 @@ interface TimeBlock {
 }
 
 export function SimpleDayViewOptimized() {
+  // Debug logging on component mount
+  useEffect(() => {
+    console.log('[SimpleDayView] Component mounted at:', new Date().toISOString())
+  }, [])
   const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(() => {
     // localStorageから開閉状態を復元
     if (typeof window !== 'undefined') {
@@ -105,23 +109,44 @@ export function SimpleDayViewOptimized() {
 
   // 日付変更を検出してタスクをリセット
   useDayChangeDetection(dayStartTime, async () => {
-    console.log('Day changed, resetting tasks...')
+    console.log('[DayChange] Day change detected! Starting task reset...')
     try {
       const response = await fetch('/api/day/reset-tasks', {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
-      if (response.ok) {
-        // React Queryのキャッシュを無効化してデータを再取得
-        await queryClient.invalidateQueries({ queryKey: ['timeBlocks'] })
-        await queryClient.invalidateQueries({ queryKey: ['activeDay'] })
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('[DayChange] Reset API failed:', response.status, errorData)
+        throw new Error(`Reset failed: ${response.status}`)
       }
+      
+      const data = await response.json()
+      console.log('[DayChange] Reset successful:', data)
+      
+      // React Queryのキャッシュを無効化してデータを再取得
+      await queryClient.invalidateQueries({ queryKey: ['timeBlocks'] })
+      await queryClient.invalidateQueries({ queryKey: ['activeDay'] })
+      
+      // Success notification (optional)
+      console.log('[DayChange] Task reset completed successfully')
     } catch (error) {
-      console.error('Error resetting tasks:', error)
+      console.error('[DayChange] Error resetting tasks:', error)
+      // Retry after 5 seconds
+      setTimeout(() => {
+        console.log('[DayChange] Retrying task reset...')
+        queryClient.invalidateQueries({ queryKey: ['timeBlocks'] })
+        queryClient.invalidateQueries({ queryKey: ['activeDay'] })
+      }, 5000)
     }
   })
 
   // Custom setter for currentPage that also saves to localStorage
   const setCurrentPageAndSave = (page: number) => {
+    console.log('[SimpleDayView] Changing page from', currentPage, 'to', page)
     setCurrentPage(page)
     localStorage.setItem('selectedDayPage', page.toString())
   }
@@ -181,10 +206,15 @@ export function SimpleDayViewOptimized() {
 
   // 初回ロード時に展開状態を設定
   useEffect(() => {
-    if (sortedTimeBlocks && sortedTimeBlocks.length > 0 && typeof window !== 'undefined' && !localStorage.getItem('expandedTimeBlocks')) {
+    console.log('[SimpleDayView] Checking initial expanded state:', {
+      blocksCount: sortedTimeBlocks?.length,
+      hasStoredExpanded: !!safeStorage.getItem('expandedTimeBlocks')
+    })
+    if (sortedTimeBlocks && sortedTimeBlocks.length > 0 && typeof window !== 'undefined' && !safeStorage.getItem('expandedTimeBlocks')) {
       const allBlockIds = sortedTimeBlocks.map((block: TimeBlock) => block.id)
       setExpandedBlocks(new Set(allBlockIds))
-      localStorage.setItem('expandedTimeBlocks', JSON.stringify(allBlockIds))
+      safeStorage.setItem('expandedTimeBlocks', JSON.stringify(allBlockIds))
+      console.log('[SimpleDayView] Set initial expanded blocks:', allBlockIds)
     }
   }, [sortedTimeBlocks])
 

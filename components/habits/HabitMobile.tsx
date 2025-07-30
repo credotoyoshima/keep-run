@@ -62,19 +62,29 @@ export function HabitMobile() {
     console.log('Day changed, React Query will handle data refresh')
   })
 
+  // リセット処理中かどうかを追跡
+  const [isResetting, setIsResetting] = useState(false)
+
   // shouldResetがtrueの場合、自動的にリセットメッセージを表示
   useEffect(() => {
-    if (currentHabit?.shouldReset && !showResetMessage) {
+    if (currentHabit?.shouldReset && !showResetMessage && !isResetting) {
+      setIsResetting(true)
       resetHabit(currentHabit.id, {
         onSuccess: (data: any) => {
           if (data?.resetMessage) {
             setResetMessage(data.resetMessage)
             setShowResetMessage(true)
           }
+          // リセット完了後にフラグをリセット
+          setIsResetting(false)
+        },
+        onError: () => {
+          // エラー時もフラグをリセット
+          setIsResetting(false)
         }
       })
     }
-  }, [currentHabit?.shouldReset, showResetMessage, resetHabit, currentHabit?.id])
+  }, [currentHabit?.shouldReset, showResetMessage, isResetting, resetHabit, currentHabit?.id])
 
   // これらの関数はReactQueryのmutationで置き換え済み
 
@@ -334,6 +344,8 @@ export function HabitMobile() {
         onClose={() => {
           setShowResetMessage(false)
           setResetMessage('')
+          // モーダルを閉じた後にデータを再取得
+          queryClient.invalidateQueries({ queryKey: ['continuousHabits'] })
         }}
       />
     </MobileLayout>

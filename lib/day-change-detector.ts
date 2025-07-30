@@ -37,11 +37,22 @@ export function useDayChangeDetection(
     }
     
     lastCheckedDateRef.current = currentDate
+    localStorage.setItem('lastCheckedDate', currentDate)
   }, [getCurrentDate, onDayChange])
 
   useEffect(() => {
-    // 初回チェック
-    lastCheckedDateRef.current = getCurrentDate()
+    // 初回チェック（初回起動時にも日付変更をチェック）
+    const currentDate = getCurrentDate()
+    
+    // localStorageから前回の日付を取得
+    const lastSavedDate = localStorage.getItem('lastCheckedDate')
+    if (lastSavedDate && lastSavedDate !== currentDate) {
+      console.log('Day changed since last visit:', lastSavedDate, '->', currentDate)
+      onDayChange()
+    }
+    
+    lastCheckedDateRef.current = currentDate
+    localStorage.setItem('lastCheckedDate', currentDate)
 
     // 1分ごとにチェック
     intervalIdRef.current = setInterval(checkDayChange, 60 * 1000)
