@@ -45,7 +45,7 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
   // 元のデザインに近い状態管理（最適化版）
   const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(() => {
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('expandedBlocks')
+      const stored = localStorage.getItem('expandedTimeBlocks')
       return stored ? new Set(JSON.parse(stored)) : new Set()
     }
     return new Set()
@@ -74,7 +74,19 @@ export function OptimizedDayView({ onRefresh }: OptimizedDayViewProps) {
     }
   })
 
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(() => {
+    // 初期値としてlocalStorageから読み込む
+    if (typeof window !== 'undefined') {
+      const savedPage = localStorage.getItem('selectedDayPage')
+      if (savedPage) {
+        const pageNum = parseInt(savedPage, 10)
+        if (pageNum >= 1 && pageNum <= 3) {
+          return pageNum
+        }
+      }
+    }
+    return 1
+  })
   const [showTimePicker, setShowTimePicker] = useState(false)
   const [newBlockTitle, setNewBlockTitle] = useState('')
   const [newBlockTime, setNewBlockTime] = useState('09:00')

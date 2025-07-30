@@ -38,32 +38,6 @@ interface TimeBlock {
 }
 
 export function SimpleDayViewOptimized() {
-  // コンポーネントマウント時にlocalStorageから状態を復元
-  useEffect(() => {
-    console.log('[SimpleDayView] Component mounted at:', new Date().toISOString())
-    
-    // ページ選択を復元
-    const savedPage = localStorage.getItem('selectedDayPage')
-    if (savedPage) {
-      const pageNum = parseInt(savedPage, 10)
-      if (pageNum >= 1 && pageNum <= 3) {
-        setCurrentPage(pageNum)
-        console.log('[SimpleDayView] Restored page from localStorage:', pageNum)
-      }
-    }
-    
-    // 展開状態を復元
-    const savedExpanded = localStorage.getItem('expandedTimeBlocks')
-    if (savedExpanded) {
-      try {
-        const parsed = JSON.parse(savedExpanded)
-        setExpandedBlocks(new Set(parsed))
-        console.log('[SimpleDayView] Restored expanded blocks:', parsed)
-      } catch (e) {
-        console.error('Failed to parse expanded blocks:', e)
-      }
-    }
-  }, [])
   const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(new Set())
   const [newBlockTitle, setNewBlockTitle] = useState('')
   const [newBlockTime, setNewBlockTime] = useState('00:00')
@@ -107,6 +81,33 @@ export function SimpleDayViewOptimized() {
       return calc(am) - calc(bm)
     })
   }, [timeBlocks, dayStartTime])
+
+  // コンポーネントマウント時にlocalStorageから状態を復元
+  useEffect(() => {
+    console.log('[SimpleDayView] Component mounted/re-rendered at:', new Date().toISOString())
+    
+    // ページ選択を復元
+    const savedPage = localStorage.getItem('selectedDayPage')
+    if (savedPage) {
+      const pageNum = parseInt(savedPage, 10)
+      if (pageNum >= 1 && pageNum <= 3 && pageNum !== currentPage) {
+        setCurrentPage(pageNum)
+        console.log('[SimpleDayView] Restored page from localStorage:', pageNum)
+      }
+    }
+    
+    // 展開状態を復元
+    const savedExpanded = localStorage.getItem('expandedTimeBlocks')
+    if (savedExpanded) {
+      try {
+        const parsed = JSON.parse(savedExpanded)
+        setExpandedBlocks(new Set(parsed))
+        console.log('[SimpleDayView] Restored expanded blocks:', parsed)
+      } catch (e) {
+        console.error('Failed to parse expanded blocks:', e)
+      }
+    }
+  }, []) // 依存配列を空にして初回のみ実行
 
   // 日付変更を検出してタスクをリセット
   useDayChangeDetection(dayStartTime, async () => {
