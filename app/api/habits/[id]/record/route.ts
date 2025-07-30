@@ -123,33 +123,23 @@ export async function POST(
       completed: r.completed
     })))
 
-    // 現在の完了日数を計算
-    const completedRecords = await prisma.habitRecord.findMany({
-      where: {
-        habitId: params.id,
-        completed: true
-      }
-    })
-    const currentCompletedDays = completedRecords.length
-    
-    // メッセージは完了回数に基づいて表示する
-    // 新しい完了の場合は、現在の完了日数+1のメッセージを表示
-    // 完了取り消しの場合はメッセージなし
+    // メッセージ表示のための完了日数を計算
     let messageDay = 0
     if (completed) {
-      // 既存の記録が完了済みかチェック
-      if (existingRecord?.completed) {
-        // 既に完了済みの場合は現在の完了日数
-        messageDay = currentCompletedDays
-      } else {
-        // 新規完了の場合は完了日数+1
-        messageDay = currentCompletedDays + 1
-      }
+      // 更新後の全完了記録を取得
+      const allCompletedRecords = await prisma.habitRecord.findMany({
+        where: {
+          habitId: params.id,
+          completed: true
+        }
+      })
+      // 今回の完了で何日目かを計算
+      messageDay = allCompletedRecords.length
     }
     
     console.log('[DEBUG API] Message calculation:', {
       completed,
-      existingCompletedDays: currentCompletedDays,
+      existingRecordCompleted: existingRecord?.completed,
       messageDay,
       messageIndex: messageDay - 1,
       message: messageDay > 0 && messageDay <= 14 ? DAILY_MOTIVATION_MESSAGES[messageDay - 1] : null
