@@ -150,13 +150,7 @@ export function useContinuousHabits(dayStartTime: string = '05:00') {
       if (!response.ok) throw new Error('Failed to reset habit')
       return response.json()
     },
-    onSuccess: () => {
-      // リセット後はデータを無効化するが、shouldResetフラグをクリアするために
-      // 少し遅延を入れてから無効化する
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['continuousHabits'] })
-      }, 100)
-    }
+    // onSuccessを削除し、データの再取得はモーダルが閉じられた後に行う
   })
 
   return {
